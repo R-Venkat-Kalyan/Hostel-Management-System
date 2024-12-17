@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raise an Issue | Hostel Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    <!-- Page Container for Centering the Content within the Central Space -->
+    <div class="flex justify-center items-start min-h-screen pt-24 px-4 sm:px-6 lg:px-8">
+
+        <!-- Main Content Section -->
+        <div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-6 space-y-4">
+
+            <!-- Page Header Section -->
+            <div class="text-center">
+                <h1 class="text-3xl text-blue-600 font-semibold">Raise an Issue</h1>
+                <p class="text-lg text-gray-600 mt-2">If you're facing any issues in the hostel, please report them here.</p>
+            </div>
+
+            <!-- Form Section -->
+            <div>
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Submit Your Issue</h2>
+                <p class="text-gray-600 mb-4">Please fill out the form below to raise an issue regarding any hostel-related problems like malfunctioning fan, uncleaned room, wifi issues, etc.</p>
+
+                <!-- Issue Form -->
+                <form action="#" method="POST" class="space-y-4">
+                    <!-- Issue Type -->
+                    <div>
+                        <label for="issue-type" class="block text-sm font-medium text-gray-700">Issue Type</label>
+                        <select id="issue-type" name="issue-type" class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select Issue Type</option>
+                            <option value="fan">Fan not working</option>
+                            <option value="room">Room not cleaned</option>
+                            <option value="wifi">WiFi not working</option>
+                            <option value="geyser">Geyser not working</option>
+                            <option value="others">Others</option>
+                        </select>
+                    </div>
+
+                    <!-- Issue Description -->
+                    <div>
+                        <label for="issue-description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea id="issue-description" name="issue-description" rows="3" placeholder="Provide a detailed description of the issue..." class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="mt-4">
+                        <button type="submit" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
+                            Submit Issue
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Disclaimer Section -->
+                <p class="mt-4 text-sm text-gray-500">
+                    <span class="font-medium">Note:</span> If the issue is urgent and needs immediate resolution, please contact the respective person through the <a href="/contacts" class="text-blue-600 hover:text-blue-700">Contacts Section</a>.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

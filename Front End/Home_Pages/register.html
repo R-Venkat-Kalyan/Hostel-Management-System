@@ -135,7 +135,7 @@
                     <div class="card-body p-4 p-sm-5">
                         <h5 class="card-title text-center mb-2 fw-bold fs-4">Create Your Account</h5>
                         <p class="subheading">Sign up here to get started</p>
-                        <form id="registerForm" onsubmit="validateForm(event)">
+                        <form id="registerForm" method="post" action="login.html">
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="name" placeholder="Name">
                                 <label for="name">Enter Your Name</label>
@@ -162,7 +162,7 @@
                                 <div id="repasswordError" class="error"></div>
                             </div>
                             <div class="d-grid mb-4">
-                                <button class="btn btn-primary btn-register text-uppercase fw-bold" type="submit">Register</button>
+                                <button class="btn btn-primary btn-register text-uppercase fw-bold" type="submit" onclick="validateForm(event)">Register</button>
                             </div>
                             <div class="login-link">
                                 <p>Already a user? <a href="/sign-in">Login here</a></p>

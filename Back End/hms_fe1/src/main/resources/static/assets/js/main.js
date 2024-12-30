@@ -1,8 +1,13 @@
 
 document.getElementById('contactForm').addEventListener('submit', function (e) {
-  e.preventDefault(); // Prevent form submission
+  e.preventDefault(); // Prevent form submission to show alert first
+
   alert('Your message has been sent successfully. Thank you!');
+
+  // After alert, submit the form programmatically
+  this.submit();
 });
+
 
 
 

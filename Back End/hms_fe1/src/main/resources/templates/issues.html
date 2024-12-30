@@ -26,11 +26,11 @@
                 <p class="text-gray-600 mb-4">Please fill out the form below to raise an issue regarding any hostel-related problems like malfunctioning fan, uncleaned room, wifi issues, etc.</p>
 
                 <!-- Issue Form -->
-                <form action="#" method="POST" class="space-y-4">
+                <form action="/issue" method="POST" class="space-y-4">
                     <!-- Issue Type -->
                     <div>
                         <label for="issue-type" class="block text-sm font-medium text-gray-700">Issue Type</label>
-                        <select id="issue-type" name="issue-type" class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select id="issue-type" name="issueType" class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="">Select Issue Type</option>
                             <option value="fan">Fan not working</option>
                             <option value="room">Room not cleaned</option>
@@ -43,7 +43,7 @@
                     <!-- Issue Description -->
                     <div>
                         <label for="issue-description" class="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea id="issue-description" name="issue-description" rows="3" placeholder="Provide a detailed description of the issue..." class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        <textarea id="issue-description" name="issueDescription" rows="3" placeholder="Provide a detailed description of the issue..." class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                     </div>
 
                     <!-- Submit Button -->

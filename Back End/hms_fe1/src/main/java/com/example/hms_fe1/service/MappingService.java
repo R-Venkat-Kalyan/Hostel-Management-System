@@ -11,20 +11,6 @@ import com.example.hms_fe1.repository.FeePaymentRepository;
 import com.example.hms_fe1.repository.RoomRepository;
 import com.example.hms_fe1.repository.StudentRepository;
 
-//@Service
-//public class MappingService {
-//	
-//	@Autowired
-//	private MappingRepository mappingRepository;
-//
-//	public void saveMappings(MappingEntity mappingEntity) {
-//		mappingRepository.save(mappingEntity);
-//	}
-//}
-//
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Service;
 
 @Service
 public class MappingService {

@@ -114,6 +114,16 @@
             }
         }
     </script>
+    
+    <th:block th:if="${successMessage}">
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+			window.onload = function () {
+				alert(/*[[${successMessage}]]*/ '');
+			};
+        /*]]>*/
+		</script>
+	</th:block>
 </head>
 
 <body>

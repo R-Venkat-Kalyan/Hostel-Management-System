@@ -83,6 +83,16 @@
             margin-bottom: 20px;
         }
     </style>
+    
+    <th:block th:if="${successMessage}">
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+			window.onload = function () {
+				alert(/*[[${successMessage}]]*/ '');
+			};
+        /*]]>*/
+		</script>
+	</th:block>
 </head>
 
 <body>
@@ -93,13 +103,13 @@
                     <div class="card-body p-4 p-sm-5">
                         <h5 class="card-title text-center mb-2 fw-bold fs-4">Welcome Back</h5>
                         <p class="subheading">Sign in here to access your account</p>
-                        <form id="loginForm" onsubmit="validateId(event)" action="/sign-up">
+                        <form id="loginForm" onsubmit="validateId(event)" action="/user" method="post">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="floatingId" placeholder="10-digit ID" required>
+                                <input type="text" class="form-control" id="floatingId" name="id" placeholder="10-digit ID" required>
                                 <label for="floatingId">Enter Your 10-digit ID</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="password" class="form-control" id="floatingPassword" placeholder="Password" required>
+                                <input type="password" class="form-control" id="floatingPassword" name="pwd" placeholder="Password" required>
                                 <label for="floatingPassword">Enter Your Password</label>
                             </div>
 

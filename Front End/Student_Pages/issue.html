@@ -3,65 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raise an Issue | Hostel Management</title>
+    <title>Meenakshi - Contacts</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 text-gray-900">
+<body class="bg-gray-100 flex flex-col items-center min-h-screen m-0 p-4">
 
-    <!-- Page Container for Centering the Content within the Central Space -->
-    <div class="flex justify-center items-start min-h-screen pt-24 px-4 sm:px-6 lg:px-8">
-
-        <!-- Main Content Section -->
-        <div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-6 space-y-4">
-
-            <!-- Page Header Section -->
-            <div class="text-center">
-                <h1 class="text-3xl text-blue-600 font-semibold">Raise an Issue</h1>
-                <p class="text-lg text-gray-600 mt-2">If you're facing any issues in the hostel, please report them here.</p>
-            </div>
-
-            <!-- Form Section -->
-            <div>
-                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Submit Your Issue</h2>
-                <p class="text-gray-600 mb-4">Please fill out the form below to raise an issue regarding any hostel-related problems like malfunctioning fan, uncleaned room, wifi issues, etc.</p>
-
-                <!-- Issue Form -->
-                <form action="#" method="POST" class="space-y-4">
-                    <!-- Issue Type -->
-                    <div>
-                        <label for="issue-type" class="block text-sm font-medium text-gray-700">Issue Type</label>
-                        <select id="issue-type" name="issue-type" class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">Select Issue Type</option>
-                            <option value="fan">Fan not working</option>
-                            <option value="room">Room not cleaned</option>
-                            <option value="wifi">WiFi not working</option>
-                            <option value="geyser">Geyser not working</option>
-                            <option value="others">Others</option>
-                        </select>
-                    </div>
-
-                    <!-- Issue Description -->
-                    <div>
-                        <label for="issue-description" class="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea id="issue-description" name="issue-description" rows="3" placeholder="Provide a detailed description of the issue..." class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="mt-4">
-                        <button type="submit" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
-                            Submit Issue
-                        </button>
-                    </div>
-                </form>
-
-                <!-- Disclaimer Section -->
-                <p class="mt-4 text-sm text-gray-500">
-                    <span class="font-medium">Note:</span> If the issue is urgent and needs immediate resolution, please contact the respective person through the <a href="/contacts" class="text-blue-600 hover:text-blue-700">Contacts Section</a>.
-                </p>
-            </div>
-
-        </div>
+    <!-- Heading Section -->
+    <div class="text-center mb-6">
+        <h1 class="text-3xl font-extrabold text-gray-800">Contact Our Team</h1>
+        <p class="text-gray-600 mt-2 text-sm">
+            Reach out to our hostel managers and maintenance staff for assistance or inquiries.
+        </p>
     </div>
 
+    <!-- Wrapper to center the cards -->
+    <div class="flex flex-wrap justify-center items-center space-x-6 p-6">
+        
+        <!-- Card 1 -->
+        <div class="w-64 bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700">
+            <div class="flex flex-col items-center pb-10 pt-6">
+                <img class="w-20 h-20 mb-3 rounded-full shadow-lg" src="logo.jpg" alt="Contact Image" />
+                <h5 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white">Bonnie Green</h5>
+                <span class="text-sm text-gray-500 dark:text-gray-400">Hostel Manager</span>
+                <div class="flex mt-4 space-x-2">
+                    <a href="tel:9777666633"
+                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        📞 Call
+                    </a>
+                    <a href="sms:9777666633"
+                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-green-600 focus:ring-4 focus:ring-green-300">
+                        💬 Message
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="w-64 bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700">
+            <div class="flex flex-col items-center pb-10 pt-6">
+                <img class="w-20 h-20 mb-3 rounded-full shadow-lg" src="logo.jpg" alt="Contact Image" />
+                <h5 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white">John Doe</h5>
+                <span class="text-sm text-gray-500 dark:text-gray-400">Maintenance Staff</span>
+                <div class="flex mt-4 space-x-2">
+                    <a href="tel:9777666633" 
+                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        📞 Call
+                    </a>
+                    <a href="sms:9777666633"
+                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-green-600 focus:ring-4 focus:ring-green-300">
+                        💬 Message
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="w-64 bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700">
+            <div class="flex flex-col items-center pb-10 pt-6">
+                <img class="w-20 h-20 mb-3 rounded-full shadow-lg" src="logo.jpg" alt="Contact Image" />
+                <h5 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white">Alice Smith</h5>
+                <span class="text-sm text-gray-500 dark:text-gray-400">Assistant Manager</span>
+                <div class="flex mt-4 space-x-2">
+                    <a href="tel:9777666633" 
+                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        📞 Call
+                    </a>
+                    <a href="sms:9777666633"
+                       class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-green-600 focus:ring-4 focus:ring-green-300">
+                        💬 Message
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </body>
 </html>

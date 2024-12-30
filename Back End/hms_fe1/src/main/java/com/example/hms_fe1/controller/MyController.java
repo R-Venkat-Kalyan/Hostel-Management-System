@@ -1,9 +1,10 @@
 package com.example.hms_fe1.controller;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Random;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -19,10 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.hms_fe1.entity.FeePayment;
+import com.example.hms_fe1.entity.IssueEntity;
 import com.example.hms_fe1.entity.MappingEntity;
 import com.example.hms_fe1.entity.Room;
-import com.example.hms_fe1.entity.Student;
 import com.example.hms_fe1.entity.UserEntity;
+import com.example.hms_fe1.repository.IssueRepository;
 import com.example.hms_fe1.service.FeePaymentService;
 import com.example.hms_fe1.service.MappingService;
 import com.example.hms_fe1.service.RoomService;
@@ -34,88 +36,98 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MyController {
+
+// ------------------------------------------------------------- <Required Beans> --------------------------------------------------------------------------- //
+
+//  @Autowired
+// 	private StudentService studentService;    
+//  
+  @Autowired
+ 	private RoomService roomService; 
+  
+  @Autowired
+ 	private FeePaymentService feePaymentService; 
+
+	@Autowired
+	private JavaMailSender mailSender;
+
+	@Value("${spring.mail.username}")
+	private String from;
+
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private MappingService mappingService;
 	
+	@Autowired
+	private IssueRepository issueRepository;
+
+// ------------------------------------------------------------- <Required Beans/> -------------------------------------------------------------------------- // 
+
+// ---------------------------------------------------------------- <Home Routes> -------------------------------------------------------------------------- // 
+
 	@GetMapping("/")
 	public String index() {
 		return "index";
 	}
-	
+
 	@GetMapping("/sign-in")
 	public String signIn() {
 		return "login";
 	}
-	
+
 	@GetMapping("/sign-up")
 	public String signUp() {
 		return "register";
 	}
-	
-	@GetMapping("/student")
-	public String home() {
-		return "dashboard";
+
+// ---------------------------------------------------------------- <Home Routes/> -------------------------------------------------------------------------- // 
+
+// ---------------------------------------------------------------- <Admin Contact> ------------------------------------------------------------------------- //	
+
+	@PostMapping("/contact-admin")
+	public String contactAdmin(HttpServletRequest request) {
+		String name = request.getParameter("name");
+		String email = request.getParameter("email");
+		String subject = request.getParameter("subject");
+		String message = request.getParameter("message");
+		String to = "2100030959cseh@gmail.com";
+
+		try {
+			// Read HTML email template
+			Resource resource = new ClassPathResource("templates/ContactMailTemplate.html");
+			String emailTemplate = new String(Files.readAllBytes(resource.getFile().toPath()), StandardCharsets.UTF_8);
+
+			// Replace placeholders in the template with user-provided data
+			String emailBody = emailTemplate.replace("{{name}}", name).replace("{{email}}", email)
+					.replace("{{subject}}", subject).replace("{{message}}", message);
+
+			// Create MimeMessage
+			MimeMessage mimeMessage = mailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+			helper.setFrom(from); // Replace `from` with the actual sender email address
+			helper.setTo(to); // Replace `to` with the recipient email address (admin's email)
+			helper.setSubject("New Contact Form Submission."); // Dynamic subject line
+			helper.setText(emailBody, true); // `true` indicates HTML content
+
+			// Send the email
+			mailSender.send(mimeMessage);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// Log the exception or handle it accordingly
+			return "error"; // Redirect to an error page if needed
+		}
+
+		return "redirect:/"; // Redirect to a success page or confirmation view
 	}
-	
-	@GetMapping("/laundry")
-    public String dashboard(Model model) {
-        model.addAttribute("mainContent", "laundry");
-        return "layout";
-    }
 
-    @GetMapping("/contacts")
-    public String accommodation(Model model) {
-        model.addAttribute("mainContent", "contacts");
-        return "layout";
-    }
+// ---------------------------------------------------------------- <Admin Contact/> ------------------------------------------------------------------------ //	
 
-    @GetMapping("/issues")
-    public String fees(Model model) {
-        model.addAttribute("mainContent", "issues");
-        return "layout";
-    }
-    
-    @GetMapping("/add-users")
-    public String addUsers() {
-    	return "MappingForm";
-    }
-    
-//    @PostMapping("/save-mapping")
-//    public String saveMapping(@ModelAttribute MappingEntity mappingEntity, HttpServletRequest request) {
-//    	String id = request.getParameter("stu_id");
-//    	String mail = id.concat("@kluniversity.in");
-//    	int bal_amount = mappingEntity.getFee_amount() - mappingEntity.getAmount_paid();
-//    	mappingEntity.setStu_mail(mail);
-//    	mappingEntity.setBalance_amount(bal_amount);
-//    	mappingService.saveMappings(mappingEntity);
-//    	return "dashboard";
-//    }
-    
-    @PostMapping("/save-mapping")
-    public String saveMapping(@ModelAttribute MappingEntity mappingEntity, HttpServletRequest request) {
-        // Save student, room, and fee payment records
-        mappingService.saveMappings(mappingEntity);
-        return "dashboard";
-    }
-    
-    @Autowired
-   	private StudentService studentService;    
-    
-    @Autowired
-   	private RoomService roomService; 
-    
-    @Autowired
-   	private FeePaymentService feePaymentService; 
-    
-    @Autowired
-	private JavaMailSender mailSender;
-    
-    @Autowired
-    private UserService userService;
-    
-    @Autowired
-    private MappingService mappingService;
-	
+// ---------------------------------------------------------------- <User Verification> --------------------------------------------------------------------- //    
 	@PostMapping("/save")
-	public String saveUser(@ModelAttribute UserEntity userEntity, HttpServletRequest request, HttpSession session, Model model) {
+	public String saveUser(@ModelAttribute UserEntity userEntity, HttpServletRequest request, HttpSession session,
+			Model model) {
 		String id = request.getParameter("id");
 		String mail = id.concat("@kluniversity.in");
 		userEntity.setMail(mail);
@@ -124,40 +136,35 @@ public class MyController {
 		sendOTP(mail, session);
 		model.addAttribute("mail", mail);
 		return "OtpForm";
-		
+
 	}
-	
+
 	@GetMapping("/verify")
 	public String verifyUser(@RequestParam("userOTP") String userOTP, HttpSession session,
-	        RedirectAttributes redirectAttributes) {
-	    int generatedOTP = (int) session.getAttribute("generatedOTP");
+			RedirectAttributes redirectAttributes) {
+		int generatedOTP = (int) session.getAttribute("generatedOTP");
 
-	    try {
-	        int enteredOTP = Integer.parseInt(userOTP); // Convert combined OTP string to an integer
+		try {
+			int enteredOTP = Integer.parseInt(userOTP); // Convert combined OTP string to an integer
 
-	        if (enteredOTP == generatedOTP) {
-	            UserEntity userEntity = (UserEntity) session.getAttribute("user");
-	            userService.saveUser(userEntity);
-	            session.invalidate(); // Clear session after successful registration
-	            redirectAttributes.addFlashAttribute("successMessage", "User registered successfully..✔\nLogin Now");
-	            return "redirect:/sign-in";
-	        } else {
-	            redirectAttributes.addFlashAttribute("successMessage", "Invalid OTP..❌❌");
-	            return "redirect:/sign-up"; // Redirect back to registration if OTP doesn't match
-	        }
-	    } catch (NumberFormatException e) {
-	        redirectAttributes.addFlashAttribute("successMessage", "Invalid OTP format..❌❌");
-	        return "redirect:/sign-up"; // Handle non-numeric OTP input
-	    }
+			if (enteredOTP == generatedOTP) {
+				UserEntity userEntity = (UserEntity) session.getAttribute("user");
+				userService.saveUser(userEntity);
+				session.invalidate(); // Clear session after successful registration
+				redirectAttributes.addFlashAttribute("successMessage", "User registered successfully..✔\nLogin Now");
+				return "redirect:/sign-in";
+			} else {
+				redirectAttributes.addFlashAttribute("successMessage", "Invalid OTP..❌❌");
+				return "redirect:/sign-up"; // Redirect back to registration if OTP doesn't match
+			}
+		} catch (NumberFormatException e) {
+			redirectAttributes.addFlashAttribute("successMessage", "Invalid OTP format..❌❌");
+			return "redirect:/sign-up"; // Handle non-numeric OTP input
+		}
 	}
-
-
-	@Value("${spring.mail.username}")
-    private String from;
 
 	private void sendOTP(String regEmail, HttpSession session) {
 		// Code to send OTP via email using mailsender
-//		String from = "taskprompter@gmail.com";
 		String to = regEmail;
 		int generatedOTP = generateRandomOTP();
 		session.setAttribute("generatedOTP", generatedOTP);
@@ -189,9 +196,163 @@ public class MyController {
 		Random random = new Random();
 		return 100000 + random.nextInt(900000);
 	}
+
+// ---------------------------------------------------------------- <User Verification/> -------------------------------------------------------------------- // 
+
+// ---------------------------------------------------------------- <User Validation> --------------------------------------------------------------------- // 	
 	
+	@PostMapping("/user")
+	public String userPanel(HttpServletRequest request, RedirectAttributes redirectAttributes, Model model,
+	        HttpSession session) {
+	    List<UserEntity> allUsers = userService.getAllUsers();
+	    boolean userFound = false;
+	    for (UserEntity ue : allUsers) {
+	    	String id = request.getParameter("id");
+	        String pwd = request.getParameter("pwd");
+	        String email = id.concat("@kluniversity.in");
+	        if (ue.getMail().equals(email) && ue.getPassword().equals(pwd)) {
+	        	Room room = roomService.getRoomByStuId(id);
+	            FeePayment feePayment = feePaymentService.getFeeByStuId(id);
+	        	session.setAttribute("id", id);
+	            session.setAttribute("mail", email);
+	            session.setAttribute("name", ue.getName()); 
+	            session.setAttribute("room_id", room.getRoom_number());
+	            session.setAttribute("room_type", room.getRoom_type());
+	            session.setAttribute("deadline", feePayment.getNext_due_date());
+	            session.setAttribute("last_date",feePayment.getLast_paid_date());
+	            session.setMaxInactiveInterval(30 * 60);
+	            userFound = true;
+	            return "redirect:/student";
+	        } else if (ue.getMail().equals(email) && !ue.getPassword().equals(pwd)) {
+	            redirectAttributes.addFlashAttribute("successMessage", "Invalid Password..❌❌");
+	            return "redirect:/sign-in";
+	        }
+	    }
+
+	    if (!userFound) {
+	        redirectAttributes.addFlashAttribute("successMessage", "User Not Found..❌\nPlease Register First");
+	        return "redirect:/sign-up";
+	    }
+	    redirectAttributes.addFlashAttribute("successMessage", "Invalid Credentials..❌❌");
+	    return "redirect:/sign-in";
+	}
 	
+// ---------------------------------------------------------------- <User Validation/> --------------------------------------------------------------------- // 	
 	
+// ---------------------------------------------------------------- <Student Routes> ------------------------------------------------------------------------ //
+
+	@GetMapping("/student")
+	public String home(HttpSession session, Model model) {
+		String id = (String) session.getAttribute("id");  // Retrieve user id from session
+		String name = (String) session.getAttribute("name");
+		String mail = (String) session.getAttribute("mail");
+		String room_id = (String) session.getAttribute("room_id");
+		String room_type = (String) session.getAttribute("room_type");
+		LocalDate deadline = (LocalDate) session.getAttribute("deadline");
+		LocalDate last_date = (LocalDate) session.getAttribute("last_date");
+        model.addAttribute("id", id);  // Add user id to model
+        model.addAttribute("name", name); 
+        model.addAttribute("mail", mail); 
+        model.addAttribute("room_id", room_id); 
+        model.addAttribute("room_type", room_type); 
+        model.addAttribute("deadline", deadline); 
+        model.addAttribute("last_date", last_date); 
+		return "dashboard";
+	}
+
+	@GetMapping("/laundry")
+	public String dashboard(Model model) {
+		model.addAttribute("mainContent", "laundry");
+		return "layout";
+	}
+
+	@GetMapping("/contacts")
+	public String accommodation(Model model) {
+		model.addAttribute("mainContent", "contacts");
+		return "layout";
+	}
+
+	@GetMapping("/issues")
+	public String issues(Model model) {
+		model.addAttribute("mainContent", "issues");
+		return "layout";
+	}
 	
+	@PostMapping("/issue")
+	public String issue(@ModelAttribute IssueEntity issue, HttpSession session, RedirectAttributes redirectAttributes) {
+		String id = (String) session.getAttribute("id");
+		String room_id = (String) session.getAttribute("room_id");
+		issue.setStatus("Pending");
+		issue.setDate(LocalDate.now());
+		issue.setStudentId(id);
+		issue.setRoomNumber(room_id);
+		issueRepository.save(issue);
+		redirectAttributes.addFlashAttribute("successMessage", "Issue Raised Successfully..");
+		return "redirect:/student";
+		
+	}
+	
+	@PostMapping("/submit-laundry")
+	public String submitLaundry(HttpServletRequest request, RedirectAttributes redirectAttributes, HttpSession session) {
+	    int pantsCount = Integer.parseInt(request.getParameter("pants-count"));
+	    int shirtsCount = Integer.parseInt(request.getParameter("shirts-count"));
+	    int towelsCount = Integer.parseInt(request.getParameter("towels-count"));
+	    int bedsheetsCount = Integer.parseInt(request.getParameter("bedsheets-count"));
+	    int othersCount = Integer.parseInt(request.getParameter("others-count"));
+	    int totalCount = pantsCount + shirtsCount + towelsCount + bedsheetsCount + othersCount;
+
+	    String to = (String) session.getAttribute("mail");
+//	    String to = "2100030959cseh@gmail.com";
+
+	    try {
+	        // Read HTML email template
+	        Resource resource = new ClassPathResource("templates/LaundryMailTemplate.html");
+	        String emailTemplate = new String(Files.readAllBytes(resource.getFile().toPath()), StandardCharsets.UTF_8);
+
+	        // Replace placeholders in the template with user-provided data
+	        String emailBody = emailTemplate
+	                .replace("{{pantsCount}}", String.valueOf(pantsCount))
+	                .replace("{{shirtsCount}}", String.valueOf(shirtsCount))
+	                .replace("{{towelsCount}}", String.valueOf(towelsCount))
+	                .replace("{{bedsheetsCount}}", String.valueOf(bedsheetsCount))
+	                .replace("{{othersCount}}", String.valueOf(othersCount))
+	                .replace("{{totalCount}}", String.valueOf(totalCount));
+
+	        // Create MimeMessage
+	        MimeMessage mimeMessage = mailSender.createMimeMessage();
+	        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+	        helper.setFrom(from); // Replace `from` with the actual sender email address
+	        helper.setTo(to); // Replace `to` with the recipient email address
+	        helper.setSubject("New Laundry Submission"); // Subject line
+	        helper.setText(emailBody, true); // `true` indicates HTML content
+
+	        // Send the email
+	        mailSender.send(mimeMessage);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        // Log the exception or handle it accordingly
+	        return "error"; // Redirect to an error page if needed
+	    }
+	    redirectAttributes.addFlashAttribute("successMessage", "Laundry clothes count report sent to registered email.");
+	    return "redirect:/student"; // Redirect to a success page or confirmation view
+	}
+
+	
+// ---------------------------------------------------------------- <Student Routes/> ---------------------------------------------------------------------- //    
+
+// ---------------------------------------------------------------- <SuperVisor Routes> -------------------------------------------------------------------- //    v
+	@GetMapping("/add-users")
+	public String addUsers() {
+		return "MappingForm";
+	}
+
+	@PostMapping("/save-mapping")
+	public String saveMapping(@ModelAttribute MappingEntity mappingEntity, HttpServletRequest request) {
+		// Save student, room, and fee payment records
+		mappingService.saveMappings(mappingEntity);
+		return "dashboard";
+	}
+
+// ---------------------------------------------------------------- <SuperVisor Routes/> ------------------------------------------------------------------ //	
 
 }

@@ -259,6 +259,24 @@ public class MyController {
         model.addAttribute("last_date", last_date); 
 		return "dashboard";
 	}
+	
+	@GetMapping("/accommodation")
+	public String accommodation(HttpSession session, Model model) {
+	
+		String name = (String) session.getAttribute("name");
+		String room_id = (String) session.getAttribute("room_id");
+		String room_type = (String) session.getAttribute("room_type");
+        model.addAttribute("studentName", name); 
+        model.addAttribute("roomNumber", room_id); 
+        model.addAttribute("roomType", room_type); 
+        if(room_type.equals("4_bed_non_ac") || room_type.equals("4_bed_ac"))
+        	model.addAttribute("washRoom", "Attached Washroom");
+        else
+        	model.addAttribute("washRoom", "Shared Washroom");
+		model.addAttribute("mainContent", "accommodation");
+		return "layout";
+		
+	}
 
 	@GetMapping("/laundry")
 	public String dashboard(Model model) {

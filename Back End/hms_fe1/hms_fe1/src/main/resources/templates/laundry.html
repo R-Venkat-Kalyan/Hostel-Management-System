@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laundry Service | Hostel Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    <!-- Page Container for Centering the Content within the Central Space -->
+    <div class="flex justify-center items-start min-h-screen pt-3 px-4 sm:px-6 lg:px-8">
+
+        <!-- Main Content Section -->
+        <div class="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 space-y-8">
+
+            <!-- Page Header Section -->
+            <div class="text-center">
+                <h1 class="text-4xl text-blue-600 font-semibold">Laundry Service</h1>
+                <p class="text-lg text-gray-600 mt-2">Schedule your laundry service based on the days for each floor.</p>
+            </div>
+
+            <!-- Laundry Schedule Table -->
+            <div>
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Laundry Schedule</h2>
+                <table class="min-w-full table-auto border-separate border-spacing-2">
+                    <thead>
+                        <tr class="bg-blue-600 text-white">
+                            <th class="px-6 py-4 text-left">Day</th>
+                            <th class="px-6 py-4 text-left">Floor</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-800">
+                        <tr class="bg-gray-50">
+                            <td class="px-6 py-4">Monday</td>
+                            <td class="px-6 py-4">1st Floor</td>
+                        </tr>
+                        <tr class="bg-gray-100">
+                            <td class="px-6 py-4">Tuesday</td>
+                            <td class="px-6 py-4">2nd Floor</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="px-6 py-4">Wednesday</td>
+                            <td class="px-6 py-4">3rd Floor</td>
+                        </tr>
+                        <tr class="bg-gray-100">
+                            <td class="px-6 py-4">Thursday</td>
+                            <td class="px-6 py-4">4th Floor</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="px-6 py-4">Friday</td>
+                            <td class="px-6 py-4">5th Floor</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Laundry Record Form -->
+            <div>
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4 mt-8">Record Laundry Clothes</h2>
+                <p class="text-gray-600 mb-4">Please fill out the form below to maintain a record of the clothes you gave to the laundry.</p>
+
+                <!-- Laundry Record Form -->
+                <form action="/submit-laundry" method="POST" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label for="pants-count" class="block text-sm font-medium text-gray-700">Pants Count</label>
+                            <input id="pants-count" name="pants-count" type="number" min="0" class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter count">
+                        </div>
+                        <div>
+                            <label for="shirts-count" class="block text-sm font-medium text-gray-700">Shirts Count</label>
+                            <input id="shirts-count" name="shirts-count" type="number" min="0" class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter count">
+                        </div>
+                        <div>
+                            <label for="towels-count" class="block text-sm font-medium text-gray-700">Towels Count</label>
+                            <input id="towels-count" name="towels-count" type="number" min="0" class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter count">
+                        </div>
+                        <div>
+                            <label for="bedsheets-count" class="block text-sm font-medium text-gray-700">Bedsheets Count</label>
+                            <input id="bedsheets-count" name="bedsheets-count" type="number" min="0" class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter count">
+                        </div>
+                        <div>
+                            <label for="others-count" class="block text-sm font-medium text-gray-700">Others Count</label>
+                            <input id="others-count" name="others-count" type="number" min="0" class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter count">
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="mt-4">
+                        <button type="submit" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
+                            Submit Laundry Record
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Hint/Disclaimer Section -->
+                <p class="mt-4 text-sm text-red-500">
+                    <span class="font-medium">Note:</span> Once you submit the form, an email will be triggered with the details of your laundry clothes. These records are temporary and will not be available on this page permanently.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Student Fee Payments | Hostel Management</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+	<div class="max-w-6xl mx-auto p-6">
+		<!-- Fee Summary Section -->
+		<div class="bg-blue-600 text-white rounded-lg shadow-md mb-6 p-6">
+			<h2 class="text-2xl font-bold text-center mb-4">Fee Summary</h2>
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+				<div class="p-4 bg-white rounded-lg text-gray-800 shadow-md">
+					<h3 class="text-xl font-bold">Total Fee Amount</h3>
+					<p class="text-2xl font-semibold text-green-600" th:text="'₹ ' + ${totalFee}"></p>
+				</div>
+				<div class="p-4 bg-white rounded-lg text-gray-800 shadow-md">
+					<h3 class="text-xl font-bold">Amount Paid</h3>
+					<p class="text-2xl font-semibold text-blue-600" th:text="'₹ ' + ${paidAmount}"></p>
+				</div>
+				<div class="p-4 bg-white rounded-lg text-gray-800 shadow-md">
+					<h3 class="text-xl font-bold">Pending Amount</h3>
+					<p class="text-2xl font-semibold text-red-600" th:text="'₹ ' + ${pendingAmount}"></p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Fee Payments Table -->
+		<div class="bg-white shadow-md rounded-lg">
+			<div class="bg-blue-600 text-white text-center py-4 rounded-t-lg">
+				<h2 class="text-2xl font-bold">Your Fee Payments</h2>
+				<p class="text-sm mt-1">Below is the history of your fee payments.</p>
+			</div>
+			<div class="overflow-x-auto">
+				<table class="min-w-full bg-white border border-gray-200">
+					<thead>
+						<tr class="bg-blue-100 text-gray-700">
+							<th class="py-2 px-4 text-center border border-gray-200">S.No</th>
+							<th class="py-2 px-4 text-left border border-gray-200">Amount Paid</th>
+							<th class="py-2 px-4 text-left border border-gray-200">Balance Amount</th>
+							<th class="py-2 px-4 text-left border border-gray-200">Last Paid Date</th>
+							<th class="py-2 px-4 text-left border border-gray-200">Next Due Date</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="payment, iterStat : ${feePayments}" class="hover:bg-gray-50">
+							<td class="py-2 px-4 text-center border border-gray-200" th:text="${iterStat.index + 1}"></td>
+							<td class="py-2 px-4 border border-gray-200" th:text="'₹ ' + ${payment.amount_paid}"></td>
+							<td class="py-2 px-4 text-red-500 font-medium border border-gray-200" th:text="'₹ ' + ${payment.balance_amount}"></td>
+							<td class="py-2 px-4 border border-gray-200" th:text="${payment.last_paid_date}"></td>
+							<td class="py-2 px-4 border border-gray-200" th:text="${payment.next_due_date}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="bg-gray-50 text-center py-4 rounded-b-lg">
+				<p class="text-sm text-red-600">If you notice any discrepancies, please contact the hostel office.</p>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

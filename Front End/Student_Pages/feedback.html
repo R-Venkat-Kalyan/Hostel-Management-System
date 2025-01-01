@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Feedback Form</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+
+	<!-- Feedback Form -->
+	<div class="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+		<div class="w-full max-w-lg bg-white rounded-lg shadow-md p-6">
+			<h2 class="text-2xl font-bold text-center text-gray-800 mb-4">We Value Your Feedback!</h2>
+			<p class="text-sm text-gray-600 text-center mb-6">
+				Your feedback helps us improve the Meenakshi Boys Hostel website. Please share your thoughts below.
+			</p>
+			<form action="/submit-feedback" method="POST" class="space-y-4">
+				<!-- Name Field -->
+				<div>
+					<label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
+					<input type="text" id="name" name="name" placeholder="Enter your name"
+						class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+				</div>
+
+				<!-- Email Field -->
+				<div>
+					<label for="email" class="block text-sm font-medium text-gray-700">Your Email</label>
+					<input type="email" id="email" name="email" placeholder="Enter your email"
+						class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+				</div>
+
+				<!-- Feedback Type -->
+				<div>
+					<label for="feedback-type" class="block text-sm font-medium text-gray-700">Feedback Type</label>
+					<select id="feedback-type" name="feedback_type"
+						class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+						<option value="" disabled selected>Select feedback type</option>
+						<option value="suggestion">Suggestion</option>
+						<option value="issue">Issue</option>
+						<option value="compliment">Compliment</option>
+						<option value="other">Other</option>
+					</select>
+				</div>
+
+				<!-- Feedback Message -->
+				<div>
+					<label for="message" class="block text-sm font-medium text-gray-700">Your Feedback</label>
+					<textarea id="message" name="message" rows="4" placeholder="Share your feedback..."
+						class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
+				</div>
+
+				<!-- Submit Button -->
+				<div class="text-center">
+					<button type="submit"
+						class="w-full bg-gradient-to-r from-blue-500 to-green-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg hover:from-blue-600 hover:to-green-600 transition-transform transform hover:scale-105">
+						Submit Feedback
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</body>
+
+</html>

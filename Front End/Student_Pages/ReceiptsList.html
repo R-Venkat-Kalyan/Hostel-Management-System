@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Student Receipts | Hostel Management</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<style>
+		.modal {
+			display: none;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.modal.active {
+			display: flex;
+		}
+
+		.modal img {
+			max-width: 90%;
+			max-height: 80%;
+			object-fit: contain;
+			margin: auto;
+		}
+
+		#close-modal {
+			position: absolute;
+			top: 8px;
+			right: 8px;
+			cursor: pointer;
+			background-color: #f87171;
+			color: white;
+			border: none;
+			padding: 4px 8px;
+			border-radius: 50%;
+			font-size: 16px;
+		}
+	</style>
+</head>
+
+<body class="bg-gray-100 text-gray-900">
+	
+
+	<!-- Modal for Receipt Image -->
+	<div id="modal"
+		class="modal fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+		<div class="relative bg-white rounded-lg shadow-lg p-4">
+			<!-- Close Button -->
+			<button id="close-modal"
+				class="absolute top-2 right-2 bg-red-500 text-white font-bold px-2 py-1 rounded-full hover:bg-red-600">X</button>
+			<!-- Image -->
+			<img id="receipt-image" class="w-full h-auto max-w-xl rounded-lg" src="logo.jpg" alt="Receipt">
+		</div>
+	</div>
+
+
+</body>
+
+</html>

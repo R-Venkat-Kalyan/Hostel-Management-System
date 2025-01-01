@@ -21,6 +21,13 @@ public class UserService {
 		return userRepository.findAll();
 	}
 	
+	public UserEntity getByEmail(String email) {
+		for(UserEntity ue: getAllUsers()) {
+			if(ue.getMail().equals(email))
+				return ue;
+		}
+		return null;
+	}
 	
 
 }

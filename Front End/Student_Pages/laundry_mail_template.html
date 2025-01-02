@@ -6,8 +6,8 @@
     <title>Laundry Submission</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f5f7;
             margin: 0;
             padding: 20px;
         }
@@ -15,35 +15,59 @@
             max-width: 600px;
             margin: 0 auto;
             background: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
         .email-header {
-            text-align: center;
             background-color: #4CAF50;
-            color: white;
-            padding: 10px 0;
-            border-radius: 8px 8px 0 0;
+            text-align: center;
+            padding: 20px;
+            color: #ffffff;
         }
         .email-header h1 {
             margin: 0;
+            font-size: 26px;
+            font-weight: 700;
         }
         .email-content {
-            padding: 20px;
+            padding: 30px;
+            color: #333333;
         }
         .email-content p {
-            margin: 0 0 10px;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 20px;
         }
         .laundry-detail {
-            margin: 20px 0;
-            padding: 10px;
-            background: #f4f4f4;
-            border-radius: 5px;
+            background: #f4f5f7;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 15px;
+        }
+        .laundry-detail p {
+            margin: 5px 0;
         }
         .total {
-            font-weight: bold;
+            font-weight: 700;
             color: #4CAF50;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        .email-footer {
+            background-color: #f9f9fb;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            color: #666666;
+            border-top: 1px solid #e6e6e6;
+        }
+        .email-footer a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -63,6 +87,10 @@
                 <p><strong>Others Count:</strong> {{othersCount}}</p>
             </div>
             <p class="total"><strong>Total Count:</strong> {{totalCount}}</p>
+        </div>
+        <div class="email-footer">
+            <p>Need assistance? Contact us at <a href="mailto:2100030959@kluniversity.in">support@meenakshi.com</a></p>
+            <p>© 2024 Meenakshi Boys Hostel. All rights reserved.</p>
         </div>
     </div>
 </body>

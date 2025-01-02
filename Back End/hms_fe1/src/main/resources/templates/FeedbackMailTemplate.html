@@ -4,8 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Meenakkshi - OTP Verification</title>
+	<title>Feedback Received</title>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 	<link href="assets/img/favicon.png" rel="icon">
 	<style>
@@ -26,11 +25,12 @@
 		}
 
 		.email-header {
-			background-color: royalblue;
+			background-color: #4CAF50;
 			background-size: cover;
-            background-position: center;
+			background-position: center;
 			text-align: center;
 			padding: 25px 20px;
+			color: #ffffff;
 		}
 
 		.email-header h1 {
@@ -56,17 +56,19 @@
 			margin-bottom: 20px;
 		}
 
-		.otp-box {
-			display: inline-block;
+		.detail-box {
 			background: #f4f5f7;
-			padding: 20px;
-			font-size: 32px;
-			font-weight: 700;
-			color: #4e54c8;
-			letter-spacing: 5px;
+			padding: 15px;
+			margin: 10px 0;
 			border-radius: 8px;
-			margin: 20px auto;
 			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		}
+
+		.detail-box span {
+			display: block;
+			font-weight: 600;
+			color: #4CAF50;
+			margin-bottom: 5px;
 		}
 
 		.email-footer {
@@ -79,20 +81,9 @@
 		}
 
 		.email-footer a {
-			color: #4e54c8;
+			color: #4CAF50;
 			text-decoration: none;
 			font-weight: 600;
-		}
-
-		@media (max-width: 600px) {
-			.email-header h1 {
-				font-size: 22px;
-			}
-
-			.otp-box {
-				font-size: 28px;
-				letter-spacing: 3px;
-			}
 		}
 	</style>
 </head>
@@ -100,20 +91,33 @@
 <body>
 	<div class="email-container">
 		<div class="email-header">
-			<h1>OTP Verification</h1>
-			<p>Secure your account with this one-time passcode</p>
+			<h1>New Feedback Received</h1>
+			<p>Details of the feedback</p>
 		</div>
 		<div class="email-content">
-			<p><strong>Dear User,</strong></p>
-			<p>To proceed with your request, please use the OTP below. This code is valid for <strong>5
-					minutes</strong>.</p>
-			<div class="otp-box">{{otp}}</div>
-			<p>If you did not request this OTP, please ignore this email. Rest assured that your account remains secure.
-			</p>
+			<p><strong>Hello,</strong></p>
+			<p>A new feedback submission has been received on the Meenakshi Boys Hostel website. Below are the details:</p>
+			<div class="detail-box">
+				<span>Name:</span>
+				<p>{{name}}</p>
+			</div>
+			<div class="detail-box">
+				<span>Email:</span>
+				<p>{{email}}</p>
+			</div>
+			<div class="detail-box">
+				<span>Feedback Type:</span>
+				<p>{{feedback_type}}</p>
+			</div>
+			<div class="detail-box">
+				<span>Message:</span>
+				<p>{{message}}</p>
+			</div>
+			<p>Please review this feedback and take appropriate action if necessary.</p>
 		</div>
 		<div class="email-footer">
-			<p>Need help? Contact us at <a href="mailto:2100030959@kluniversity.in">support@meenakshi.com</a></p>
-			<p>© 2024 Meenakkshi. All rights reserved.</p>
+			<p>Need assistance? Contact us at <a href="mailto:2100030959@kluniversity.in">support@meenakshi.com</a></p>
+			<p>© 2024 Meenakshi Boys Hostel. All rights reserved.</p>
 		</div>
 	</div>
 </body>

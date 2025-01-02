@@ -435,7 +435,7 @@ public class MyController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload fee receipt");
 		}
 	}
-	
+
 	@GetMapping("/receipts-list")
 	public String receiptsList(HttpSession session, Model model) {
 		if (session.getAttribute("mail") == null) {
@@ -447,21 +447,81 @@ public class MyController {
 		model.addAttribute("mainContent", "ReceiptsList");
 		return "layout";
 	}
-	
-	
-	@GetMapping("/api/receipts/{id}")
-	@ResponseBody
-	public ResponseEntity<byte[]> getReceiptImage(@PathVariable long id) {
-	    Optional<FeeReceipt> receiptOptional = feeReceiptService.findById(id);
-	    if (receiptOptional.isPresent()) {
-	        FeeReceipt receipt = receiptOptional.get();
-	        byte[] imageData = receipt.getReceiptImage();
 
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.setContentType(MediaType.IMAGE_JPEG);
-	        return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
-	    }
-	    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	@GetMapping("/api/receipts/{id}")
+	public ResponseEntity<byte[]> downloadReceiptImage(@PathVariable long id) {
+		Optional<FeeReceipt> receiptOptional = feeReceiptService.findById(id);
+		if (receiptOptional.isPresent()) {
+			FeeReceipt receipt = receiptOptional.get();
+			byte[] imageData = receipt.getReceiptImage();
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			headers.setContentDispositionFormData("attachment", receipt.getFileName());
+			return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+
+	@GetMapping("/payments")
+	public String paymentsList(HttpSession session, Model model) {
+		String id = (String) session.getAttribute("id");
+		Set<FeePayment> studentPayments = feePaymentService.getAllPaymentsByStu(id);
+		FeePayment feePayment = feePaymentService.getFeeByStuId(id);
+		int totalFee = feePayment.getFee_amount();
+		int paidAmount = feePayment.getAmount_paid();
+		int pendingAmount = feePayment.getBalance_amount();
+		model.addAttribute("feePayments", studentPayments);
+		model.addAttribute("totalFee", totalFee);
+		model.addAttribute("paidAmount", paidAmount);
+		model.addAttribute("pendingAmount", pendingAmount);
+		model.addAttribute("mainContent", "FeePaymentsList");
+		return "layout";
+	}
+	
+	@GetMapping("/feedback")
+	public String feedBack(Model model) {
+		model.addAttribute("mainContent", "feedback");
+		return "layout";
+	}
+	
+	@PostMapping("/submit-feedback")
+	public String submitFeedback(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+		String name = request.getParameter("name");
+		String email = request.getParameter("email");
+		String feedbackType = request.getParameter("feedback_type");
+		String message = request.getParameter("message");
+		String to = "2100030959cseh@gmail.com"; // Designer's email
+
+		try {
+			// Read the HTML email template
+			Resource resource = new ClassPathResource("templates/FeedbackMailTemplate.html");
+			String emailTemplate = new String(Files.readAllBytes(resource.getFile().toPath()), StandardCharsets.UTF_8);
+
+			// Replace placeholders with form data
+			String emailBody = emailTemplate
+				.replace("{{name}}", name)
+				.replace("{{email}}", email)
+				.replace("{{feedback_type}}", feedbackType)
+				.replace("{{message}}", message);
+
+			// Create and configure the email
+			MimeMessage mimeMessage = mailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+			helper.setFrom(from); // Replace with actual sender email
+			helper.setTo(to);
+			helper.setSubject("New Feedback Received");
+			helper.setText(emailBody, true);
+
+			// Send the email
+			mailSender.send(mimeMessage);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error"; // Redirect to an error page if required
+		}
+		redirectAttributes.addFlashAttribute("successMessage",
+			    "Thank you for your feedback! Your message has been successfully submitted.");
+		return "redirect:/student";
 	}
 
 // ---------------------------------------------------------------- <Student Routes/> ---------------------------------------------------------------------- //    

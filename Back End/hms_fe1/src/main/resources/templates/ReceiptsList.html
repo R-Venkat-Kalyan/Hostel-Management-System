@@ -4,39 +4,9 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Student Receipts | Hostel Management</title>
+	<title>Student Receipts</title>
 	<script src="https://cdn.tailwindcss.com"></script>
-	<style>
-		.modal {
-			display: none;
-			align-items: center;
-			justify-content: center;
-		}
-
-		.modal.active {
-			display: flex;
-		}
-
-		.modal img {
-			max-width: 90%;
-			max-height: 80%;
-			object-fit: contain;
-			margin: auto;
-		}
-
-		#close-modal {
-			position: absolute;
-			top: 8px;
-			right: 8px;
-			cursor: pointer;
-			background-color: #f87171;
-			color: white;
-			border: none;
-			padding: 4px 8px;
-			border-radius: 50%;
-			font-size: 16px;
-		}
-	</style>
+	<link href="assets/img/favicon.png" rel="icon">
 </head>
 
 <body class="bg-gray-100 text-gray-900">
@@ -53,54 +23,25 @@
 							<th class="py-2 px-2 border border-gray-200 text-center w-12">S.No</th>
 							<th class="py-2 px-4 border border-gray-200 text-left">Receipt Name</th>
 							<th class="py-2 px-4 border border-gray-200 text-left">Uploaded Date</th>
-							<th class="py-2 px-4 border border-gray-200 text-left w-1/6">View</th>
+							<th class="py-2 px-4 border border-gray-200 text-left w-1/6">Download</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="receipt, iterStat : ${receipts}" class="hover:bg-gray-50">
-							<td class="py-2 px-2 border border-gray-200 text-center" th:text="${iterStat.index + 1}">
-							</td>
+							<td class="py-2 px-2 border border-gray-200 text-center" th:text="${iterStat.index + 1}"></td>
 							<td class="py-2 px-4 border border-gray-200" th:text="${receipt.fileName}"></td>
 							<td class="py-2 px-4 border border-gray-200" th:text="${receipt.date}"></td>
 							<td class="py-2 px-4 border border-gray-200 text-center">
-								<button class="text-blue-600 font-bold view-btn"
-									th:onclick="'viewReceipt(' + ${receipt.id} + ')'">View</button>
+								<a class="text-blue-600 font-bold hover:underline"
+									th:href="@{'/api/receipts/' + ${receipt.id}}"
+									th:download="${receipt.fileName}">Download</a>
 							</td>
 						</tr>
-
 					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
-
-	<!-- Modal for Receipt Image -->
-	<div id="modal"
-		class="modal fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-		<div class="relative bg-white rounded-lg shadow-lg p-4">
-			<!-- Close Button -->
-			<button id="close-modal"
-				class="absolute top-2 right-2 bg-red-500 text-white font-bold px-2 py-1 rounded-full hover:bg-red-600">X</button>
-			<!-- Image -->
-			<img id="receipt-image" class="w-full h-auto max-w-xl rounded-lg" src="" alt="Receipt">
-		</div>
-	</div>
-
-
-	<script>
-		const modal = document.getElementById("modal");
-		const receiptImage = document.getElementById("receipt-image");
-		const closeModalButton = document.getElementById("close-modal");
-
-		function viewReceipt(receiptId) {
-			receiptImage.src = `/api/receipts/${receiptId}`;
-			modal.classList.add("active");
-		}
-
-		closeModalButton.addEventListener("click", () => {
-			modal.classList.remove("active");
-		});
-	</script>
 </body>
 
 </html>

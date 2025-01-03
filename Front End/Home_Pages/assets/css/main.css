@@ -746,9 +746,24 @@ section,
   inset: 90px 64px 64px 64px;
   display: flex;
   justify-content: center;
+  text-align: center;
   align-items: center;
   flex-direction: column;
   z-index: 3;
+}
+
+.carousel-container p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  /* Makes the text bold */
+  color: #fdfafa;
+  /* Adjust color for better visibility */
+  line-height: 1.5;
+  /* Adds some spacing between lines for readability */
+  margin: 0 auto;
+  /* Centers the paragraph */
+  width: 80%;
+  /* Optional: Restrict width for better alignment */
 }
 
 .hero h2 {

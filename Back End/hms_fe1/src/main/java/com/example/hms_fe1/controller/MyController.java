@@ -292,20 +292,20 @@ public class MyController {
 		else
 			model.addAttribute("washRoom", "Shared Washroom");
 		model.addAttribute("mainContent", "accommodation");
-		return "layout";
+		return "StudentLayout";
 
 	}
 
 	@GetMapping("/contacts")
 	public String accommodation(Model model) {
 		model.addAttribute("mainContent", "contacts");
-		return "layout";
+		return "StudentLayout";
 	}
 
 	@GetMapping("/issues")
 	public String issues(Model model) {
 		model.addAttribute("mainContent", "issues");
-		return "layout";
+		return "StudentLayout";
 	}
 
 	@PostMapping("/issue")
@@ -330,13 +330,13 @@ public class MyController {
 		Set<IssueEntity> userissues = issueService.getIssuesOfUser(id);
 		model.addAttribute("issues", userissues);
 		model.addAttribute("mainContent", "IssuesList");
-		return "layout";
+		return "StudentLayout";
 	}
 
 	@GetMapping("/laundry")
 	public String dashboard(Model model) {
 		model.addAttribute("mainContent", "laundry");
-		return "layout";
+		return "StudentLayout";
 	}
 
 	@PostMapping("/submit-laundry")
@@ -395,7 +395,7 @@ public class MyController {
 		UserEntity ue = userService.getByEmail(email);
 		model.addAttribute("user", ue);
 		model.addAttribute("mainContent", "profile");
-		return "layout";
+		return "StudentLayout";
 	}
 
 	@PostMapping("/update-profile")
@@ -419,7 +419,7 @@ public class MyController {
 	@GetMapping("/add-receipts")
 	public String uploadReceipt(Model model) {
 		model.addAttribute("mainContent", "ReceiptUploadForm");
-		return "layout";
+		return "StudentLayout";
 
 	}
 
@@ -445,7 +445,7 @@ public class MyController {
 		Set<FeeReceipt> userReceipts = feeReceiptService.findStuReceipts(id);
 		model.addAttribute("receipts", userReceipts);
 		model.addAttribute("mainContent", "ReceiptsList");
-		return "layout";
+		return "StudentLayout";
 	}
 
 	@GetMapping("/api/receipts/{id}")
@@ -476,13 +476,13 @@ public class MyController {
 		model.addAttribute("paidAmount", paidAmount);
 		model.addAttribute("pendingAmount", pendingAmount);
 		model.addAttribute("mainContent", "FeePaymentsList");
-		return "layout";
+		return "StudentLayout";
 	}
 	
 	@GetMapping("/feedback")
 	public String feedBack(Model model) {
 		model.addAttribute("mainContent", "feedback");
-		return "layout";
+		return "StudentLayout";
 	}
 	
 	@PostMapping("/submit-feedback")
@@ -527,16 +527,33 @@ public class MyController {
 // ---------------------------------------------------------------- <Student Routes/> ---------------------------------------------------------------------- //    
 
 // ---------------------------------------------------------------- <SuperVisor Routes> -------------------------------------------------------------------- //    v
-	@GetMapping("/add-users")
-	public String addUsers() {
-		return "MappingForm";
+	
+	@GetMapping("/supervisor")
+	public String superVisor() {
+		return "SuperVisorDashboard";
+	}
+	
+	@GetMapping("/view-issues")
+	public String Studentissues(Model model) {
+		Set<IssueEntity> allIssues = issueService.getAllIssues();
+		model.addAttribute("issues", allIssues);
+		model.addAttribute("mainContent", "UpdateIssuesList");
+		return "SuperVisorLayout";
+	}
+	
+	@GetMapping("/add-student")
+	public String addUsers(Model model) {
+		model.addAttribute("mainContent", "MappingForm");
+		return "SuperVisorLayout";
 	}
 
 	@PostMapping("/save-mapping")
-	public String saveMapping(@ModelAttribute MappingEntity mappingEntity, HttpServletRequest request) {
+	public String saveMapping(@ModelAttribute MappingEntity mappingEntity, HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		// Save student, room, and fee payment records
 		mappingService.saveMappings(mappingEntity);
-		return "dashboard";
+		redirectAttributes.addFlashAttribute("successMessage",
+			    "New Mapping Added Successfully ✔✔");
+		return "redirect:/supervisor";
 	}
 
 // ---------------------------------------------------------------- <SuperVisor Routes/> ------------------------------------------------------------------ //	

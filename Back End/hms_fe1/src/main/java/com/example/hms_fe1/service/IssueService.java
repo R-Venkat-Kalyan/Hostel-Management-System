@@ -20,6 +20,12 @@ public class IssueService {
 		issueRepository.save(issue);
 	}
 	
+	public Set<IssueEntity> getAllIssues(){
+		List<IssueEntity> allIssues = issueRepository.findAll();
+		Set<IssueEntity> issues = new HashSet<IssueEntity>(allIssues);	
+		return issues;
+	}
+	
 	public Set<IssueEntity> getIssuesOfUser(String id){
 		List<IssueEntity> allIssues = issueRepository.findAll();
 		Set<IssueEntity> userissues = new HashSet<IssueEntity>();
@@ -29,6 +35,8 @@ public class IssueService {
 		}
 		return userissues;
 	}
+	
+	
 	
 	
 

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supervisor - Issues</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="assets/img/favicon.png" rel="icon">
+    <!-- Tooltip Styles -->
+    <style>
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            white-space: nowrap;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+            pointer-events: none;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-900">
+    <!-- Table Container -->
+    <div class="max-w-5xl mx-auto py-12 px-6">
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <!-- Centered Header -->
+            <div class="px-6 py-4 text-center">
+                <h2 class="text-2xl font-bold text-blue-600">Issues Reported</h2>
+                <p class="text-gray-600 mt-2">View and manage issues raised by students.</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200">
+                    <thead>
+                        <tr class="bg-blue-600 text-white">
+                            <th class="py-2 px-2 border border-gray-200 text-center w-20">Student ID</th>
+                            <th class="py-2 px-4 border border-gray-200 text-left w-1/6">Room Number</th>
+                            <th class="py-2 px-4 border border-gray-200 text-left">Description</th>
+                            <th class="py-2 px-4 border border-gray-200 text-left w-1/5">Date</th>
+                            <th class="py-2 px-4 border border-gray-200 text-left w-1/6">Status</th>
+                            <th class="py-2 px-4 border border-gray-200 text-center w-16">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="issue : ${issues}" class="hover:bg-gray-50">
+                            <td class="py-2 px-2 border border-gray-200 text-center" th:text="${issue.studentId}"></td>
+                            <td class="py-2 px-4 border border-gray-200" th:text="${issue.roomNumber}"></td>
+                            <td class="py-2 px-4 border border-gray-200" th:text="${issue.issueDescription}"></td>
+                            <td class="py-2 px-4 border border-gray-200" th:text="${issue.date}"></td>
+                            <td class="py-2 px-4 border border-gray-200" th:text="${issue.status}"></td>
+                            <td class="py-2 px-4 border border-gray-200 text-center">
+                                <!-- Update Status Button -->
+                                <a href="#" class="text-green-600 hover:text-green-800 tooltip" title="Update Status">
+                                    <i class="fas fa-sync-alt text-lg"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

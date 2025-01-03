@@ -4,165 +4,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Student Details</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link href="assets/img/favicon.png" rel="icon">
+    <title>Hostel Student Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-        html,
         body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background: linear-gradient(to bottom, #2a0845, #6441a5);
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-            background-size: cover;
-            color: #fff;
             font-family: 'Roboto', sans-serif;
         }
 
-        #msform {
-            margin: 40px auto;
-            text-align: center;
-        }
-
-        #msform fieldset {
-            background: #fff;
-            color: #333;
-            border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            padding: 20px 30px;
-            box-sizing: border-box;
-            width: 70%;
-            margin: 0 auto;
-            display: none;
-        }
-
-        #msform fieldset.active {
-            display: block;
-        }
-
-        #msform input,
-        #msform select {
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            width: 100%;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-
-        #msform .action-button {
-            background: #6a1b9a;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            margin: 10px;
-        }
-
-        #msform .action-button:hover {
-            background: #4a0072;
-        }
-
-        #progressbar {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
         #progressbar li {
-            list-style-type: none;
-            width: 33%;
-            color: #fff;
-            position: relative;
-            text-align: center;
-            text-transform: uppercase;
+            border: 2px solid transparent;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
         }
 
         #progressbar li.active {
+            border-color: #4c51bf;
+            color: #4c51bf;
             font-weight: bold;
-            color: #ffcc00;
-        }
-
-        form label {
-            display: block;
-            text-align: left;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #333;
         }
     </style>
 </head>
 
-<body>
-    <div class="container">
-        <form id="msform" action="/save-mapping" method="post">
-            <ul id="progressbar">
-                <li class="active">Student Info</li>
-                <li>Room Details</li>
-                <li>Fee Details</li>
+<body class="bg-white text-gray-800">
+    
+    <!-- Form Content -->
+    <div class="pt-20 max-w-3xl mx-auto p-6">
+        <form id="msform" class="space-y-8">
+            <!-- Progressbar -->
+            <ul id="progressbar" class="flex justify-between space-x-4 mb-6">
+                <li class="w-1/3 text-center py-2 active">Student Info</li>
+                <li class="w-1/3 text-center py-2">Room Details</li>
+                <li class="w-1/3 text-center py-2">Fee Details</li>
             </ul>
+
             <!-- Fieldset 1 -->
-            <fieldset class="active">
-                <h2 class="fs-title">Student Information</h2>
-                <label for="name">Name</label>
-                <input type="text" name="stu_name" id="name" placeholder="Name" required />
-
-                <label for="id">Student ID</label>
-                <input type="text" name="stu_id" id="id" placeholder="Student ID" pattern="\d{10}" title="Student ID must be exactly 10 digits" required />
-
-                <label for="phone">Phone Number</label>
-                <input type="text" name="stu_phone" id="phone" placeholder="Phone Number" pattern="\d{10}" title="Phone number must be exactly 10 digits" required />
-
-                <input type="button" name="next" class="next action-button" value="Next" />
+            <fieldset class="bg-blue-50 p-6 rounded-lg shadow-lg space-y-4">
+                <h2 class="text-xl font-bold text-blue-800">Student Information</h2>
+                <div>
+                    <label for="name" class="block font-medium">Name</label>
+                    <input type="text" name="name" id="stuName" placeholder="Name" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded focus:ring focus:ring-blue-300" />
+                </div>
+                <div>
+                    <label for="id" class="block font-medium">Student ID</label>
+                    <input type="text" name="stuId" id="id" placeholder="Student ID" pattern="\d{10}"
+                        title="Student ID must be exactly 10 digits" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded focus:ring focus:ring-blue-300" />
+                </div>
+                <div>
+                    <label for="phone" class="block font-medium">Phone Number</label>
+                    <input type="text" name="stuPhone" id="phone" placeholder="Phone Number" pattern="\d{10}"
+                        title="Phone number must be exactly 10 digits" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded focus:ring focus:ring-blue-300" />
+                </div>
+                <div class="flex justify-end">
+                    <button type="button"
+                        class="next bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Next</button>
+                </div>
             </fieldset>
+
             <!-- Fieldset 2 -->
-            <fieldset>
-                <h2 class="fs-title">Room Details</h2>
-                <label for="room_number">Room Number</label>
-                <input type="text" name="room_number" id="room_number" placeholder="Room Number" required />
-
-                <label for="room_type">Room Type</label>
-                <select name="room_type" id="room_type" required>
-                    <option value="">Select Room Type</option>
-                    <option value="3_bed_non_ac">3 Bed Non-AC</option>
-                    <option value="4_bed_ac">4 Bed AC</option>
-                    <option value="4_bed_non_ac">4 Bed Non-AC</option>
-                    <option value="2_bed_hall">2 Bed Hall</option>
-                </select>
-
-                <input type="button" name="previous" class="previous action-button" value="Previous" />
-                <input type="button" name="next" class="next action-button" value="Next" />
+            <fieldset class="hidden bg-green-50 p-6 rounded-lg shadow-lg space-y-4">
+                <h2 class="text-xl font-bold text-green-800">Room Details</h2>
+                <div>
+                    <label for="room_number" class="block font-medium">Room Number</label>
+                    <input type="text" name="room_number" id="room_number" placeholder="Room Number" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded focus:ring focus:ring-green-300" />
+                </div>
+                <div>
+                    <label for="room_type" class="block font-medium">Room Type</label>
+                    <select name="room_type" id="room_type" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded focus:ring focus:ring-green-300">
+                        <option value="">Select Room Type</option>
+                        <option value="3_bed_non_ac">3 Bed Non-AC</option>
+                        <option value="4_bed_ac">4 Bed AC</option>
+                        <option value="4_bed_non_ac">4 Bed Non-AC</option>
+                        <option value="2_bed_hall">2 Bed Hall</option>
+                    </select>
+                </div>
+                <div class="flex justify-between">
+                    <button type="button"
+                        class="previous bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Previous</button>
+                    <button type="button"
+                        class="next bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Next</button>
+                </div>
             </fieldset>
+
             <!-- Fieldset 3 -->
-            <fieldset>
-                <h2 class="fs-title">Fee Details</h2>
-                <label for="fee_amount">Fee Amount</label>
-                <select name="fee_amount" id="fee_amount" required>
-                    <option value="75000">75,000</option>
-                    <option value="90000">90,000</option>
-                    <option value="100000">1,00,000</option>
-                </select>
-
-                <label for="amount_paid">Amount Paid</label>
-                <input type="number" name="amount_paid" id="amount_paid" placeholder="Amount Paid" required />
-
-                <label for="last_paid_date">Last Paid Date</label>
-                <input type="date" name="last_paid_date" id="last_paid_date" required />
-
-                <label for="next_due_date">Next Due Date</label>
-                <input type="date" name="next_due_date" id="next_due_date" required />
-
-                <input type="button" name="previous" class="previous action-button" value="Previous" />
-                <input type="submit" class="action-button" value="Submit" />
+            <fieldset class="hidden bg-yellow-50 p-6 rounded-lg shadow-lg space-y-4">
+                <h2 class="text-xl font-bold text-yellow-800">Fee Details</h2>
+                <div>
+                    <label for="fee_amount" class="block font-medium">Fee Amount</label>
+                    <select name="fee_amount" id="fee_amount" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded focus:ring focus:ring-yellow-300">
+                        <option value="75000">75,000</option>
+                        <option value="90000">90,000</option>
+                        <option value="100000">1,00,000</option>
+                    </select>
+                </div>
+                <div class="flex justify-between">
+                    <button type="button"
+                        class="previous bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Previous</button>
+                    <button type="submit"
+                        class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">Submit</button>
+                </div>
             </fieldset>
         </form>
     </div>
@@ -170,40 +117,48 @@
     <script>
         const nextButtons = document.querySelectorAll('.next');
         const prevButtons = document.querySelectorAll('.previous');
-        const fieldsets = document.querySelectorAll('#msform fieldset');
-        const progressbar = document.querySelectorAll('#progressbar li');
+        const fieldsets = document.querySelectorAll('fieldset');
+        const progressbarItems = document.querySelectorAll('#progressbar li');
 
         let currentStep = 0;
 
-        nextButtons.forEach((button, index) => {
-            button.addEventListener('click', () => {
-                const inputs = fieldsets[currentStep].querySelectorAll('input, select');
-                for (const input of inputs) {
-                    if (!input.checkValidity()) {
-                        alert(input.title || `${input.name} is required!`);
-                        input.focus();
-                        return;
-                    }
+        const validateFieldset = (fieldset) => {
+            const inputs = fieldset.querySelectorAll('input, select');
+            for (const input of inputs) {
+                if (!input.checkValidity()) {
+                    input.reportValidity();
+                    return false;
                 }
-                // Move to the next step
-                fieldsets[currentStep].classList.remove('active');
-                progressbar[currentStep].classList.remove('active');
-                currentStep++;
-                fieldsets[currentStep].classList.add('active');
-                progressbar[currentStep].classList.add('active');
+            }
+            return true;
+        };
+
+        nextButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                if (validateFieldset(fieldsets[currentStep])) {
+                    fieldsets[currentStep].classList.add('hidden');
+                    progressbarItems[currentStep].classList.remove('active');
+                    currentStep++;
+                    fieldsets[currentStep].classList.remove('hidden');
+                    progressbarItems[currentStep].classList.add('active');
+                }
             });
         });
 
         prevButtons.forEach((button) => {
             button.addEventListener('click', () => {
-                fieldsets[currentStep].classList.remove('active');
-                progressbar[currentStep].classList.remove('active');
+                fieldsets[currentStep].classList.add('hidden');
+                progressbarItems[currentStep].classList.remove('active');
                 currentStep--;
-                fieldsets[currentStep].classList.add('active');
-                progressbar[currentStep].classList.add('active');
+                fieldsets[currentStep].classList.remove('hidden');
+                progressbarItems[currentStep].classList.add('active');
             });
         });
 
+        document.getElementById('msform').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Form submitted successfully!');
+        });
     </script>
 </body>
 

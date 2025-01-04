@@ -36,7 +36,9 @@ public class IssueService {
 		return userissues;
 	}
 	
-	
+	public IssueEntity getIssueById(int id) {
+		return issueRepository.getById(id);
+	}
 	
 	
 

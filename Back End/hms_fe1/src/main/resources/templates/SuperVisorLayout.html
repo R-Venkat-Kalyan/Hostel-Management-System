@@ -8,6 +8,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="assets/img/favicon.png" rel="icon">
+    <th:block th:if="${successMessage}">
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+			window.onload = function () {
+				alert(/*[[${successMessage}]]*/ '');
+			};
+        /*]]>*/
+		</script>
+	</th:block>
 </head>
 
 <body class="flex flex-col w-screen h-screen bg-red-300">
@@ -73,7 +82,7 @@
         
                 <!-- View Students Data -->
                 <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
-                    href="/view-students">
+                    href="/students-list">
                     <i class="fas fa-users w-6"></i>
                     <span class="ml-2 text-sm font-medium">View Students</span>
                 </a>

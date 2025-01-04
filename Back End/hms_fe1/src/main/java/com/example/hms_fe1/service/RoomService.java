@@ -12,17 +12,6 @@ public class RoomService {
 	
     @Autowired
     private RoomRepository roomRepository;
-
-//    public void save(String roomId, Student student) {
-//        Room room = roomRepository.findById(roomId).orElseThrow(() -> 
-//            new IllegalArgumentException("Room not found!"));
-//
-//        // Assign the student to the room
-//        room.setStudent(student);
-//
-//        // Save the updated room
-//        roomRepository.save(room);
-//    }
     
     public Room getRoomByStuId(String stu_id) {
     	for(Room room: roomRepository.findAll()) {
@@ -31,5 +20,6 @@ public class RoomService {
     	}
     	return null;
     }
+    
 }
 

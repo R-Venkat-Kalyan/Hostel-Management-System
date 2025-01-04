@@ -68,7 +68,7 @@
                             <td class="py-2 px-4 border border-gray-200" th:text="${issue.status}"></td>
                             <td class="py-2 px-4 border border-gray-200 text-center">
                                 <!-- Update Status Button -->
-                                <a href="#" class="text-green-600 hover:text-green-800 tooltip" title="Update Status">
+                                <a th:href="@{/update-status/{id}(id=${issue.id})}" class="text-green-600 hover:text-green-800 tooltip" title="Update Status">
                                     <i class="fas fa-sync-alt text-lg"></i>
                                 </a>
                             </td>

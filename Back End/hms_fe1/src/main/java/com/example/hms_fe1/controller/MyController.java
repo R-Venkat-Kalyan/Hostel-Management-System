@@ -1,10 +1,12 @@
 package com.example.hms_fe1.controller;
 
 import java.io.IOException;
+
 import java.nio.charset.StandardCharsets;
 
 import java.nio.file.Files;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -26,23 +28,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.example.hms_fe1.entity.FeePayment;
 import com.example.hms_fe1.entity.FeeReceipt;
 import com.example.hms_fe1.entity.IssueEntity;
 import com.example.hms_fe1.entity.MappingEntity;
 import com.example.hms_fe1.entity.Room;
+import com.example.hms_fe1.entity.Student;
 import com.example.hms_fe1.entity.UserEntity;
-import com.example.hms_fe1.repository.IssueRepository;
 import com.example.hms_fe1.service.FeePaymentService;
 import com.example.hms_fe1.service.FeeReceiptService;
 import com.example.hms_fe1.service.IssueService;
 import com.example.hms_fe1.service.MappingService;
 import com.example.hms_fe1.service.RoomService;
+import com.example.hms_fe1.service.StudentDetailsDTO;
 import com.example.hms_fe1.service.StudentService;
 import com.example.hms_fe1.service.UserService;
 import jakarta.mail.internet.MimeMessage;
@@ -54,9 +54,9 @@ public class MyController {
 
 // ------------------------------------------------------------- <Required Beans> --------------------------------------------------------------------------- //
 
-//  @Autowired
-// 	private StudentService studentService;    
-//  
+	@Autowired
+	private StudentService studentService;
+
 	@Autowired
 	private RoomService roomService;
 
@@ -478,13 +478,13 @@ public class MyController {
 		model.addAttribute("mainContent", "FeePaymentsList");
 		return "StudentLayout";
 	}
-	
+
 	@GetMapping("/feedback")
 	public String feedBack(Model model) {
 		model.addAttribute("mainContent", "feedback");
 		return "StudentLayout";
 	}
-	
+
 	@PostMapping("/submit-feedback")
 	public String submitFeedback(HttpServletRequest request, RedirectAttributes redirectAttributes) {
 		String name = request.getParameter("name");
@@ -499,11 +499,8 @@ public class MyController {
 			String emailTemplate = new String(Files.readAllBytes(resource.getFile().toPath()), StandardCharsets.UTF_8);
 
 			// Replace placeholders with form data
-			String emailBody = emailTemplate
-				.replace("{{name}}", name)
-				.replace("{{email}}", email)
-				.replace("{{feedback_type}}", feedbackType)
-				.replace("{{message}}", message);
+			String emailBody = emailTemplate.replace("{{name}}", name).replace("{{email}}", email)
+					.replace("{{feedback_type}}", feedbackType).replace("{{message}}", message);
 
 			// Create and configure the email
 			MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -520,19 +517,19 @@ public class MyController {
 			return "error"; // Redirect to an error page if required
 		}
 		redirectAttributes.addFlashAttribute("successMessage",
-			    "Thank you for your feedback! Your message has been successfully submitted.");
+				"Thank you for your feedback! Your message has been successfully submitted.");
 		return "redirect:/student";
 	}
 
 // ---------------------------------------------------------------- <Student Routes/> ---------------------------------------------------------------------- //    
 
 // ---------------------------------------------------------------- <SuperVisor Routes> -------------------------------------------------------------------- //    v
-	
+
 	@GetMapping("/supervisor")
 	public String superVisor() {
 		return "SuperVisorDashboard";
 	}
-	
+
 	@GetMapping("/view-issues")
 	public String Studentissues(Model model) {
 		Set<IssueEntity> allIssues = issueService.getAllIssues();
@@ -540,7 +537,47 @@ public class MyController {
 		model.addAttribute("mainContent", "UpdateIssuesList");
 		return "SuperVisorLayout";
 	}
-	
+
+	@GetMapping("/update-status/{id}")
+	public String showUpdateTaskForm(@PathVariable("id") String idStr, Model model,
+			RedirectAttributes redirectAttributes) {
+		int id = Integer.parseInt(idStr);
+		IssueEntity issue = issueService.getIssueById(id);
+		if (issue != null) {
+			issue.setStatus("Resolved");
+			issueService.saveIssue(issue);
+			redirectAttributes.addFlashAttribute("successMessage", "Issue Status Updated Successfully ✔✔");
+			return "redirect:/view-issues";
+		} else {
+			return "Error";
+		}
+	}
+
+	@GetMapping("/students-list")
+	public String getStudentDetails(Model model) {
+		// Fetch all students
+		List<Student> students = studentService.getAllStudents();
+
+		// Prepare list of student details
+		List<StudentDetailsDTO> studentDetailsList = new ArrayList<StudentDetailsDTO>();
+		for (Student student : students) {
+			Room room = roomService.getRoomByStuId(student.getStu_id());
+			FeePayment feePayment = feePaymentService.getFeeByStuId(student.getStu_id());
+
+			StudentDetailsDTO studentDetails = new StudentDetailsDTO(student.getStu_id(), student.getStu_name(),
+					room != null ? room.getRoom_number() : "N/A", room != null ? room.getRoom_type() : "N/A",
+					feePayment != null ? feePayment.getAmount_paid() : 0,
+					feePayment != null ? feePayment.getBalance_amount() : 0, student.getStu_phone());
+			studentDetailsList.add(studentDetails);
+		}
+
+		// Add data to model
+		model.addAttribute("students", studentDetailsList);
+
+		model.addAttribute("mainContent", "StudentDetailsList");
+		return "SuperVisorLayout";
+	}
+
 	@GetMapping("/add-student")
 	public String addUsers(Model model) {
 		model.addAttribute("mainContent", "MappingForm");
@@ -548,11 +585,11 @@ public class MyController {
 	}
 
 	@PostMapping("/save-mapping")
-	public String saveMapping(@ModelAttribute MappingEntity mappingEntity, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+	public String saveMapping(@ModelAttribute MappingEntity mappingEntity, HttpServletRequest request,
+			RedirectAttributes redirectAttributes) {
 		// Save student, room, and fee payment records
 		mappingService.saveMappings(mappingEntity);
-		redirectAttributes.addFlashAttribute("successMessage",
-			    "New Mapping Added Successfully ✔✔");
+		redirectAttributes.addFlashAttribute("successMessage", "New Mapping Added Successfully ✔✔");
 		return "redirect:/supervisor";
 	}
 

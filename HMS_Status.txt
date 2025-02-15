@@ -1,0 +1,19 @@
+					Hostel Management System - Status
+
+Student's Role
+--------------------
+Logout Button Configuration Pending
+
+
+Supervisor's Role
+------------------------
+Logout button configuration Pending
+Dashboard Page Pending
+Add Fee Payment Page Pending
+View Rooms Page Pending
+Approval Pending  Payements Page Pending
+
+
+Admin's Role
+------------------
+EveryThing Pending

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Student Receipts</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<link href="assets/img/favicon.png" rel="icon">
+</head>
+
+<body class="bg-gray-100 text-gray-900">
+	<div class="max-w-5xl mx-auto p-6">
+		<div class="bg-white shadow-md rounded-lg overflow-hidden">
+			<div class="px-6 py-4 text-center">
+				<h2 class="text-2xl font-bold text-blue-600">Your Fee Receipts</h2>
+				<p class="text-gray-600 mt-2">Below is the list of fee receipts you've uploaded.</p>
+			</div>
+			<div class="overflow-x-auto">
+				<table class="min-w-full bg-white border border-gray-200">
+					<thead>
+						<tr class="bg-blue-600 text-white">
+							<th class="py-2 px-2 border border-gray-200 text-center w-12">S.No</th>
+							<th class="py-2 px-4 border border-gray-200 text-left">Receipt Name</th>
+							<th class="py-2 px-4 border border-gray-200 text-left">Uploaded Date</th>
+							<th class="py-2 px-4 border border-gray-200 text-left w-1/6">Download</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="receipt, iterStat : ${receipts}" class="hover:bg-gray-50">
+							<td class="py-2 px-2 border border-gray-200 text-center" th:text="${iterStat.index + 1}"></td>
+							<td class="py-2 px-4 border border-gray-200" th:text="${receipt.fileName}"></td>
+							<td class="py-2 px-4 border border-gray-200" th:text="${receipt.date}"></td>
+							<td class="py-2 px-4 border border-gray-200 text-center">
+								<a class="text-blue-600 font-bold hover:underline"
+									th:href="@{'/api/receipts/' + ${receipt.id}}"
+									th:download="${receipt.fileName}">Download</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Feedback Received</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+	<link href="assets/img/favicon.png" rel="icon">
+	<style>
+		body {
+			font-family: 'Inter', sans-serif;
+			background-color: #f4f5f7;
+			margin: 0;
+			padding: 0;
+		}
+
+		.email-container {
+			max-width: 600px;
+			margin: 50px auto;
+			background: #ffffff;
+			border-radius: 10px;
+			box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+			overflow: hidden;
+		}
+
+		.email-header {
+			background-color: #4CAF50;
+			background-size: cover;
+			background-position: center;
+			text-align: center;
+			padding: 25px 20px;
+			color: #ffffff;
+		}
+
+		.email-header h1 {
+			margin: 0;
+			font-size: 26px;
+			font-weight: 700;
+		}
+
+		.email-header p {
+			margin: 5px 0 0;
+			font-size: 14px;
+			font-weight: 400;
+		}
+
+		.email-content {
+			padding: 30px;
+			color: #333333;
+		}
+
+		.email-content p {
+			font-size: 16px;
+			line-height: 1.8;
+			margin-bottom: 20px;
+		}
+
+		.detail-box {
+			background: #f4f5f7;
+			padding: 15px;
+			margin: 10px 0;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		}
+
+		.detail-box span {
+			display: block;
+			font-weight: 600;
+			color: #4CAF50;
+			margin-bottom: 5px;
+		}
+
+		.email-footer {
+			background-color: #f9f9fb;
+			text-align: center;
+			padding: 20px;
+			font-size: 14px;
+			color: #666666;
+			border-top: 1px solid #e6e6e6;
+		}
+
+		.email-footer a {
+			color: #4CAF50;
+			text-decoration: none;
+			font-weight: 600;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="email-container">
+		<div class="email-header">
+			<h1>New Feedback Received</h1>
+			<p>Details of the feedback</p>
+		</div>
+		<div class="email-content">
+			<p><strong>Hello,</strong></p>
+			<p>A new feedback submission has been received on the Meenakshi Boys Hostel website. Below are the details:</p>
+			<div class="detail-box">
+				<span>Name:</span>
+				<p>{{name}}</p>
+			</div>
+			<div class="detail-box">
+				<span>Email:</span>
+				<p>{{email}}</p>
+			</div>
+			<div class="detail-box">
+				<span>Feedback Type:</span>
+				<p>{{feedback_type}}</p>
+			</div>
+			<div class="detail-box">
+				<span>Message:</span>
+				<p>{{message}}</p>
+			</div>
+			<p>Please review this feedback and take appropriate action if necessary.</p>
+		</div>
+		<div class="email-footer">
+			<p>Need assistance? Contact us at <a href="mailto:2100030959@kluniversity.in">support@meenakshi.com</a></p>
+			<p>© 2024 Meenakshi Boys Hostel. All rights reserved.</p>
+		</div>
+	</div>
+</body>
+
+</html>

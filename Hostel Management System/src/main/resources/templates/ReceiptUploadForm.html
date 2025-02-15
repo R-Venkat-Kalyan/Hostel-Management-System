@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Fee Receipt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="assets/img/favicon.png" rel="icon">
+</head>
+
+<body class="bg-gray-100 text-gray-900">
+    <!-- Form Container -->
+    <div class="max-w-3xl mx-auto p-6">
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <!-- Centered Header -->
+            <div class="px-6 py-4 text-center">
+                <h2 class="text-2xl font-bold text-blue-600">Upload Fee Receipt</h2>
+                <p class="text-gray-600 mt-2">Provide the details of your payment and upload the receipt.</p>
+            </div>
+
+            <!-- Form -->
+            <form action="/upload-fee-receipt" method="POST" enctype="multipart/form-data" class="px-6 py-4 space-y-4">
+                <!-- Date -->
+                <div>
+                    <label for="date" class="block text-sm font-medium text-gray-700">Date of Payment</label>
+                    <input type="date" id="date" name="date" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <!-- Payment Amount -->
+                <div>
+                    <label for="amount" class="block text-sm font-medium text-gray-700">Payment Amount (₹)</label>
+                    <input type="number" id="amount" name="amount" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <!-- Upload Receipt -->
+                <div>
+                    <label for="receiptImage" class="block text-sm font-medium text-gray-700">Upload Receipt</label>
+                    <input type="file" id="receiptImage" name="imageFile" accept="image/*" required
+                        class="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit"
+                        class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

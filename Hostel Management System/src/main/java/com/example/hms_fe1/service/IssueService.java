@@ -40,6 +40,9 @@ public class IssueService {
 		return issueRepository.getById(id);
 	}
 	
+	public int pendingIssuesCount() {
+		return issueRepository.pendingIssuesCount();
+	}
 	
 
 }

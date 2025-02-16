@@ -21,5 +21,13 @@ public class StudentService {
     public List<Student> getAllStudents(){
     	return studentRepository.findAll();
     }
+    
+    public int getStudentCount() {
+    	return studentRepository.studentCount();
+    }
+    
+    public Student findStudentById(String id) {
+    	return studentRepository.findById(id) .orElseThrow(() -> new RuntimeException("Student not found"));
+    }
 }
 

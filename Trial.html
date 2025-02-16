@@ -19,7 +19,7 @@
     </th:block>
     <style>
         .cool-text {
-            background:  rgb(0, 0, 255);
+            background: linear-gradient(90deg, #60a5fa, #3b82f6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: bold;
@@ -123,13 +123,13 @@
             <!-- User Details -->
             <div class="mt-6 bg-white shadow-md rounded-lg p-4">
                 <!-- <h2 class="text-xl font-semibold text-gray-800">Your Details:</h2> -->
-                <p><span class="cool-text text-2xl">Total Number Of Students Residing:</span> <span class="text-green-700 text-2xl"
+                <p><span class="cool-text">Total Students:</span> <span class="text-gray-300 text-2xl"
                         th:text="${totalStudents}"></span></p>
-                <p><span class="cool-text text-2xl">Available Rooms:</span> <span class="text-gray-300 text-2xl"
+                <p><span class="cool-text">Available Rooms:</span> <span class="text-gray-300 text-2xl"
                         th:text="${availableRooms}"></span></p>
-                <p><span class="cool-text text-2xl">Pending Fee Approvals:</span> <span class="text-gray-300 text-2xl"
+                <p><span class="cool-text">Pending Fee Approvals:</span> <span class="text-gray-300 text-2xl"
                         th:text="${pendingApprovals}"></span></p>
-                <p><span class="cool-text text-2xl">Total Issues Yet To Be Resolved:</span> <span class="text-red-500 text-2xl"
+                <p><span class="cool-text">Issues Raised:</span> <span class="text-gray-300 text-2xl"
                         th:text="${studentIssues}"></span></p>
             </div>
 

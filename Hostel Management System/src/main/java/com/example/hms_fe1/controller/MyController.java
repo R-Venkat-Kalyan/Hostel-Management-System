@@ -526,9 +526,27 @@ public class MyController {
 // ---------------------------------------------------------------- <SuperVisor Routes> -------------------------------------------------------------------- //    v
 
 	@GetMapping("/supervisor")
-	public String superVisor() {
+	public String superVisor(Model model) {
+		int studentCount = studentService.getStudentCount();
+		int pendingIssuesCout = issueService.pendingIssuesCount();
+		model.addAttribute("totalStudents", studentCount);
+		model.addAttribute("studentIssues", pendingIssuesCout);
 		return "SuperVisorDashboard";
 	}
+
+	@GetMapping("/add-fee-payment")
+	public String addNewPayment() {
+		return "AddPayment";
+	}
+	
+	@PostMapping("/process-payment")
+	public ResponseEntity<String> addPayment(@RequestParam String stuId, @RequestParam Integer amountPaid,
+			@RequestParam LocalDate nextDueDate,@RequestParam LocalDate  lastPaidDate) {
+		 feePaymentService.addPayment(stuId, amountPaid, nextDueDate,lastPaidDate);
+		return ResponseEntity.ok("Payment recorded successfully");
+	}
+
+	
 
 	@GetMapping("/view-issues")
 	public String Studentissues(Model model) {

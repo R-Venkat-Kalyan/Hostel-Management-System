@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Payment</title>
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link href="assets/img/favicon.png" rel="icon">
+    <style>
+        body {
+            background: linear-gradient(to right, #0062E6, #33AEFF);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-control {
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 1rem;
+        }
+
+        .btn-submit {
+            font-size: 0.9rem;
+            letter-spacing: 0.05rem;
+            padding: 0.75rem 1rem;
+            border-radius: 30px;
+        }
+    </style>
+    <script>
+        function validateForm(event) {
+            event.preventDefault(); // Prevent form submission
+            document.querySelectorAll('.error').forEach(el => el.innerText = '');
+
+            const stuId = document.getElementById('stuId').value.trim();
+            const amountPaid = document.getElementById('amountPaid').value.trim();
+            const lastPaidDate = document.getElementById('lastPaidDate').value;
+            const nextDueDate = document.getElementById('nextDueDate').value;
+
+            let isValid = true;
+
+            if (!/^[0-9]+$/.test(stuId)) {
+                document.getElementById('stuIdError').innerText = 'Student ID must be numeric.';
+                isValid = false;
+            }
+            if (!/^[0-9]+$/.test(amountPaid) || amountPaid <= 0) {
+                document.getElementById('amountPaidError').innerText = 'Enter a valid amount paid.';
+                isValid = false;
+            }
+            if (!lastPaidDate) {
+                document.getElementById('lastPaidDateError').innerText = 'Please select a last paid date.';
+                isValid = false;
+            }
+            if (!nextDueDate) {
+                document.getElementById('nextDueDateError').innerText = 'Please select a next due date.';
+                isValid = false;
+            }
+
+            if (isValid) {
+                document.getElementById('feePaymentForm').submit();
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <div class="card border-0 shadow rounded-3 my-5">
+                    <div class="card-body p-4 p-sm-5">
+                        <h5 class="card-title text-center mb-4 fw-bold">Fee Payment</h5>
+                        <form id="feePaymentForm" method="post" action="/process-payment">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="stuId" name="stuId" placeholder="Student ID">
+                                <label for="stuId">Student ID</label>
+                                <div id="stuIdError" class="error text-danger"></div>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="amountPaid" name="amountPaid" placeholder="Amount Paid">
+                                <label for="amountPaid">Amount Paid</label>
+                                <div id="amountPaidError" class="error text-danger"></div>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="date" class="form-control" id="lastPaidDate" name="lastPaidDate">
+                                <label for="lastPaidDate">Last Paid Date</label>
+                                <div id="lastPaidDateError" class="error text-danger"></div>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="date" class="form-control" id="nextDueDate" name="nextDueDate">
+                                <label for="nextDueDate">Next Due Date</label>
+                                <div id="nextDueDateError" class="error text-danger"></div>
+                            </div>
+                            <div class="d-grid mb-4">
+                                <button class="btn btn-primary btn-submit text-uppercase fw-bold" type="submit" onclick="validateForm(event)">Submit Payment</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

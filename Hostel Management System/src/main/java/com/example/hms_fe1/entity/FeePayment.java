@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
 import java.time.LocalDate;
@@ -20,7 +22,8 @@ public class FeePayment {
 	private LocalDate last_paid_date;
 	private LocalDate next_due_date;
 
-	@OneToOne
+	@ManyToOne
+	@JoinColumn(name = "student_stu_id", nullable = false) // Ensure no unique constraint here
 	private Student student;
 
 	public FeePayment() {

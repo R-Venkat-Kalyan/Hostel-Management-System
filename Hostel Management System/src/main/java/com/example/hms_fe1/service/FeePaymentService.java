@@ -48,31 +48,46 @@ public class FeePaymentService {
     	return feePaymentRepository.getLatestBalance(stuId);
     }
     
-    public void addPayment(String stuId, int amountPaid, LocalDate nextDueDate, LocalDate paidDate) {
-		// Fetch the student
-		Student student = studentService.findStudentById(stuId);
-//                .orElseThrow(() -> new RuntimeException("Student not found"));
-
-		// Get the latest balance amount
-		Integer latestBalance = getLatestBalance(stuId);
-
-//        if (latestBalance == null) {
-//            latestBalance = student.getTotalFee();  // If no payment exists, start with full fee
+	       
+//    public void addPayment(String stuId, int amountPaid, LocalDate nextDueDate, LocalDate paidDate) {
+//        // Fetch the student
+//        Student student = studentService.findStudentById(stuId);
+//        
+//        // Fetch all previous payments for this student
+//        Set<FeePayment> payments = getAllPaymentsByStu(stuId);
+//
+//        // Get the total amount already paid
+//        int totalPaidSoFar = payments.stream().mapToInt(FeePayment::getAmount_paid).sum();
+//
+//        // Calculate updated total paid amount
+//        int updatedTotalPaid = totalPaidSoFar + amountPaid;
+//
+//        // Fetch total fee amount
+//        int totalFee = getFeeByStuId(stuId).getFee_amount();
+//
+//        // Ensure that the total paid does not exceed the total fee
+//        if (updatedTotalPaid > totalFee) {
+//            throw new RuntimeException("Payment exceeds total fee amount!");
 //        }
+//
+//        // Calculate new balance
+//        int newBalance = totalFee - updatedTotalPaid;
+//
+//        // Create a new FeePayment entry
+//        FeePayment newPayment = new FeePayment();
+//        newPayment.setStudent(student);
+//        newPayment.setFee_amount(totalFee); // Keep total fee reference
+//        newPayment.setAmount_paid(amountPaid); // Store only the current transaction amount
+//        newPayment.setBalance_amount(newBalance); // Updated balance amount
+//        newPayment.setLast_paid_date(paidDate);
+//        newPayment.setNext_due_date(nextDueDate);
+//
+//        // Save the new payment entry
+//        feePaymentRepository.save(newPayment);
+//    }
+//    
+   
 
-		// Calculate the new balance
-		int newBalance = latestBalance - amountPaid;
 
-		// Save new payment entry
-		FeePayment payment = getFeeByStuId(stuId);
-		payment.setStudent(student);
-		payment.setFee_amount(payment.getFee_amount()); // Keep original fee for reference
-		payment.setAmount_paid(amountPaid);
-		payment.setBalance_amount(newBalance);
-		payment.setLast_paid_date(paidDate);
-		payment.setNext_due_date(nextDueDate);
-		save(payment);
-	
-	}
 }
 

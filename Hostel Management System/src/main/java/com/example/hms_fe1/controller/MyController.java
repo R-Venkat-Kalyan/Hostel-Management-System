@@ -31,12 +31,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.hms_fe1.entity.FeePayment;
+import com.example.hms_fe1.entity.FeePaymentHistory;
 import com.example.hms_fe1.entity.FeeReceipt;
 import com.example.hms_fe1.entity.IssueEntity;
 import com.example.hms_fe1.entity.MappingEntity;
 import com.example.hms_fe1.entity.Room;
 import com.example.hms_fe1.entity.Student;
 import com.example.hms_fe1.entity.UserEntity;
+import com.example.hms_fe1.service.FeePaymentHistoryService;
 import com.example.hms_fe1.service.FeePaymentService;
 import com.example.hms_fe1.service.FeeReceiptService;
 import com.example.hms_fe1.service.IssueService;
@@ -63,6 +65,9 @@ public class MyController {
 	@Autowired
 	private FeePaymentService feePaymentService;
 
+	@Autowired
+	private FeePaymentHistoryService feePaymentHistoryService;
+	
 	@Autowired
 	private JavaMailSender mailSender;
 
@@ -540,10 +545,10 @@ public class MyController {
 	}
 	
 	@PostMapping("/process-payment")
-	public ResponseEntity<String> addPayment(@RequestParam String stuId, @RequestParam Integer amountPaid,
-			@RequestParam LocalDate nextDueDate,@RequestParam LocalDate  lastPaidDate) {
-		 feePaymentService.addPayment(stuId, amountPaid, nextDueDate,lastPaidDate);
-		return ResponseEntity.ok("Payment recorded successfully");
+	public String addPayment(@ModelAttribute FeePaymentHistory feePayment, RedirectAttributes redirectAttributes) {
+		redirectAttributes.addFlashAttribute("successMessage", "New Payment Added Successfully ✔✔");
+		 feePaymentHistoryService.savePayment(feePayment);
+		 return "redirect:/supervisor";
 	}
 
 	

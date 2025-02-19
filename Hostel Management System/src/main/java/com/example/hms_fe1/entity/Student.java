@@ -1,7 +1,12 @@
 package com.example.hms_fe1.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -16,22 +21,22 @@ public class Student {
 	@OneToOne(mappedBy = "student")
 	private Room room;
 
-	@OneToOne(mappedBy = "student")
-	private FeePayment feePayment;
+	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<FeePayment> feePayments = new ArrayList<>();
 
 	public Student() {
 
 	}
 
 	public Student(String stu_id, String stu_name, String stu_phone, String stu_mail, Room room,
-			FeePayment feePayment) {
+			List<FeePayment> feePayments) {
 		super();
 		this.stu_id = stu_id;
 		this.stu_name = stu_name;
 		this.stu_phone = stu_phone;
 		this.stu_mail = stu_mail;
 		this.room = room;
-		this.feePayment = feePayment;
+		this.feePayments = feePayments;
 	}
 
 	// Getters and Setters
@@ -75,11 +80,11 @@ public class Student {
 		this.room = room;
 	}
 
-	public FeePayment getFeePayment() {
-		return feePayment;
+	public List<FeePayment> getFeePayment() {
+		return feePayments;
 	}
 
-	public void setFeePayment(FeePayment feePayment) {
-		this.feePayment = feePayment;
+	public void setFeePayment(List<FeePayment> feePayments) {
+		this.feePayments = feePayments;
 	}
 }

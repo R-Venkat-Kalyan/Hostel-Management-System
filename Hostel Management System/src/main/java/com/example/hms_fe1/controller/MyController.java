@@ -540,8 +540,9 @@ public class MyController {
 	}
 
 	@GetMapping("/add-fee-payment")
-	public String addNewPayment() {
-		return "AddPayment";
+	public String addNewPayment(Model model) {
+		model.addAttribute("mainContent", "AddPayment");
+		return "SuperVisorLayout";
 	}
 	
 	@PostMapping("/process-payment")
@@ -551,10 +552,16 @@ public class MyController {
 		 return "redirect:/supervisor";
 	}
 
-	
+	@GetMapping("/unverified-fee-payments")
+    public String getUnverifiedPayments(Model model) {
+        List<FeePaymentHistory> payments = feePaymentHistoryService.unVerifiedPayments();
+        model.addAttribute("payments", payments);
+        model.addAttribute("mainContent", "unverifiedFeePayments");
+		return "SuperVisorLayout";
+    }
 
 	@GetMapping("/view-issues")
-	public String Studentissues(Model model) {
+	public String studentissues(Model model) {
 		Set<IssueEntity> allIssues = issueService.getAllIssues();
 		model.addAttribute("issues", allIssues);
 		model.addAttribute("mainContent", "UpdateIssuesList");

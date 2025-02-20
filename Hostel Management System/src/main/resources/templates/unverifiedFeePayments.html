@@ -28,9 +28,9 @@
                     </thead>
                     <tbody class="text-sm text-gray-700 divide-y divide-gray-200">
                         <tr th:each="payment : ${payments}" class="hover:bg-gray-100">
-                            <td class="py-3 px-4 text-center font-medium" th:text="${payment.studentId}"></td>
-                            <td class="py-3 px-4 font-medium text-green-600" th:text="${payment.amount}"></td>
-                            <td class="py-3 px-4" th:text="${payment.paymentDate}"></td>
+                            <td class="py-3 px-4 text-center font-medium" th:text="${payment.stuId}"></td>
+                            <td class="py-3 px-4 font-medium text-green-600" th:text="${payment.amountPaid}"></td>
+                            <td class="py-3 px-4" th:text="${payment.lastPaidDate}"></td>
                         </tr>
                     </tbody>
                 </table>

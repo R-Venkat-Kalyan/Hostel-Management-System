@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="assets/img/favicon.png">
     <style>
-        body {
-            background: linear-gradient(to right, #0062E6, #33AEFF);
-            font-family: 'Roboto', sans-serif;
-        }
+        
     </style>
     <script>
         function validateForm(event) {
@@ -47,32 +45,66 @@
         }
     </script>
 </head>
-<body class="flex items-center justify-center min-h-screen p-6">
-    <div class="w-full max-w-md bg-white rounded-2xl shadow-lg p-6">
-        <h2 class="text-center text-xl font-bold mb-4">Fee Payment</h2>
-        <form id="feePaymentForm" method="post" action="/process-payment">
-            <div class="mb-4">
-                <label class="block text-gray-700">Student ID</label>
-                <input type="text" id="stuId" name="stuId" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Student ID">
-                <div id="stuIdError" class="error text-red-500 text-sm mt-1"></div>
+
+<body class="bg-gray-100 text-gray-900">
+
+    <div class="flex justify-center items-center min-h-screen px-4 sm:px-6 lg:px-8 mt-12">
+        <!-- Card Container -->
+        <div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-6 space-y-4">
+
+            <!-- Page Header -->
+            <div class="text-center">
+                <h1 class="text-3xl text-blue-600 font-semibold">Fee Payment</h1>
+                <p class="text-gray-600 mt-2">Please fill in the details to add new fee payment.</p>
             </div>
-            <div class="mb-4">
-                <label class="block text-gray-700">Amount Paid</label>
-                <input type="number" id="amountPaid" name="amountPaid" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Amount Paid">
-                <div id="amountPaidError" class="error text-red-500 text-sm mt-1"></div>
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700">Last Paid Date</label>
-                <input type="date" id="lastPaidDate" name="lastPaidDate" class="w-full p-3 border border-gray-300 rounded-lg">
-                <div id="lastPaidDateError" class="error text-red-500 text-sm mt-1"></div>
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700">Next Due Date</label>
-                <input type="date" id="nextDueDate" name="nextDueDate" class="w-full p-3 border border-gray-300 rounded-lg">
-                <div id="nextDueDateError" class="error text-red-500 text-sm mt-1"></div>
-            </div>
-            <button type="submit" onclick="validateForm(event)" class="w-full bg-blue-500 text-white font-bold py-3 rounded-lg hover:bg-blue-600 transition">Submit Payment</button>
-        </form>
+
+            <!-- Form -->
+            <form id="feePaymentForm" method="post" action="/process-payment" class="space-y-4">
+
+                <!-- Student ID -->
+                <div>
+                    <label for="stuId" class="block text-sm font-medium text-gray-700">Student ID</label>
+                    <input type="text" id="stuId" name="stuId" placeholder="Student ID"
+                        class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <div id="stuIdError" class="text-red-500 text-sm mt-1"></div>
+                </div>
+
+                <!-- Amount Paid -->
+                <div>
+                    <label for="amountPaid" class="block text-sm font-medium text-gray-700">Amount Paid</label>
+                    <input type="number" id="amountPaid" name="amountPaid" placeholder="Amount Paid"
+                        class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <div id="amountPaidError" class="text-red-500 text-sm mt-1"></div>
+                </div>
+
+                <!-- Last Paid Date -->
+                <div>
+                    <label for="lastPaidDate" class="block text-sm font-medium text-gray-700">Last Paid Date</label>
+                    <input type="date" id="lastPaidDate" name="lastPaidDate"
+                        class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <div id="lastPaidDateError" class="text-red-500 text-sm mt-1"></div>
+                </div>
+
+                <!-- Next Due Date -->
+                <div>
+                    <label for="nextDueDate" class="block text-sm font-medium text-gray-700">Next Due Date</label>
+                    <input type="date" id="nextDueDate" name="nextDueDate"
+                        class="mt-2 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <div id="nextDueDateError" class="text-red-500 text-sm mt-1"></div>
+                </div>
+
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit" onclick="validateForm(event)"
+                        class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500">
+                        Submit Payment
+                    </button>
+                </div>
+            </form>
+
+        </div>
     </div>
+
 </body>
+
 </html>

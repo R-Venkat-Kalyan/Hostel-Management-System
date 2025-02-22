@@ -1,5 +1,7 @@
 package com.example.hms_fe1.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +23,8 @@ public class RoomService {
     	return null;
     }
     
+    public List<Room> allRooms(){
+    	return roomRepository.findAllSortedByRoomNumber();
+    }
 }
 

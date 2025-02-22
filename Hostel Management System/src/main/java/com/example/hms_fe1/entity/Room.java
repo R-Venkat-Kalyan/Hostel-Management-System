@@ -1,6 +1,8 @@
 package com.example.hms_fe1.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 
@@ -8,6 +10,8 @@ import jakarta.persistence.OneToOne;
 public class Room {
 
 	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 	private String room_number;
 	private String room_type;
 	private int capacity = 9; // Default capacity

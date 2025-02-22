@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Hostel - Room Details</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+	<link href="assets/img/favicon.png" rel="icon">
+
+	<style>
+		.tooltip {
+			position: relative;
+			display: inline-block;
+		}
+
+		.tooltip::after {
+			content: attr(data-tooltip);
+			position: absolute;
+			bottom: 120%;
+			left: 50%;
+			transform: translateX(-50%);
+			background-color: #333;
+			color: #fff;
+			padding: 5px 10px;
+			border-radius: 5px;
+			white-space: nowrap;
+			font-size: 0.75rem;
+			opacity: 0;
+			transition: opacity 0.2s ease-in-out;
+			pointer-events: none;
+		}
+
+		.tooltip:hover::after {
+			opacity: 1;
+		}
+	</style>
+</head>
+
+<body class="bg-gradient-to-br from-blue-100 to-blue-300 text-gray-900 min-h-screen flex items-center justify-center">
+
+	<!-- Container -->
+	<div class="max-w-6xl w-full mx-auto py-8 px-4">
+		<div class="bg-white shadow-xl rounded-xl overflow-hidden">
+
+			<!-- Header -->
+			<div class="px-6 py-6 text-center bg-blue-600 text-white rounded-t-xl">
+				<h2 class="text-4xl font-bold"><i class="fas fa-hotel"></i> Hostel Room Details</h2>
+				<p class="text-gray-200 mt-2">Manage room capacity, type, and student assignments.</p>
+			</div>
+
+			<!-- Room Details Table -->
+			<div class="overflow-x-auto p-6">
+				<table class="w-full bg-white shadow-lg rounded-lg border border-gray-300">
+					<thead>
+						<tr class="bg-blue-500 text-white">
+							<th class="py-3 px-4 text-left"><i class="fas fa-door-closed"></i> Room Number</th>
+							<th class="py-3 px-4 text-left"><i class="fas fa-users"></i> Capacity</th>
+							<th class="py-3 px-4 text-left"><i class="fas fa-id-badge"></i> Student ID</th>
+							<th class="py-3 px-4 text-left"><i class="fas fa-bed"></i> Room Type</th>
+							<th class="py-3 px-4 text-center"><i class="fas fa-cogs"></i> Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="room : ${rooms}" class="hover:bg-gray-100 transition">
+							<td class="py-3 px-4 border border-gray-300 text-gray-700 font-medium" th:text="${room.room_number}"></td>
+							<td class="py-3 px-4 border border-gray-300 text-gray-700 font-medium" th:text="${room.capacity}"></td>
+							<td class="py-3 px-4 border border-gray-300 text-gray-700 font-medium" th:text="${room.student.stu_id} ?: 'Not Assigned'"></td>
+							<td class="py-3 px-4 border border-gray-300 text-gray-700 font-medium" th:text="${room.room_type} ?: 'Not Specified'"></td>
+							<td class="py-3 px-4 border border-gray-300 text-center">
+								<!-- Update Icon -->
+								<a href="#" class="text-green-600 tooltip mx-2 hover:text-green-800 transition" data-tooltip="Update">
+									<i class="fas fa-edit text-xl"></i>
+								</a>
+								<!-- Delete Icon -->
+								<a href="#" class="text-red-600 tooltip mx-2 hover:text-red-800 transition" data-tooltip="Delete">
+									<i class="fas fa-trash-alt text-xl"></i>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+	</div>
+
+</body>
+
+</html>

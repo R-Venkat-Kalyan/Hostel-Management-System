@@ -534,11 +534,28 @@ public class MyController {
 	public String superVisor(Model model) {
 		int studentCount = studentService.getStudentCount();
 		int pendingIssuesCout = issueService.pendingIssuesCount();
+		int pendingApprovals = feePaymentHistoryService.unVerifiedPayments().size();
 		model.addAttribute("totalStudents", studentCount);
 		model.addAttribute("studentIssues", pendingIssuesCout);
+		model.addAttribute("pendingApprovals", pendingApprovals);
 		return "SuperVisorDashboard";
 	}
 
+	@GetMapping("/add-student")
+	public String addUsers(Model model) {
+		model.addAttribute("mainContent", "MappingForm");
+		return "SuperVisorLayout";
+	}
+
+	@PostMapping("/save-mapping")
+	public String saveMapping(@ModelAttribute MappingEntity mappingEntity, HttpServletRequest request,
+			RedirectAttributes redirectAttributes) {
+		// Save student, room, and fee payment records
+		mappingService.saveMappings(mappingEntity);
+		redirectAttributes.addFlashAttribute("successMessage", "New Mapping Added Successfully ✔✔");
+		return "redirect:/supervisor";
+	}
+	
 	@GetMapping("/add-fee-payment")
 	public String addNewPayment(Model model) {
 		model.addAttribute("mainContent", "AddPayment");
@@ -551,14 +568,6 @@ public class MyController {
 		 feePaymentHistoryService.savePayment(feePayment);
 		 return "redirect:/supervisor";
 	}
-
-	@GetMapping("/unverified-fee-payments")
-    public String getUnverifiedPayments(Model model) {
-        List<FeePaymentHistory> payments = feePaymentHistoryService.unVerifiedPayments();
-        model.addAttribute("payments", payments);
-        model.addAttribute("mainContent", "unverifiedFeePayments");
-		return "SuperVisorLayout";
-    }
 
 	@GetMapping("/view-issues")
 	public String studentissues(Model model) {
@@ -582,7 +591,17 @@ public class MyController {
 			return "Error";
 		}
 	}
-
+	
+	@GetMapping("/view-rooms")
+    public String getAllRooms(Model model) {
+        List<Room> rooms = roomService.allRooms();
+//        System.out.println("Details "+rooms.get(0).getStudent().getStu_id());
+        model.addAttribute("rooms", rooms);
+        model.addAttribute("mainContent", "availableRooms");
+		return "SuperVisorLayout";
+//        return "availableRooms"; 
+    }
+	
 	@GetMapping("/students-list")
 	public String getStudentDetails(Model model) {
 		// Fetch all students
@@ -608,20 +627,13 @@ public class MyController {
 		return "SuperVisorLayout";
 	}
 
-	@GetMapping("/add-student")
-	public String addUsers(Model model) {
-		model.addAttribute("mainContent", "MappingForm");
+	@GetMapping("/unverified-fee-payments")
+    public String getUnverifiedPayments(Model model) {
+        List<FeePaymentHistory> payments = feePaymentHistoryService.unVerifiedPayments();
+        model.addAttribute("payments", payments);
+        model.addAttribute("mainContent", "unverifiedFeePayments");
 		return "SuperVisorLayout";
-	}
-
-	@PostMapping("/save-mapping")
-	public String saveMapping(@ModelAttribute MappingEntity mappingEntity, HttpServletRequest request,
-			RedirectAttributes redirectAttributes) {
-		// Save student, room, and fee payment records
-		mappingService.saveMappings(mappingEntity);
-		redirectAttributes.addFlashAttribute("successMessage", "New Mapping Added Successfully ✔✔");
-		return "redirect:/supervisor";
-	}
+    }
 
 // ---------------------------------------------------------------- <SuperVisor Routes/> ------------------------------------------------------------------ //	
 

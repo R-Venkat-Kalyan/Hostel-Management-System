@@ -29,33 +29,32 @@
 
 <body class="bg-white text-gray-800">
     
-    <!-- Form Content -->
     <div class="pt-20 max-w-3xl mx-auto p-6">
-        <form id="msform" class="space-y-8">
+        <form id="msform" class="space-y-8" method="post" action="save-mapping">
             <!-- Progressbar -->
             <ul id="progressbar" class="flex justify-between space-x-4 mb-6">
-                <li class="w-1/3 text-center py-2 active">Student Info</li>
-                <li class="w-1/3 text-center py-2">Room Details</li>
-                <li class="w-1/3 text-center py-2">Fee Details</li>
+                <li class="w-1/4 text-center py-2 active">Student Info</li>
+                <li class="w-1/4 text-center py-2">Room Details</li>
+                <li class="w-1/4 text-center py-2">Fee Details</li>
             </ul>
 
-            <!-- Fieldset 1 -->
+            <!-- Fieldset 1: Student Information -->
             <fieldset class="bg-blue-50 p-6 rounded-lg shadow-lg space-y-4">
                 <h2 class="text-xl font-bold text-blue-800">Student Information</h2>
                 <div>
-                    <label for="name" class="block font-medium">Name</label>
-                    <input type="text" name="name" id="stuName" placeholder="Name" required
+                    <label for="stu_name" class="block font-medium">Name</label>
+                    <input type="text" name="stu_name" id="stu_name" placeholder="Name" required
                         class="w-full px-3 py-2 border border-gray-300 rounded focus:ring focus:ring-blue-300" />
                 </div>
                 <div>
-                    <label for="id" class="block font-medium">Student ID</label>
-                    <input type="text" name="stuId" id="id" placeholder="Student ID" pattern="\d{10}"
+                    <label for="stu_id" class="block font-medium">Student ID</label>
+                    <input type="text" name="stu_id" id="stu_id" placeholder="Student ID" pattern="\d{10}"
                         title="Student ID must be exactly 10 digits" required
                         class="w-full px-3 py-2 border border-gray-300 rounded focus:ring focus:ring-blue-300" />
                 </div>
                 <div>
-                    <label for="phone" class="block font-medium">Phone Number</label>
-                    <input type="text" name="stuPhone" id="phone" placeholder="Phone Number" pattern="\d{10}"
+                    <label for="stu_phone" class="block font-medium">Phone Number</label>
+                    <input type="text" name="stu_phone" id="stu_phone" placeholder="Phone Number" pattern="\d{10}"
                         title="Phone number must be exactly 10 digits" required
                         class="w-full px-3 py-2 border border-gray-300 rounded focus:ring focus:ring-blue-300" />
                 </div>
@@ -65,7 +64,7 @@
                 </div>
             </fieldset>
 
-            <!-- Fieldset 2 -->
+            <!-- Fieldset 2: Room Details -->
             <fieldset class="hidden bg-green-50 p-6 rounded-lg shadow-lg space-y-4">
                 <h2 class="text-xl font-bold text-green-800">Room Details</h2>
                 <div>
@@ -92,7 +91,7 @@
                 </div>
             </fieldset>
 
-            <!-- Fieldset 3 -->
+            <!-- Fieldset 3: Fee Details -->
             <fieldset class="hidden bg-yellow-50 p-6 rounded-lg shadow-lg space-y-4">
                 <h2 class="text-xl font-bold text-yellow-800">Fee Details</h2>
                 <div>
@@ -103,6 +102,21 @@
                         <option value="90000">90,000</option>
                         <option value="100000">1,00,000</option>
                     </select>
+                </div>
+                <div>
+                    <label for="amount_paid" class="block font-medium">Amount Paid</label>
+                    <input type="number" name="amount_paid" id="amount_paid" placeholder="Amount Paid" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded focus:ring focus:ring-yellow-300" />
+                </div>
+                <div>
+                    <label for="last_paid_date" class="block font-medium">Last Paid Date</label>
+                    <input type="date" name="last_paid_date" id="last_paid_date" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded focus:ring focus:ring-yellow-300" />
+                </div>
+                <div>
+                    <label for="next_due_date" class="block font-medium">Next Due Date</label>
+                    <input type="date" name="next_due_date" id="next_due_date" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded focus:ring focus:ring-yellow-300" />
                 </div>
                 <div class="flex justify-between">
                     <button type="button"
@@ -153,11 +167,6 @@
                 fieldsets[currentStep].classList.remove('hidden');
                 progressbarItems[currentStep].classList.add('active');
             });
-        });
-
-        document.getElementById('msform').addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Form submitted successfully!');
         });
     </script>
 </body>

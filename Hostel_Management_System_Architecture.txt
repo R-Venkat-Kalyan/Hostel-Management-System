@@ -1,0 +1,201 @@
+HOSTEL MANAGEMENT SYSTEM
+=========================
+
+This document captures the complete backend architecture, MongoDB data model, roles, responsibilities, and end-to-end flow for the Hostel Management System discussed in this conversation.
+
+
+1. OVERVIEW
+-----------
+The system is designed for a private hostel (e.g., Meenakshi Boys Hostel) with ~200–300 students.
+It supports three roles:
+- MANAGER (primary operator)
+- ADMIN (financial approver)
+- STUDENT (read-only user)
+
+The system is manager-driven: students do not self-register.
+
+
+2. ROLE RESPONSIBILITIES
+-----------------------
+
+MANAGER:
+- Creates and manages rooms
+- Registers student login credentials
+- Creates student profiles
+- Assigns rooms to students
+- Records fee/payment entries (PENDING)
+- Shares login credentials with students
+
+ADMIN:
+- Reviews payments entered by manager
+- Approves or rejects payments
+- No operational control (no rooms, no students)
+
+STUDENT:
+- Logs in using credentials given by manager
+- Views room details
+- Views fee paid, pending amount, and payment history
+- No write permissions
+
+
+3. CORE DESIGN PRINCIPLES
+------------------------
+- Simple MongoDB schema (no over-engineering)
+- Manager owns all operational data
+- Admin controls financial approval only
+- Student is a consumer (read-only)
+- Status fields stored as STRING (no enums)
+- No Lombok Builder, no DBRef, no indexes (can be added later)
+
+
+4. MONGODB COLLECTIONS
+---------------------
+
+Collections used:
+1. users
+2. students
+3. rooms
+4. roomAssignments
+5. feePlans
+6. payments
+
+
+5. ENTITY DEFINITIONS (SPRING BOOT / MONGODB)
+--------------------------------------------
+
+users:
+- id
+- email
+- passwordHash
+- role (STUDENT | MANAGER | ADMIN)
+- status (ACTIVE | SUSPENDED)
+- createdAt
+- updatedAt
+
+students:
+- id
+- userId (users.id)
+- fullName
+- phone
+- email
+- currentRoomAssignmentId
+- feeSummary
+  - totalFee
+  - totalPaid
+  - pendingAmount
+  - lastPaidDate
+  - nextDueDate
+- status (ACTIVE | INACTIVE | MOVED_OUT)
+- createdAt
+- updatedAt
+
+rooms:
+- id
+- roomNo
+- floor
+- capacity
+- occupiedCount
+- status (AVAILABLE | FULL | MAINTENANCE)
+- createdAt
+- updatedAt
+
+roomAssignments:
+- id
+- studentId
+- roomId
+- startDate
+- endDate
+- status (ACTIVE | ENDED | CANCELLED)
+- createdBy (manager userId)
+- createdAt
+- updatedAt
+
+feePlans:
+- id
+- name
+- amount
+- billingCycle (MONTHLY | QUARTERLY | SEMESTER)
+- active
+- createdAt
+- updatedAt
+
+payments:
+- id
+- studentId
+- amount
+- paymentMode (CASH | UPI | CARD | NETBANKING | OTHER)
+- transactionRef
+- paidDate
+- status (PENDING | APPROVED | REJECTED)
+- createdBy (manager)
+- approvedBy (admin)
+- approvedDate
+- createdAt
+- updatedAt
+
+
+6. END-TO-END FLOW (ONE STUDENT)
+-------------------------------
+
+STEP 1: Manager creates a room
+- Insert into rooms
+
+STEP 2: Manager registers student login
+- Insert into users with role = STUDENT
+
+STEP 3: Manager creates student profile
+- Insert into students
+- Initialize feeSummary
+
+STEP 4: Manager assigns room
+- Update rooms.occupiedCount
+- Insert into roomAssignments (status = ACTIVE)
+- Update students.currentRoomAssignmentId
+
+STEP 5: Manager records payment
+- Insert into payments with status = PENDING
+
+STEP 6: Admin approves payment
+- Update payments.status = APPROVED
+- Update students.feeSummary:
+  - totalPaid += amount
+  - pendingAmount -= amount
+  - lastPaidDate
+  - nextDueDate
+
+STEP 7: Student views dashboard
+- Room info from roomAssignments + rooms
+- Fee info from students.feeSummary
+- Payments from payments (APPROVED only)
+
+
+7. STUDENT DASHBOARD VIEW (LOGICAL)
+----------------------------------
+
+- Name
+- Room Number
+- Total Paid
+- Pending Amount
+- Last Paid Date
+- Next Due Date
+
+
+8. KEY ADVANTAGES OF THIS DESIGN
+-------------------------------
+- Clear ownership (Manager vs Admin)
+- Simple mental model
+- Easy to implement in Spring Boot + MongoDB
+- Scales to 300+ students comfortably
+- Can be extended later (indexes, invoices, audit logs)
+
+
+9. FUTURE EXTENSIONS (OPTIONAL)
+-------------------------------
+- MongoDB indexes for performance
+- Monthly auto-fee generation
+- Audit logs
+- Notifications
+- Multi-hostel support
+
+
+END OF DOCUMENT

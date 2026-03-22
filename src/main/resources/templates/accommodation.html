@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accommodation Details</title>
+    <link href="assets/img/favicon.png" rel="icon">
+    <style>
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            padding: 15px 0;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .detail {
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #8260fc, #8e9eab);
+            border-radius: 10px;
+            color: #444;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .detail-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            /* justify-content: center; */
+        }
+
+        .detail-item {
+            flex: 0 0 40%; /* Adjusted for two items in a row */
+            display: flex;
+            align-items: center;
+            background: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 1rem;
+            font-weight: 500;
+            color: #444;
+        }
+
+        
+        .detail-item1 {
+            flex: 0 0 48%; /* Adjusted for 2 items per row */
+            display: flex;
+            /* align-items: center; */
+            background: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 1rem;
+            font-weight: 500;
+            color: #444;
+        }
+
+        .detail-item i, .detail-item1 i {
+            font-size: 1.2rem;
+            color: #2575fc;
+            margin-right: 10px;
+        }
+
+        .features {
+            margin-top: 20px;
+        }
+
+        .features h3 {
+            font-size: 1.3rem;
+            color: #2575fc;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .detail-item, .detail-item1 {
+                flex: 1 1 100%; /* Stack items on smaller screens */
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+    <!-- Include Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Accommodation Details</h1>
+        </div>
+        <div class="detail">
+            <div class="detail-content">
+                <div class="detail-item1">
+                    <i class="fas fa-user"></i>
+                    <strong>Student Name:  <span th:text="${studentName}"></span> </strong>
+                </div>
+                <div class="detail-item1">
+                    <i class="fas fa-door-closed"></i>
+                    <strong>Room Number: <span th:text="${roomNumber}"></span> </strong>
+                </div>
+                <div class="detail-item1">
+                    <i class="fas fa-home"></i>
+                    <strong>Room Type: <span th:text="${roomType}"></span> </strong>
+                </div>
+                <div class="detail-item1">
+                    <i class="fas fa-bath"></i>
+                    <strong>Washroom: <span th:text="${washRoom}"></span> </strong>
+                </div>
+            </div>
+        </div>
+        <div class="features">
+            <h3>Free Features</h3>
+            <div class="detail-content">
+                <div class="detail-item">
+                    <i class="fas fa-wifi"></i>
+                    <span>WiFi</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-water"></i>
+                    <span>Geyser</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-broom"></i>
+                    <span>Room Cleaning</span>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-tshirt"></i>
+                    <span>Laundry</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

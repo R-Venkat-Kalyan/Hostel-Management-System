@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Resident | Meenakshi Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-start justify-center pt-12 p-4">
+
+<div th:fragment="content" class="w-full max-w-2xl form-card rounded-[2.5rem] shadow-2xl p-8 md:p-12 transition-all">
+    <div class="text-center mb-10">
+        <div class="inline-flex items-center justify-center w-14 h-14 bg-blue-600 text-white rounded-2xl mb-4 shadow-xl shadow-blue-100">
+            <i class="fa-solid fa-user-plus text-xl"></i>
+        </div>
+        <h2 class="text-3xl font-bold text-slate-800 tracking-tight">Resident Registration</h2>
+        <p class="text-slate-500 text-sm mt-2">Fill in the details to create a new resident profile</p>
+    </div>
+
+    <form th:action="@{/api/users/add-resident}" method="POST" id="registrationForm" class="space-y-6">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="group">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Full
+                    Name</label>
+                <div class="relative">
+                    <i class="fa-regular fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" name="fullName" placeholder="John Doe"
+                           class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all"
+                           required>
+                </div>
+            </div>
+
+            <div class="group">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">University
+                    ID</label>
+                <div class="relative">
+                    <i class="fa-solid fa-id-card absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" name="universityId" placeholder="U-2026-001"
+                           class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all"
+                           required>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="group">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Email
+                    Address</label>
+                <div class="relative">
+                    <i class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="email" name="email" id="email" placeholder="resident@email.com"
+                           class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all"
+                           required>
+                </div>
+            </div>
+
+            <div class="group">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Phone
+                    Number</label>
+                <div class="relative">
+                    <i class="fa-solid fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="tel" name="phone" placeholder="+91 00000 00000"
+                           class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all"
+                           required>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="group">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Password</label>
+                <div class="relative">
+                    <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="password" name="password" id="password" placeholder="••••••••"
+                           class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all"
+                           required>
+                </div>
+            </div>
+
+            <div class="group">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Confirm
+                    Password</label>
+                <div class="relative">
+                    <i class="fa-solid fa-shield-check absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="password" id="confirmPassword" placeholder="••••••••"
+                           class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all"
+                           required>
+                </div>
+                <p id="passwordError" class="hidden text-[10px] text-red-500 mt-2 ml-1 font-bold italic">Passwords do
+                    not match!</p>
+            </div>
+        </div>
+
+        <input type="hidden" name="role" value="RESIDENT">
+        <input type="hidden" name="status" value="ACTIVE">
+
+        <button type="submit"
+                class="w-full bg-slate-900 hover:bg-blue-600 text-white font-bold py-5 rounded-[2rem] shadow-xl flex items-center justify-center gap-3 transition-all hover:-translate-y-1 active:scale-95 mt-8 group">
+            <span class="text-lg">Register Resident Account</span>
+            <i class="fa-solid fa-arrow-right text-blue-400 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
+        </button>
+        <div class="mt-8 text-center">
+            <p class="text-slate-800 text-xs">
+                Registered accounts are automatically granted <span class="font-bold">RESIDENT</span> role access.
+            </p>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Password Matching Validation
+    const form = document.getElementById('registrationForm');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const errorMsg = document.getElementById('passwordError');
+
+    form.addEventListener('submit', function (e) {
+        if (password.value !== confirmPassword.value) {
+            e.preventDefault(); // Stop form submission
+            errorMsg.classList.remove('hidden');
+            confirmPassword.classList.add('border-red-500', 'bg-red-50');
+            confirmPassword.focus();
+        } else {
+            errorMsg.classList.add('hidden');
+            confirmPassword.classList.remove('border-red-500', 'bg-red-50');
+        }
+    });
+
+    // Real-time error clearing
+    confirmPassword.addEventListener('input', function () {
+        if (password.value === confirmPassword.value) {
+            errorMsg.classList.add('hidden');
+            confirmPassword.classList.remove('border-red-500', 'bg-red-50');
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -5,6 +5,9 @@ import com.hms.meenakshi.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class RoomService {
@@ -13,6 +16,13 @@ public class RoomService {
 
     public void saveRoom(Room room){
         roomRepository.save(room);
+    }
+
+    public List<Room> getAvailableRoooms() {
+        List<Room> availableRooms = roomRepository.findAll().stream()
+                .filter(r -> r.getOccupiedCount() < r.getCapacity())
+                .collect(Collectors.toList());
+        return availableRooms;
     }
 
 }

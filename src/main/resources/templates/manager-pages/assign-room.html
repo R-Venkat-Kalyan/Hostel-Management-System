@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Room | Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .form-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border: 1px solid rgba(0, 0, 0, 0.05); }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
+<div th:fragment="content" class="w-full max-w-xl form-card rounded-[2.5rem] shadow-2xl p-8 md:p-12">
+    <div class="text-center mb-10">
+        <div class="inline-flex items-center justify-center w-14 h-14 bg-indigo-600 text-white rounded-2xl mb-4 shadow-xl shadow-indigo-100">
+            <i class="fa-solid fa-key text-xl"></i>
+        </div>
+        <h2 class="text-3xl font-bold text-slate-800 tracking-tight">Room Assignment</h2>
+        <p class="text-slate-500 text-sm mt-2">Link a resident to an available room unit</p>
+    </div>
+
+    <form th:action="@{/api/assignments/create}" method="POST" class="space-y-8">
+
+        <div class="group">
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Select Resident</label>
+            <div class="relative">
+                <i class="fa-solid fa-user-graduate absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <select name="userId" required
+                        class="w-full pl-11 pr-10 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none appearance-none cursor-pointer transition-all">
+                    <option value="" disabled selected>Choose a student...</option>
+                    <option th:each="user : ${unassignedResidents}"
+                            th:value="${user.id}"
+                            th:text="${user.fullName + ' (' + user.universityId + ')'}"></option>
+                </select>
+                <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-xs"></i>
+            </div>
+        </div>
+
+        <div class="group">
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Select Available Room</label>
+            <div class="relative">
+                <i class="fa-solid fa-door-open absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <select name="roomId" required
+                        class="w-full pl-11 pr-10 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none appearance-none cursor-pointer transition-all">
+                    <option value="" disabled selected>Choose a room...</option>
+                    <option th:each="room : ${availableRooms}"
+                            th:value="${room.id}"
+                            th:text="${room.roomNumber + ' - ' + room.roomType + ' (Floor: ' + room.roomFloor + ')'}"></option>
+                </select>
+                <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-xs"></i>
+            </div>
+        </div>
+
+        <button type="submit"
+                class="w-full bg-slate-900 hover:bg-indigo-600 text-white font-bold py-5 rounded-[2rem] shadow-xl transition-all hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-3">
+            <i class="fa-solid fa-link"></i>
+            <span>Confirm Assignment</span>
+        </button>
+    </form>
+</div>
+</body>
+</html>

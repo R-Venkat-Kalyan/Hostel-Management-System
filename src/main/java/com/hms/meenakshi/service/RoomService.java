@@ -18,7 +18,7 @@ public class RoomService {
         roomRepository.save(room);
     }
 
-    public List<Room> getAvailableRoooms() {
+    public List<Room> getAvailableRooms() {
         List<Room> availableRooms = roomRepository.findAll().stream()
                 .filter(r -> r.getOccupiedCount() < r.getCapacity())
                 .collect(Collectors.toList());

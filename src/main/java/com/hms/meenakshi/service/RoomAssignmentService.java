@@ -10,6 +10,7 @@ import com.hms.meenakshi.repository.RoomRepository;
 import com.hms.meenakshi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
@@ -22,9 +23,12 @@ public class RoomAssignmentService {
     private final UserRepository userRepository;
     private  final FeeSummaryRepository feeSummaryRepository;
 
+    @Transactional
     public void assignRoomToResident(String userId, String roomId) {
         // 1. Validate Room Availability
-        Room room = roomRepository.findById(roomId).orElseThrow();
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RuntimeException("Room not found"));
+
         if (room.getOccupiedCount() >= room.getCapacity()) {
             throw new IllegalStateException("Room is already full!");
         }
@@ -34,20 +38,25 @@ public class RoomAssignmentService {
         assignment.setUserId(userId);
         assignment.setRoomId(roomId);
         assignment.setStartDate(LocalDate.now());
+        assignment.setEndDate(LocalDate.now().plusYears(4));
         assignment.setStatus("ACTIVE");
-        assignment.setCreatedAt(LocalDate.now());
+//        assignment.setCreatedAt(LocalDate.now());
         assignmentRepository.save(assignment);
 
-        // 3. Update the Resident Entity (The Current State)
-        User resident = userRepository.findById(userId).orElseThrow();
+        // 3. Update the Resident Entity
+        User resident = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Resident not found"));
         resident.setRoomId(roomId);
 
         // 4. Create the Initial Fee Summary
         FeeSummary fee = new FeeSummary();
         fee.setUserId(userId);
-        fee.setTotalAmount(room.getRentAmount()); // First month's rent
+        fee.setTotalAmount(room.getRentAmount());
+        fee.setPaidAmount(0.0);
         fee.setPendingAmount(room.getRentAmount());
         fee.setStatus("UNPAID");
+        fee.setLastPaymentDate(null);
+        fee.setNextDueDate(LocalDate.now().plusDays(2));
         feeSummaryRepository.save(fee);
 
         resident.setFeeSummaryId(fee.getId());
@@ -55,10 +64,14 @@ public class RoomAssignmentService {
 
         // 5. Update the Room Occupancy
         room.setOccupiedCount(room.getOccupiedCount() + 1);
-        if (room.getOccupiedCount().equals(room.getCapacity())) {
+        if (room.getOccupiedCount() >= room.getCapacity()) {
             room.setStatus("FULL");
+        } else {
+            room.setStatus("AVAILABLE");
         }
         roomRepository.save(room);
     }
 
-}
+
+    }
+

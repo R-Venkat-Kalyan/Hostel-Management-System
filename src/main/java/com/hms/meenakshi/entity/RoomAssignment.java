@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
@@ -26,6 +28,9 @@ public class RoomAssignment {
     private LocalDate endDate;     // Null if currently staying
     private String status;      // "ACTIVE" or "COMPLETED"
 
+    @CreatedDate
     private LocalDate createdAt;
+
+    @LastModifiedDate
     private LocalDate updatedAt;
 }

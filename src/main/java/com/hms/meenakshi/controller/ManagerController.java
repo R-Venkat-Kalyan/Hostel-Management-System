@@ -1,24 +1,27 @@
 package com.hms.meenakshi.controller;
 
+import com.hms.meenakshi.dto.ResidentDetailsDTO;
 import com.hms.meenakshi.entity.Room;
 import com.hms.meenakshi.entity.User;
+import com.hms.meenakshi.service.RoomAssignmentService;
 import com.hms.meenakshi.service.RoomService;
 import com.hms.meenakshi.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
 @AllArgsConstructor
 @Controller
+@RequestMapping("/manager")
 public class ManagerController {
 
     private final RoomService roomService;
     private final UserService userService;
+    private final RoomAssignmentService assignmentService;
 
     @GetMapping("/add-room")
     public String addRoom(Model model) {
@@ -56,7 +59,7 @@ public class ManagerController {
         List<User> unassigned = userService.findByRoleAndRoomId("RESIDENT", "NEW");
 
         // 2. Get rooms where occupiedCount < capacity
-        List<Room> available = roomService.getAvailableRoooms();
+        List<Room> available = roomService.getAvailableRooms();
 
         model.addAttribute("unassignedResidents", unassigned);
         model.addAttribute("availableRooms", available);
@@ -65,6 +68,29 @@ public class ManagerController {
         return "manager-pages/layout";
     }
 
+    @PostMapping("/create-assignment")
+    public String processAssignment(@RequestParam String userId,
+                                    @RequestParam String roomId,
+                                    RedirectAttributes redirectAttributes) {
+        try {
+            assignmentService.assignRoomToResident(userId, roomId);
+            redirectAttributes.addFlashAttribute("successMessage", "Resident assigned successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("successMessage", "Error: " + e.getMessage());
+        }
+        return "redirect:/assign-room";
+    }
+
+    @GetMapping("/view-residents")
+    public String viewResidents(Model model) {
+        List<ResidentDetailsDTO> residentList = userService.getAllResidentSnapshots();
+        model.addAttribute("residents", residentList);
+        // Standardizing the total calculation for the footer
+        double totalDue = residentList.stream().mapToDouble(ResidentDetailsDTO::getDuePayment).sum();
+        model.addAttribute("totalDue", totalDue);
+        model.addAttribute("mainContent", "manager-pages/view-residents");
+        return "manager-pages/layout";
+    }
 
 
 }

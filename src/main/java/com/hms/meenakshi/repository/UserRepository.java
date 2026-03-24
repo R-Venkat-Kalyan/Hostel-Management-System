@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
 
-        List<User> findByRoleAndRoomId(String role, String roomId);
+    List<User> findByRoleAndRoomId(String role, String roomId);
 
+    List<User> findByRoleAndRoomIdNot(String role, String roomId);
 }

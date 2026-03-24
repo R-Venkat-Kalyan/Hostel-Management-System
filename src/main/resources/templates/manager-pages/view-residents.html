@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resident Directory | Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        th, td { white-space: nowrap; }
+
+        /* Matching the Daily Tracker's table feel */
+        .header-controls button {
+            height: 2.1rem;
+            font-size: .825rem;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-slate-100 to-slate-300 text-gray-900 min-h-screen flex items-center justify-center">
+
+<div class="max-w-7xl w-full mx-auto py-8 px-4">
+
+    <div class="bg-white shadow-xl rounded-xl overflow-hidden">
+
+        <div class="px-4 sm:px-6 py-4 bg-slate-800 text-white rounded-t-xl flex items-center justify-between">
+            <h2 class="text-2xl sm:text-3xl font-bold">
+                <i class="fas fa-users-gear mr-2"></i>
+                Resident Management
+            </h2>
+
+            <div class="header-controls flex items-center gap-2">
+                <button type="button" id="btnExport"
+                        class="px-3 rounded-md bg-white text-slate-800 hover:bg-gray-100 font-semibold">
+                    Export CSV
+                </button>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto p-4 sm:p-6">
+
+            <table id="residentTable" class="w-full bg-white rounded-lg border border-gray-300">
+                <thead>
+                <tr class="bg-slate-700 text-white text-sm">
+                    <th class="py-2 px-3 text-left">Name</th>
+                    <th class="py-2 px-3 text-left">University ID</th>
+                    <th class="py-2 px-3 text-left">Room</th>
+                    <th class="py-2 px-3 text-left">Room Type</th>
+                    <th class="py-2 px-3 text-right">Total Payment</th>
+                    <th class="py-2 px-3 text-right">Due Payment</th>
+                    <th class="py-2 px-3 text-center">Last Paid Date</th>
+                    <th class="py-2 px-3 text-center">Actions</th>
+                </tr>
+                </thead>
+
+                <tbody class="text-sm">
+                <tr th:each="res : ${residents}" class="hover:bg-gray-100 transition">
+                    <td class="py-2 px-3 border border-gray-200 font-medium" th:text="${res.name}">John Doe</td>
+                    <td class="py-2 px-3 border border-gray-200" th:text="${res.universityId}">U2024001</td>
+                    <td class="py-2 px-3 border border-gray-200 font-bold text-slate-700" th:text="${res.room}">101</td>
+                    <td class="py-2 px-3 border border-gray-200" th:text="${res.roomType}">2-Sharing</td>
+                    <td class="py-2 px-3 border border-gray-200 text-right" th:text="'₹' + ${res.totalPayment}">₹5000</td>
+                    <td class="py-2 px-3 border border-gray-200 text-right font-bold"
+                        th:classappend="${res.duePayment > 0 ? 'text-red-600' : 'text-green-600'}"
+                        th:text="'₹' + ${res.duePayment}">₹500</td>
+                    <td class="py-2 px-3 border border-gray-200 text-center"
+                        th:text="${res.lastPaidDate != null ? #temporals.format(res.lastPaidDate, 'dd-MM-yyyy') : '-'}">24-03-2026</td>
+                    <td class="py-2 px-3 border border-gray-200 text-center">
+                        <a th:href="@{/api/fees/collect/{id}(id=${res.userId})}"
+                           class="px-3 py-1 bg-blue-600 text-white rounded text-xs font-bold hover:bg-blue-700 transition">
+                            Add Payment
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+
+                <tfoot>
+                <tr class="bg-gray-50 text-sm">
+                    <td class="py-2 px-3 border-t font-bold text-slate-600" colspan="5">
+                        Total Outstanding Balance
+                    </td>
+                    <td class="py-2 px-3 border-t text-right font-bold text-red-600" th:text="'₹' + ${totalDue}">
+                        0
+                    </td>
+                    <td class="py-2 px-3 border-t" colspan="2"></td>
+                </tr>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    /* CSV Export Logic matching your Tracker style */
+    document.getElementById('btnExport')?.addEventListener('click', () => {
+        const table = document.getElementById('residentTable');
+        const rows = table.querySelectorAll('thead tr, tbody tr');
+        let csv = [];
+
+        rows.forEach(row => {
+            const cols = row.querySelectorAll('th, td');
+            let vals = [];
+            cols.forEach((c, idx) => {
+                if (idx === cols.length - 1) return; // Skip Actions column
+                let t = c.textContent.replace(/\s+/g, ' ').trim();
+                if (t.includes(',') || t.includes('"'))
+                    t = '"' + t.replace(/"/g, '""') + '"';
+                vals.push(t);
+            });
+            csv.push(vals.join(','));
+        });
+
+        const blob = new Blob([csv.join('\n')], {type: 'text/csv;charset=utf-8;'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `resident-report-${new Date().toISOString().slice(0, 10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
+</script>
+
+</body>
+</html>

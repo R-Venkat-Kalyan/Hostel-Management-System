@@ -112,20 +112,7 @@
                 </a>
 
                 <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
-                   href="/add-fee-payment">
-                    <i class="fas fa-money-check-alt w-6"></i>
-                    <span class="ml-2 text-sm font-medium">Add Fee Payment</span>
-                </a>
-
-                <!--                <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"-->
-                <!--                   href="/view-issues">-->
-                <!--                    <i class="fas fa-exclamation-triangle w-6"></i>-->
-                <!--                    <span class="ml-2 text-sm font-medium">View Issues</span>-->
-                <!--                </a>-->
-
-
-                <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
-                   href="/view-rooms">
+                   href="/manager/view-rooms">
                     <i class="fas fa-bed w-6"></i>
                     <span class="ml-2 text-sm font-medium">View Rooms</span>
                 </a>
@@ -137,9 +124,9 @@
                 </a>
 
                 <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
-                   href="/view-fee-payments">
+                   href="/manager/view-payments">
                     <i class="fas fa-hand-holding-usd w-6"></i>
-                    <span class="ml-2 text-sm font-medium">Approval Pending Payments</span>
+                    <span class="ml-2 text-sm font-medium">View Payments</span>
                 </a>
                 <div class="fixed bottom-4 left-2 w-44 z-30 pointer-events-auto">
                     <a class="relative flex items-center w-full h-12 px-3 rounded-lg bg-gradient-to-r from-blue-500 to-green-500 text-white font-bold"
@@ -156,8 +143,13 @@
     <div id="sidebar-overlay" onclick="toggleSidebar()"
          class="fixed inset-0 bg-black opacity-50 z-10 hidden md:hidden"></div>
 
-    <main class="flex-grow md:ml-48 p-4 bg-white min-h-[calc(100vh-4rem)] flex items-start justify-center pt-8">
-        <div th:replace="${mainContent}" class="w-full flex justify-center">
+<!--    <main class="flex-grow md:ml-48 p-4 bg-white min-h-[calc(100vh-4rem)] flex items-start justify-center pt-8">-->
+<!--        <div th:replace="${mainContent}" class="w-full flex justify-center">-->
+<!--        </div>-->
+<!--    </main>-->
+
+    <main class="flex-grow md:ml-48 p-4 bg-white min-h-[calc(100vh-4rem)] flex items-start justify-center pt-8 overflow-x-hidden">
+        <div th:replace="${mainContent}" class="w-full max-w-full overflow-hidden">
         </div>
     </main>
 </div>

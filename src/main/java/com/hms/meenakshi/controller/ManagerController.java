@@ -1,17 +1,22 @@
 package com.hms.meenakshi.controller;
 
+import com.hms.meenakshi.dto.PaymentHistoryDTO;
 import com.hms.meenakshi.dto.ResidentDetailsDTO;
 import com.hms.meenakshi.entity.Room;
 import com.hms.meenakshi.entity.User;
+import com.hms.meenakshi.service.PaymentService;
 import com.hms.meenakshi.service.RoomAssignmentService;
 import com.hms.meenakshi.service.RoomService;
 import com.hms.meenakshi.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.YearMonth;
+import java.util.Comparator;
 import java.util.List;
 
 @AllArgsConstructor
@@ -22,25 +27,33 @@ public class ManagerController {
     private final RoomService roomService;
     private final UserService userService;
     private final RoomAssignmentService assignmentService;
+    private final PaymentService paymentService;
+
+    @GetMapping("/dashboard")
+    public String dashBoard(RedirectAttributes redirectAttributes, Model model){
+        model.addAttribute("mainContent", "manager-pages/dashboard");
+        model.addAttribute("successMessage", "Successfull");
+        return "manager-pages/layout";
+    }
 
     @GetMapping("/add-room")
     public String addRoom(Model model) {
-        model.addAttribute("mainContent","manager-pages/add-room");
-        return "/manager-pages/layout";
+        model.addAttribute("mainContent", "manager-pages/add-room");
+        return "manager-pages/layout";
     }
 
     @PostMapping("/save-room")
     public String saveRoom(@ModelAttribute Room room, Model model) {
         roomService.saveRoom(room);
-        model.addAttribute("successMessage","Room Added Successfully");
-        model.addAttribute("mainContent","/manager-pages/add-room");
-        return "/manager-pages/layout";
+        model.addAttribute("successMessage", "Room Added Successfully");
+        model.addAttribute("mainContent", "manager-pages/add-room");
+        return "manager-pages/layout";
     }
 
     @GetMapping("/add-resident")
     public String addResident(Model model) {
-        model.addAttribute("mainContent","/manager-pages/add-resident");
-        return "/manager-pages/layout";
+        model.addAttribute("mainContent", "manager-pages/add-resident");
+        return "manager-pages/layout";
     }
 
     @PostMapping("/save-resident")
@@ -48,9 +61,9 @@ public class ManagerController {
         user.setRoomId("NEW");
         user.setFeeSummaryId("NEW");
         userService.saveUser(user);
-        model.addAttribute("successMessage","User Added Successfully");
-        model.addAttribute("mainContent","/manager-pages/add-resident");
-        return "/manager-pages/layout";
+        model.addAttribute("successMessage", "User Added Successfully");
+        model.addAttribute("mainContent", "manager-pages/add-resident");
+        return "manager-pages/layout";
     }
 
     @GetMapping("/assign-room")
@@ -92,5 +105,72 @@ public class ManagerController {
         return "manager-pages/layout";
     }
 
+    @GetMapping("/collect-payment/{userId}")
+    public String showPaymentForm(@PathVariable String userId, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            ResidentDetailsDTO resident = userService.getSingleResidentSnapshot(userId);
+            if (resident == null) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Resident not found!");
+                return "redirect:/manager/view-residents";
+            }
+            model.addAttribute("resident", resident);
+            model.addAttribute("mainContent", "manager-pages/collect-payment");
+            return "manager-pages/layout";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error: " + e.getMessage());
+            return "redirect:/manager/view-residents";
+        }
+    }
+
+    @PostMapping("/save-payment")
+    public String savePayment(@RequestParam String userId,
+                              @RequestParam double amount,
+                              @RequestParam String paymentMode,
+                              @RequestParam(required = false) String transactionRef,
+                              RedirectAttributes redirectAttributes) {
+        String managerId = "Bannu";
+        try {
+            paymentService.recordPendingPayment(userId, amount, paymentMode, transactionRef, managerId);
+            redirectAttributes.addFlashAttribute("successMessage", "Payment Record Submitted for Approval!");
+            return "redirect:/manager/view-residents";
+        } catch (Exception e) {
+            // Log the error to console so you can see it
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to save: " + e.getMessage());
+            return "redirect:/manager/collect-payment/" + userId;
+        }
+    }
+
+    @GetMapping("/view-payments")
+    public String viewPayments(@RequestParam(required = false) String month, Model model) {
+        if (month == null) month = YearMonth.now().toString();
+
+        List<PaymentHistoryDTO> history = paymentService.getFilteredPayments(month);
+
+        model.addAttribute("payments", history);
+        model.addAttribute("selectedMonth", month);
+        model.addAttribute("mainContent", "manager-pages/view-payments");
+        return "manager-pages/layout";
+    }
+
+    @GetMapping("/view-rooms")
+    public String viewRooms(Model model) {
+        List<Room> rooms = roomService.getAllRooms();
+
+        // Sort numerically by room number (e.g., 101, 102, 201)
+        rooms.sort(Comparator.comparing(Room::getRoomNumber));
+
+        // Calculate totals for the footer
+        int totalOccupied = rooms.stream().mapToInt(Room::getOccupiedCount).sum();
+        int totalCapacity = rooms.stream().mapToInt(Room::getCapacity).sum();
+        int totalVacant = totalCapacity - totalOccupied;
+
+        model.addAttribute("rooms", rooms);
+        model.addAttribute("totalOccupied", totalOccupied);
+        model.addAttribute("totalVacant", totalVacant);
+        model.addAttribute("mainContent", "manager-pages/view-rooms");
+
+        return "manager-pages/layout";
+    }
 
 }

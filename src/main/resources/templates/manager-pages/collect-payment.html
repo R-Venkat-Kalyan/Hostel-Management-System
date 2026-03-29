@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collect Payment | Meenakshi Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .form-card { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(16px); border: 1px solid rgba(0, 0, 0, 0.08); }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-start justify-center pt-12 p-4">
+
+<div th:fragment="content" class="w-full max-w-2xl form-card rounded-[2.5rem] shadow-2xl p-8 md:p-12 transition-all">
+
+    <div class="text-center mb-10">
+        <div class="inline-flex items-center justify-center w-14 h-14 bg-emerald-600 text-white rounded-2xl mb-4 shadow-xl shadow-emerald-100">
+            <i class="fa-solid fa-indian-rupee-sign text-xl"></i>
+        </div>
+        <h2 class="text-3xl font-bold text-slate-800 tracking-tight">Collect Payment</h2>
+        <p class="text-slate-500 text-sm mt-2">Recording payment for <span class="font-bold text-slate-800" th:text="${resident.name}">John Doe</span></p>
+    </div>
+
+    <div class="mb-8 p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-start gap-3">
+        <i class="fa-solid fa-circle-info text-amber-500 mt-1"></i>
+        <p class="text-xs text-amber-800 leading-relaxed">
+            Note: This payment will be marked as <span class="font-bold uppercase tracking-wider">Pending</span>. The resident's balance will only update once the Owner approves this transaction.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mb-8">
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-center">
+            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Fee</span>
+            <span class="text-lg font-bold text-slate-700" th:text="'₹' + ${resident.totalPayment}">₹5000</span>
+        </div>
+        <div class="bg-rose-50 p-4 rounded-2xl border border-rose-100 text-center">
+            <span class="block text-[10px] font-bold text-rose-400 uppercase tracking-widest mb-1">Currently Due</span>
+            <span class="text-lg font-bold text-rose-600" th:text="'₹' + ${resident.duePayment}">₹1200</span>
+        </div>
+    </div>
+
+    <form th:action="@{/manager/save-payment}" method="POST" id="paymentForm" class="space-y-6">
+
+        <input type="hidden" name="userId" th:value="${resident.userId}">
+
+        <div class="group">
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-emerald-600 transition-colors">Amount Received (₹)</label>
+            <div class="relative">
+                <i class="fa-solid fa-money-bill-1 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="number" name="amount" step="0.01" th:max="${resident.duePayment}" placeholder="0.00"
+                       class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 focus:bg-white outline-none transition-all font-bold text-lg"
+                       required>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-2 ml-1 italic">Maximum accepted: <span th:text="'₹' + ${resident.duePayment}">₹1200</span></p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="group">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Payment Mode</label>
+                <div class="relative">
+                    <i class="fa-solid fa-credit-card absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <select name="paymentMode"
+                            class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none appearance-none transition-all" required>
+                        <option value="UPI">UPI / PhonePe / GPay</option>
+                        <option value="CASH">Cash</option>
+                        <option value="TRANSFER">Bank Transfer</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="group">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Transaction Ref #</label>
+                <div class="relative">
+                    <i class="fa-solid fa-receipt absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" name="transactionRef" placeholder="TXN12345678"
+                           class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all">
+                </div>
+            </div>
+        </div>
+
+        <button type="submit"
+                class="w-full bg-slate-900 hover:bg-emerald-600 text-white font-bold py-5 rounded-[2rem] shadow-xl flex items-center justify-center gap-3 transition-all hover:-translate-y-1 active:scale-95 mt-8 group">
+            <span class="text-lg">Confirm & Update Ledger</span>
+            <i class="fa-solid fa-check-circle text-emerald-400 group-hover:text-white transition-all"></i>
+        </button>
+
+        <div class="mt-8 text-center">
+            <p class="text-slate-400 text-[10px] uppercase tracking-tighter">
+                Submitting will update the <span class="font-bold">Resident Fee Summary</span> instantly.
+            </p>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

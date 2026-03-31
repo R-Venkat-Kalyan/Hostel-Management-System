@@ -1,0 +1,198 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<div th:fragment="content" class="w-full max-w-5xl mx-auto px-2 sm:px-4 py-4 md:py-8">
+
+    <div class="flex flex-col lg:flex-row gap-6 md:gap-8 items-start">
+
+        <div class="w-full lg:w-3/5 bg-white p-5 md:p-8 rounded-[2rem] md:rounded-[2.5rem] shadow-xl shadow-slate-200/60 border border-slate-100">
+            <div class="mb-6 md:mb-10">
+                <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-[10px] font-bold uppercase tracking-widest border border-blue-100">
+                    Self-Service Portal
+                </span>
+                <h1 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mt-4">Laundry Tracker</h1>
+                <p class="text-slate-500 text-sm mt-2">Log your items below to generate your digital collection token.</p>
+            </div>
+
+            <div class="space-y-4 md:space-y-8">
+
+                <div class="relative p-4 md:p-6 bg-slate-50 rounded-2xl md:rounded-3xl border border-transparent hover:border-blue-200 transition-all group">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-3 md:gap-4">
+                            <div class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-xl md:rounded-2xl flex items-center justify-center text-blue-600 shadow-sm shrink-0">
+                                <i class="fa-solid fa-shirt text-lg md:text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-sm md:text-base">Shirts & Tops</h4>
+                                <p class="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-tighter">T-shirts, Polos, Shirts</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between sm:justify-end gap-3 bg-white p-1.5 rounded-xl md:rounded-2xl shadow-sm border border-slate-100">
+                            <button onclick="updateQty('shirts', -1)" class="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl hover:bg-rose-50 hover:text-rose-600 text-slate-400 transition-all">
+                                <i class="fa-solid fa-minus text-xs"></i>
+                            </button>
+                            <input type="number" id="input-shirts" value="0" min="0" oninput="syncReceipt()"
+                                   class="w-10 md:w-12 bg-transparent text-center font-black text-slate-900 outline-none text-base md:text-lg">
+                            <button onclick="updateQty('shirts', 1)" class="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl hover:bg-emerald-50 hover:text-emerald-600 text-slate-400 transition-all">
+                                <i class="fa-solid fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative p-4 md:p-6 bg-slate-50 rounded-2xl md:rounded-3xl border border-transparent hover:border-blue-200 transition-all group">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-3 md:gap-4">
+                            <div class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-xl md:rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm shrink-0">
+                                <i class="fa-solid fa-person-half-dress text-lg md:text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-sm md:text-base">Pants & Bottoms</h4>
+                                <p class="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Jeans, Trousers, Shorts</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between sm:justify-end gap-3 bg-white p-1.5 rounded-xl md:rounded-2xl shadow-sm border border-slate-100">
+                            <button onclick="updateQty('pants', -1)" class="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl hover:bg-rose-50 hover:text-rose-600 text-slate-400 transition-all">
+                                <i class="fa-solid fa-minus text-xs"></i>
+                            </button>
+                            <input type="number" id="input-pants" value="0" min="0" oninput="syncReceipt()"
+                                   class="w-10 md:w-12 bg-transparent text-center font-black text-slate-900 outline-none text-base md:text-lg">
+                            <button onclick="updateQty('pants', 1)" class="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl hover:bg-emerald-50 hover:text-emerald-600 text-slate-400 transition-all">
+                                <i class="fa-solid fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative p-4 md:p-6 bg-slate-50 rounded-2xl md:rounded-3xl border border-transparent hover:border-blue-200 transition-all group">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-3 md:gap-4">
+                            <div class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-xl md:rounded-2xl flex items-center justify-center text-amber-600 shadow-sm shrink-0">
+                                <i class="fa-solid fa-box-open text-lg md:text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-sm md:text-base">Others</h4>
+                                <p class="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Bedsheets, Towels, Misc</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between sm:justify-end gap-3 bg-white p-1.5 rounded-xl md:rounded-2xl shadow-sm border border-slate-100">
+                            <button onclick="updateQty('others', -1)" class="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl hover:bg-rose-50 hover:text-rose-600 text-slate-400 transition-all">
+                                <i class="fa-solid fa-minus text-xs"></i>
+                            </button>
+                            <input type="number" id="input-others" value="0" min="0" oninput="syncReceipt()"
+                                   class="w-10 md:w-12 bg-transparent text-center font-black text-slate-900 outline-none text-base md:text-lg">
+                            <button onclick="updateQty('others', 1)" class="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl hover:bg-emerald-50 hover:text-emerald-600 text-slate-400 transition-all">
+                                <i class="fa-solid fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="downloadReceipt()"
+                        class="w-full py-4 md:py-5 bg-slate-900 text-white rounded-[1.5rem] md:rounded-[2rem] font-bold hover:bg-blue-600 transition-all shadow-xl flex items-center justify-center gap-3 transform active:scale-95 text-sm md:text-base">
+                    <i class="fa-solid fa-camera-retro"></i> SAVE TOKEN TO GALLERY
+                </button>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-2/5 flex flex-col items-center mt-4 lg:mt-0">
+            <div id="receipt-area" class="w-full max-w-[340px] bg-white p-6 md:p-10 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl relative border-t-8 border-blue-600 border-x border-b border-slate-100">
+
+                <div class="text-center mb-6 md:mb-8">
+                    <div class="w-16 h-16 md:w-20 md:h-20 bg-slate-900 text-white rounded-2xl md:rounded-[2rem] flex items-center justify-center mx-auto mb-4 shadow-xl">
+                        <i class="fa-solid fa-soap text-2xl md:text-3xl"></i>
+                    </div>
+                    <h2 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight">MEENAKSHI PG</h2>
+                    <p class="text-[9px] md:text-[10px] font-bold text-blue-500 uppercase tracking-[0.3em] mt-2">Laundry Token</p>
+                </div>
+
+                <div class="space-y-4 md:space-y-5 border-y-2 border-dashed border-slate-100 py-4 md:py-6 mb-6">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest">Date Issued</span>
+                        <span class="text-xs font-black text-slate-800" id="r-date">--/--/--</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest">Resident</span>
+                        <span class="text-xs font-black text-slate-800 truncate pl-4 text-right" th:text="${fullName}">--</span>
+                    </div>
+                </div>
+
+                <div class="space-y-3 md:space-y-4">
+                    <div class="flex justify-between text-xs md:text-sm">
+                        <span class="font-medium text-slate-500 italic">Shirts/Tops</span>
+                        <span class="font-black text-slate-900" id="r-shirts">0</span>
+                    </div>
+                    <div class="flex justify-between text-xs md:text-sm">
+                        <span class="font-medium text-slate-500 italic">Pants/Bottoms</span>
+                        <span class="font-black text-slate-900" id="r-pants">0</span>
+                    </div>
+                    <div class="flex justify-between text-xs md:text-sm">
+                        <span class="font-medium text-slate-500 italic">Other Items</span>
+                        <span class="font-black text-slate-900" id="r-others">0</span>
+                    </div>
+                </div>
+
+                <div class="mt-8 md:mt-10 p-4 md:p-5 bg-blue-600 rounded-2xl md:rounded-[2rem] text-center shadow-lg shadow-blue-100">
+                    <p class="text-[9px] md:text-[10px] font-bold text-blue-200 uppercase tracking-widest mb-1">Total Item Count</p>
+                    <p class="text-3xl md:text-4xl font-black text-white" id="r-total">0</p>
+                </div>
+
+                <div class="mt-6 text-center">
+                    <p class="text-[8px] md:text-[9px] text-slate-400 font-medium">Valid only for the date of issue.<br>Powered by Meenakshi Mgmt</p>
+                </div>
+            </div>
+
+            <p class="mt-6 text-slate-400 text-[10px] md:text-xs flex items-center gap-2">
+                <i class="fa-solid fa-circle-info"></i>
+                Preview updates in real-time
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Logic remains identical to previous version but ensures parsing works
+    document.getElementById('r-date').innerText = new Date().toLocaleDateString('en-GB', {
+        day: '2-digit', month: 'short', year: 'numeric'
+    });
+
+    function updateQty(id, delta) {
+        const input = document.getElementById('input-' + id);
+        let newVal = parseInt(input.value || 0) + delta;
+        if (newVal < 0) newVal = 0;
+        input.value = newVal;
+        syncReceipt();
+    }
+
+    function syncReceipt() {
+        const s = document.getElementById('input-shirts').value || 0;
+        const p = document.getElementById('input-pants').value || 0;
+        const o = document.getElementById('input-others').value || 0;
+
+        document.getElementById('r-shirts').innerText = s;
+        document.getElementById('r-pants').innerText = p;
+        document.getElementById('r-others').innerText = o;
+
+        document.getElementById('r-total').innerText = parseInt(s) + parseInt(p) + parseInt(o);
+    }
+
+    function downloadReceipt() {
+        const total = parseInt(document.getElementById('r-total').innerText);
+        if(total === 0) {
+            alert("Please log at least one item first!");
+            return;
+        }
+
+        const area = document.getElementById('receipt-area');
+        html2canvas(area, {
+            scale: 3, // Slightly lower scale for faster mobile processing but still sharp
+            backgroundColor: "#ffffff",
+            logging: false,
+            useCORS: true
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `Laundry_${Date.now()}.png`;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        });
+    }
+</script>

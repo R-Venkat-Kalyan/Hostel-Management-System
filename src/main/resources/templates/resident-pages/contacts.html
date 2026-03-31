@@ -1,0 +1,103 @@
+<div th:fragment="content" class="w-full max-w-6xl mx-auto px-4 py-8">
+
+    <div class="text-center mb-12">
+        <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-[10px] font-bold uppercase tracking-widest border border-blue-100">
+            Support Directory
+        </span>
+        <h1 class="text-4xl font-black text-slate-900 tracking-tight mt-4">Help & Support</h1>
+        <p class="text-slate-500 mt-2 text-sm max-w-md mx-auto">
+            Quick access to management and maintenance teams. Click to call or message directly.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-slate-200/60 border border-slate-100 flex flex-col items-center text-center transform transition-all hover:-translate-y-2">
+            <div class="w-16 h-16 bg-slate-900 text-white rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                <i class="fa-solid fa-crown text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-black text-slate-800">Property Owner</h3>
+            <p class="text-xs font-bold text-blue-500 uppercase tracking-widest mt-1">Escalations</p>
+
+            <div class="flex gap-3 mt-6 w-full">
+                <a href="tel:9999999999" class="flex-1 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold text-xs hover:bg-slate-900 hover:text-white transition-all">
+                    <i class="fa-solid fa-phone mr-2"></i> CALL
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-slate-200/60 border border-slate-100 flex flex-col items-center text-center transform transition-all hover:-translate-y-2">
+            <div class="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                <i class="fa-solid fa-user-tie text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-black text-slate-800">Hostel Manager</h3>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Daily Operations</p>
+
+            <div class="flex gap-3 mt-6 w-full">
+                <a href="tel:8888888888" class="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold text-xs hover:bg-blue-700 transition-all">
+                    <i class="fa-solid fa-phone mr-2"></i> CALL
+                </a>
+                <a href="sms:8888888888" class="flex-1 py-3 bg-emerald-500 text-white rounded-xl font-bold text-xs hover:bg-emerald-600 transition-all">
+                    <i class="fa-solid fa-message mr-2"></i> SMS
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-slate-200/60 border border-slate-100 flex flex-col items-center text-center transform transition-all hover:-translate-y-2">
+            <div class="w-16 h-16 bg-amber-500 text-white rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                <i class="fa-solid fa-screwdriver-wrench text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-black text-slate-800">Maintenance</h3>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Repairs & Cleaning</p>
+
+            <div class="flex gap-3 mt-6 w-full">
+                <a href="tel:7777777777" class="flex-1 py-3 bg-slate-900 text-white rounded-xl font-bold text-xs hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-phone mr-2"></i> CALL
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-slate-200/60 border border-slate-100 flex flex-col items-center text-center transform transition-all hover:-translate-y-2">
+            <div class="w-16 h-16 bg-indigo-600 text-white rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                <i class="fa-solid fa-user-shield text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-black text-slate-800">Gate Keeper</h3>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Security & Entry</p>
+
+            <div class="flex gap-3 mt-6 w-full">
+                <a href="tel:6666666666" class="flex-1 py-3 bg-slate-900 text-white rounded-xl font-bold text-xs">
+                    <i class="fa-solid fa-phone mr-2"></i> CALL
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-slate-200/60 border border-slate-100 flex flex-col items-center text-center transform transition-all hover:-translate-y-2">
+            <div class="w-16 h-16 bg-cyan-500 text-white rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                <i class="fa-solid fa-wifi text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-black text-slate-800">WiFi Support</h3>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Internet Issues</p>
+
+            <div class="flex gap-3 mt-6 w-full">
+                <a href="tel:5555555555" class="flex-1 py-3 bg-slate-900 text-white rounded-xl font-bold text-xs">
+                    <i class="fa-solid fa-phone mr-2"></i> CALL
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-slate-200/60 border border-slate-100 flex flex-col items-center text-center transform transition-all hover:-translate-y-2">
+            <div class="w-16 h-16 bg-rose-500 text-white rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                <i class="fa-solid fa-elevator text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-black text-slate-800">Lift Maintenance</h3>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Elevator Support</p>
+
+            <div class="flex gap-3 mt-6 w-full">
+                <a href="tel:4444444444" class="flex-1 py-3 bg-slate-900 text-white rounded-xl font-bold text-xs">
+                    <i class="fa-solid fa-phone mr-2"></i> CALL
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>

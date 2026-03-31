@@ -32,7 +32,6 @@ public class ManagerController {
     @GetMapping("/dashboard")
     public String dashBoard(RedirectAttributes redirectAttributes, Model model){
         model.addAttribute("mainContent", "manager-pages/dashboard");
-        model.addAttribute("successMessage", "Successfull");
         return "manager-pages/layout";
     }
 
@@ -43,11 +42,11 @@ public class ManagerController {
     }
 
     @PostMapping("/save-room")
-    public String saveRoom(@ModelAttribute Room room, Model model) {
+    public String saveRoom(@ModelAttribute Room room, Model model,RedirectAttributes redirectAttributes) {
         roomService.saveRoom(room);
-        model.addAttribute("successMessage", "Room Added Successfully");
-        model.addAttribute("mainContent", "manager-pages/add-room");
-        return "manager-pages/layout";
+        redirectAttributes.addFlashAttribute("successMessage", "Room Added Successfully");
+        return "redirect:/manager/view-rooms";
+
     }
 
     @GetMapping("/add-resident")
@@ -57,13 +56,12 @@ public class ManagerController {
     }
 
     @PostMapping("/save-resident")
-    public String saveResident(@ModelAttribute User user, Model model) {
+    public String saveResident(@ModelAttribute User user, Model model, RedirectAttributes redirectAttributes) {
         user.setRoomId("NEW");
         user.setFeeSummaryId("NEW");
         userService.saveUser(user);
-        model.addAttribute("successMessage", "User Added Successfully");
-        model.addAttribute("mainContent", "manager-pages/add-resident");
-        return "manager-pages/layout";
+        redirectAttributes.addFlashAttribute("successMessage", "Resident Added Successfully");
+        return "redirect:/manager/view-residents";
     }
 
     @GetMapping("/assign-room")
@@ -132,11 +130,11 @@ public class ManagerController {
         try {
             paymentService.recordPendingPayment(userId, amount, paymentMode, transactionRef, managerId);
             redirectAttributes.addFlashAttribute("successMessage", "Payment Record Submitted for Approval!");
-            return "redirect:/manager/view-residents";
+            return "redirect:/manager/view-payments";
         } catch (Exception e) {
             // Log the error to console so you can see it
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute("errorMessage", "Failed to save: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("successMessage", "Failed to save: " + e.getMessage());
             return "redirect:/manager/collect-payment/" + userId;
         }
     }

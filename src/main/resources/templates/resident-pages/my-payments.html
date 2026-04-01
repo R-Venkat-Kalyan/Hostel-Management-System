@@ -1,0 +1,40 @@
+<div th:fragment="content" class="w-full max-w-5xl mx-auto px-4 py-8">
+    <div class="mb-10 text-center">
+        <h1 class="text-3xl font-black text-slate-900 tracking-tight">Verified Payment Ledger</h1>
+        <p class="text-slate-500 text-sm">Official payment history approved by the Management.</p>
+    </div>
+
+    <div class="bg-white shadow-xl shadow-slate-200/50 rounded-[2.5rem] border border-slate-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead>
+                <tr class="bg-slate-900 text-white">
+                    <th class="py-5 px-6 text-[10px] font-bold uppercase tracking-widest">Date</th>
+                    <th class="py-5 px-6 text-[10px] font-bold uppercase tracking-widest">Transaction Ref</th>
+                    <th class="py-5 px-6 text-[10px] font-bold uppercase tracking-widest">Mode</th>
+                    <th class="py-5 px-6 text-[10px] font-bold uppercase tracking-widest text-right">Amount</th>
+                    <th class="py-5 px-6 text-[10px] font-bold uppercase tracking-widest text-center">Status</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-sm">
+                <tr th:each="p : ${payments}" class="hover:bg-slate-50/50 transition-all group">
+                    <td class="py-5 px-6 font-medium text-slate-500" th:text="${#temporals.format(p.paidDate, 'dd MMM yyyy')}">Date</td>
+                    <td class="py-5 px-6 font-mono text-xs text-blue-600" th:text="${p.transactionRef}">TXN123456</td>
+                    <td class="py-5 px-6">
+                        <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded-md font-bold text-[10px]" th:text="${p.paymentMode}">UPI</span>
+                    </td>
+                    <td class="py-5 px-6 text-right font-black text-slate-900" th:text="'₹' + ${p.amount}">₹0.00</td>
+                    <td class="py-5 px-6 text-center">
+                            <span th:if="${p.status == 'APPROVED'}" class="text-emerald-500 font-bold flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-circle-check"></i> VERIFIED
+                            </span>
+                        <span th:if="${p.status == 'PENDING'}" class="text-amber-500 font-bold flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-clock animate-pulse"></i> PENDING
+                            </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

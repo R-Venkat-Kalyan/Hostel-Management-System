@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Meenakshi Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .input-focus:focus-within {
+            ring: 2px;
+            ring-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-6">
+
+<div class="w-full max-w-[440px]">
+
+    <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-slate-900 text-white rounded-3xl mb-4 shadow-2xl shadow-indigo-200">
+            <i class="fa-solid fa-shield-halved text-2xl"></i>
+        </div>
+        <h1 class="text-3xl font-black text-slate-900 tracking-tight">Meenakshi PG</h1>
+        <p class="text-slate-500 text-sm font-medium mt-2">Management & Resident Portal</p>
+    </div>
+
+    <div class="glass-effect rounded-[2.5rem] p-8 md:p-10 shadow-2xl shadow-indigo-100 border border-white">
+
+        <form th:action="@{/login}" method="POST" class="space-y-6">
+
+            <div class="group">
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">Registered Email</label>
+                <div class="relative flex items-center">
+                    <i class="fa-solid fa-envelope absolute left-4 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
+                    <input type="email" name="username" required
+                           placeholder="name@example.com"
+                           class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all font-bold text-slate-700 placeholder:font-normal">
+                </div>
+            </div>
+
+            <div class="group">
+                <div class="flex justify-between items-center mb-2 px-1">
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Password</label>
+                    <a href="/forgot-password" class="text-[10px] font-bold text-blue-600 hover:text-indigo-600 transition-colors uppercase tracking-widest">Forgot?</a>
+                </div>
+                <div class="relative flex items-center">
+                    <i class="fa-solid fa-lock absolute left-4 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
+                    <input type="password" id="passwordField" name="password" required
+                           placeholder="••••••••"
+                           class="w-full pl-11 pr-12 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all font-bold text-slate-700">
+
+                    <button type="button" onclick="togglePassword()" class="absolute right-4 text-slate-400 hover:text-slate-600 transition-colors p-1">
+                        <i id="toggleIcon" class="fa-solid fa-eye text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit"
+                    class="w-full py-5 bg-slate-900 text-white rounded-[2rem] font-bold hover:bg-blue-600 transition-all shadow-xl shadow-slate-200 active:scale-[0.98] flex items-center justify-center gap-2">
+                SIGN IN <i class="fa-solid fa-arrow-right-to-bracket text-xs ml-1"></i>
+            </button>
+        </form>
+
+        <div class="mt-8 pt-8 border-t border-slate-100 text-center">
+            <p class="text-xs text-slate-400 font-medium">
+                New resident? <a href="/contacts" class="text-blue-600 font-bold hover:underline">Contact Manager</a>
+            </p>
+        </div>
+    </div>
+
+    <p class="text-center mt-8 text-[10px] font-bold text-slate-300 uppercase tracking-[0.4em]">
+        Secure Access • v2.0
+    </p>
+</div>
+
+<script>
+    function togglePassword() {
+        const passwordField = document.getElementById('passwordField');
+        const icon = document.getElementById('toggleIcon');
+
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordField.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>
+</body>
+</html>

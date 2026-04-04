@@ -1,13 +1,13 @@
 package com.hms.meenakshi.repository;
 
-import com.hms.meenakshi.entity.Payments;
+import com.hms.meenakshi.entity.UserReceipts;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface PaymentRepository extends MongoRepository<Payments, String> {
+public interface UserReceiptsRepository extends MongoRepository<UserReceipts, String> {
 
-    List<Payments> getPaymentsByUserId(String userId);
+    List<UserReceipts> findByUserId(String userId);
 }

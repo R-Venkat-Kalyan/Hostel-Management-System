@@ -144,4 +144,7 @@ public class PaymentService {
         paymentRepo.save(p);
     }
 
+    public List<Payments> getPaymentsByUserId(String userId) {
+        return paymentRepo.getPaymentsByUserId(userId);
+    }
 }

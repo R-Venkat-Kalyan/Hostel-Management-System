@@ -145,6 +145,6 @@ public class PaymentService {
     }
 
     public List<Payments> getPaymentsByUserId(String userId) {
-        return paymentRepo.getPaymentsByUserId(userId);
+        return paymentRepo.findByUserIdOrderByPaidDateDesc(userId);
     }
 }

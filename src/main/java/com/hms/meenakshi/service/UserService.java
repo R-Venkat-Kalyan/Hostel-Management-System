@@ -28,29 +28,6 @@ public class UserService {
         return userRepository.findByRoleAndRoomId(role, roomId);
     }
 
-//    public List<ResidentDetailsDTO> getAllResidentSnapshots() {
-//        List<User> residents = userRepository.findByRoleAndRoomIdNot("RESIDENT", "NEW");
-//
-//        return residents.stream().map(user -> {
-//            ResidentDetailsDTO dto = new ResidentDetailsDTO();
-//            dto.setUserId(user.getId());
-//            dto.setName(user.getFullName());
-//            dto.setUniversityId(user.getUniversityId());
-//
-//            roomRepository.findById(user.getRoomId()).ifPresent(r -> {
-//                dto.setRoom(r.getRoomNumber());
-//                dto.setRoomType(r.getRoomType());
-//            });
-//
-//            feeSummaryRepository.findById(user.getFeeSummaryId()).ifPresent(f -> {
-//                dto.setTotalPayment(f.getTotalAmount());
-//                dto.setDuePayment(f.getPendingAmount());
-//                dto.setLastPaidDate(f.getLastPaymentDate());
-//            });
-//
-//            return dto;
-//        }).collect(Collectors.toList());
-//    }
 
     // 1. Get ALL residents (Your existing method, updated to use the helper)
     public List<ResidentDetailsDTO> getAllResidentSnapshots() {
@@ -97,8 +74,9 @@ public class UserService {
         return dto;
     }
 
-
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+
 }

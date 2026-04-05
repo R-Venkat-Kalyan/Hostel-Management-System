@@ -47,7 +47,7 @@ public class UserController {
         if (userOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute("successMessage",
                     "User Not Found..❌\nContact your manager to get your credentials created!");
-            return "redirect:/login";
+            return "redirect:/sign-in";
         }
 
         User user = userOpt.get();
@@ -56,13 +56,13 @@ public class UserController {
         // Note: If you use BCrypt later, use: passwordEncoder.matches(password, user.getPassword())
         if (!user.getPassword().equals(password)) {
             redirectAttributes.addFlashAttribute("successMessage", "Invalid Password..❌");
-            return "redirect:/login";
+            return "redirect:/sign-in";
         }
 
         // 3. Check Account Status
         if (!"ACTIVE".equals(user.getStatus())) {
             redirectAttributes.addFlashAttribute("successMessage", "Account Inactive..🔒 Contact Admin.");
-            return "redirect:/login";
+            return "redirect:/sign-in";
         }
 
         // 4. Session Setup
@@ -110,6 +110,11 @@ public class UserController {
         if ("MANAGER".equals(user.getRole())) redirectPath = "/manager/dashboard";
 
         return "redirect:" + redirectPath;
+    }
+
+    @GetMapping("/all-contacts")
+    public String contacts(){
+        return "resident-pages/contacts";
     }
 
 }

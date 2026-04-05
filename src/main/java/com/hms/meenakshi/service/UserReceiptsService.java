@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -61,6 +62,24 @@ public class UserReceiptsService {
     }
 
     public List<UserReceipts> getReceiptsForUser(String userId) {
-        return receiptsRepository.findByUserId(userId);
+        return receiptsRepository.findByUserIdOrderByPaymentDateDesc(userId);
+    }
+
+    public boolean deleteReceipt(String id) {
+        return receiptsRepository.findById(id).map(receipt -> {
+            try {
+                // Delete from Cloudinary
+                cloudinary.uploader().destroy(receipt.getPublicId(), ObjectUtils.emptyMap());
+                // Delete from DB
+                receiptsRepository.delete(receipt);
+                return true;
+            } catch (IOException e) {
+                return false;
+            }
+        }).orElse(false);
+    }
+
+    public Optional<UserReceipts> findById(String id) {
+        return receiptsRepository.findById(id);
     }
 }

@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface UserReceiptsRepository extends MongoRepository<UserReceipts, String> {
 
-    List<UserReceipts> findByUserId(String userId);
+    List<UserReceipts> findByUserIdOrderByPaymentDateDesc(String userId);
 }

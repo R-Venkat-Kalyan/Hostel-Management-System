@@ -1,52 +1,127 @@
 <div th:fragment="content" class="w-full max-w-6xl mx-auto px-4 py-8">
 
-    <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
         <div>
             <h1 class="text-4xl font-black text-slate-900 tracking-tight">Receipt Vault</h1>
-            <p class="text-slate-500 text-sm font-medium uppercase tracking-widest mt-1">Your Personal Payment History</p>
+            <p class="text-slate-500 text-[10px] font-bold uppercase tracking-[0.3em] mt-2">Verified Ledger & Digital Proofs</p>
         </div>
-        <a th:href="@{/resident/add-fee-receipt}" class="group px-8 py-4 bg-slate-900 text-white rounded-[2rem] font-bold text-xs shadow-2xl hover:bg-blue-600 transition-all flex items-center gap-3">
-            <i class="fa-solid fa-plus group-hover:rotate-90 transition-transform"></i> UPLOAD NEW
+        <a th:href="@{/resident/add-fee-receipt}" class="px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold text-xs shadow-xl hover:bg-blue-600 transition-all flex items-center gap-3 active:scale-95">
+            <i class="fa-solid fa-plus text-[10px]"></i> UPLOAD NEW
         </a>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/60 border border-slate-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                <tr class="bg-slate-50/50 border-b border-slate-100">
+                    <th class="py-6 px-8 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Payment Date</th>
+                    <th class="py-6 px-8 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Amount</th>
+                    <th class="py-6 px-8 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                <tr th:each="r : ${receipts}" class="hover:bg-blue-50/30 transition-colors group">
+                    <td class="py-6 px-8">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400 group-hover:text-blue-500 transition-colors">
+                                <i class="fa-solid fa-calendar-day text-xs"></i>
+                            </div>
+                            <span class="text-sm font-bold text-slate-700" th:text="${#temporals.format(r.paymentDate, 'dd MMM yyyy')}">28 Mar 2026</span>
+                        </div>
+                    </td>
 
-        <div th:each="r : ${receipts}" class="bg-white p-5 rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col group hover:shadow-2xl transition-all">
+                    <td class="py-6 px-8">
+                        <span class="text-lg font-black text-slate-900" th:text="'₹' + ${r.amount}">₹0</span>
+                    </td>
 
-            <div class="relative w-full h-56 rounded-[2rem] overflow-hidden mb-6 bg-slate-50 border border-slate-100">
-                <img th:src="${r.receiptUrl}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Receipt">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-6">
-                    <a th:href="${r.receiptUrl}" target="_blank" class="px-4 py-2 bg-white text-slate-900 rounded-full font-bold text-[10px] uppercase tracking-widest shadow-xl">
-                        <i class="fa-solid fa-expand mr-1"></i> View Full
-                    </a>
-                </div>
-            </div>
+                    <td class="py-6 px-8">
+                        <div class="flex items-center justify-center gap-3">
+                            <button th:data-url="${r.receiptUrl}"
+                                    onclick="openPreview(this.getAttribute('data-url'))"
+                                    title="Quick Preview"
+                                    class="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center group/btn">
+                                <i class="fa-solid fa-eye text-xs"></i>
+                            </button>
 
-            <div class="px-2 pb-2">
-                <div class="flex justify-between items-start mb-4">
-                    <div>
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Amount Paid</p>
-                        <h3 class="text-2xl font-black text-slate-800" th:text="'₹' + ${r.amount}">₹5,500</h3>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Date</p>
-                        <p class="text-xs font-bold text-slate-600" th:text="${#temporals.format(r.paymentDate, 'dd MMM yyyy')}">28 Mar 2026</p>
-                    </div>
-                </div>
+                            <a th:href="${r.receiptUrl}" target="_blank" download title="Download Proof"
+                               class="w-10 h-10 rounded-xl bg-slate-900 text-white hover:bg-emerald-500 hover:shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all flex items-center justify-center shadow-lg shadow-slate-200">
+                                <i class="fa-solid fa-cloud-arrow-down text-xs"></i>
+                            </a>
 
-                <a th:href="${r.receiptUrl}" download class="w-full py-3 bg-slate-50 text-slate-400 rounded-2xl font-bold text-[10px] uppercase tracking-[0.2em] hover:bg-blue-50 hover:text-blue-600 transition-colors flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-cloud-arrow-down"></i> Download Proof
-                </a>
-            </div>
-        </div>
+                            <a th:href="@{/resident/delete-receipt/{id}(id=${r.id})}"
+                               title="Delete Permanently"
+                               onclick="return confirm('Are you sure you want to delete this receipt? This action cannot be undone.')"
+                               class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white transition-all flex items-center justify-center shadow-sm">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
 
-        <div th:if="${#lists.isEmpty(receipts)}" class="col-span-full py-20 text-center bg-white rounded-[3rem] border border-dashed border-slate-200">
-            <div class="w-20 h-20 bg-slate-50 text-slate-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                <i class="fa-solid fa-folder-open text-4xl"></i>
-            </div>
-            <h2 class="text-xl font-black text-slate-900">No Receipts Found</h2>
-            <p class="text-slate-400 text-sm mt-2">Start by uploading your first payment proof today.</p>
+                <tr th:if="${#lists.isEmpty(receipts)}">
+                    <td colspan="3" class="py-24 text-center">
+                        <div class="w-20 h-20 bg-slate-50 text-slate-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fa-solid fa-folder-open text-4xl"></i>
+                        </div>
+                        <h2 class="text-xl font-black text-slate-900">No Receipts Found</h2>
+                        <p class="text-slate-400 text-sm mt-2">Start by uploading your first payment proof today.</p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
+
+    <div id="previewModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-slate-900/90 backdrop-blur-md transition-all">
+        <div class="relative max-w-4xl w-full flex flex-col items-center animate-in fade-in zoom-in duration-300">
+            <button onclick="closePreview()" class="absolute -top-14 right-0 md:-right-10 text-white text-4xl hover:text-blue-400 transition-colors">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+
+            <div class="bg-white p-2 rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/20">
+                <img id="previewImg" src="" class="max-h-[75vh] w-auto rounded-[2rem] object-contain block">
+            </div>
+
+            <p class="mt-6 text-white/40 font-bold text-[10px] uppercase tracking-[0.5em] flex items-center gap-2">
+                <i class="fa-solid fa-keyboard text-xs"></i> Press ESC to close
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function openPreview(url) {
+            const modal = document.getElementById('previewModal');
+            const img = document.getElementById('previewImg');
+
+            // Set source and show
+            img.src = url;
+            modal.classList.remove('hidden');
+
+            // Lock body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePreview() {
+            const modal = document.getElementById('previewModal');
+            modal.classList.add('hidden');
+
+            // Restore body scroll
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closePreview();
+            }
+        });
+
+        // Close modal when clicking on the backdrop
+        document.getElementById('previewModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closePreview();
+            }
+        });
+    </script>
 </div>

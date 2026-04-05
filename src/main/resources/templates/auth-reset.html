@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reset Password | Meenakshi PG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 min-h-screen flex items-center justify-center p-6">
+<div class="w-full max-w-lg bg-white p-10 rounded-[3rem] shadow-2xl">
+    <div class="text-center mb-10">
+        <h1 class="text-3xl font-black text-slate-900 tracking-tight">Create New Password</h1>
+        <p class="text-slate-400 text-[10px] mt-2 uppercase tracking-[0.2em] font-bold">OTP has been sent to your email</p>
+    </div>
+
+    <p th:if="${error}" class="bg-rose-50 text-rose-500 p-4 rounded-2xl text-xs font-bold mb-8 text-center" th:text="${error}"></p>
+
+    <form th:action="@{/auth/final-update}" method="POST" class="space-y-6">
+        <div>
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">6-Digit OTP</label>
+            <input type="text" name="otp" maxlength="6" placeholder="000000" required
+                   class="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl text-center text-2xl font-black tracking-[1em] focus:ring-4 focus:ring-blue-500/10 outline-none text-blue-600">
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="group">
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">New Password</label>
+                <div class="relative flex items-center">
+                    <input type="password" id="newPass" name="newPass" required
+                           class="w-full p-4 pr-12 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all">
+                    <button type="button" onclick="togglePassword('newPass', 'newPassIcon')" class="absolute right-4 text-slate-400 hover:text-slate-600 transition-colors">
+                        <i id="newPassIcon" class="fa-solid fa-eye text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="group">
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block ml-1">Confirm New</label>
+                <div class="relative flex items-center">
+                    <input type="password" id="confirmPass" name="confirmPass" required
+                           class="w-full p-4 pr-12 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all">
+                    <button type="button" onclick="togglePassword('confirmPass', 'confirmPassIcon')" class="absolute right-4 text-slate-400 hover:text-slate-600 transition-colors">
+                        <i id="confirmPassIcon" class="fa-solid fa-eye text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="w-full py-5 bg-blue-600 text-white rounded-[2rem] font-black hover:bg-slate-900 transition-all shadow-xl shadow-blue-100 active:scale-95 flex items-center justify-center gap-2">
+            UPDATE & SECURE <i class="fa-solid fa-circle-check text-xs"></i>
+        </button>
+    </form>
+</div>
+
+<script>
+    function togglePassword(fieldId, iconId) {
+        const passwordField = document.getElementById(fieldId);
+        const icon = document.getElementById(iconId);
+
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordField.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>
+</body>
+</html>

@@ -117,4 +117,11 @@ public class UserController {
         return "resident-pages/contacts";
     }
 
+    @GetMapping("/sign-out")
+    public String signOut(HttpSession session, RedirectAttributes ra){
+        session.invalidate();
+        ra.addFlashAttribute("successMessage", "Logged Off !!");
+        return "redirect:/sign-in";
+    }
+
 }

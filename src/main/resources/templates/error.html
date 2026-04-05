@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>System Error | Meenakshi PG MGMT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-slate-50 flex items-center justify-center min-h-screen p-6">
+
+<div class="max-w-xl w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
+  <div class="bg-red-50 p-8 text-center border-b border-red-100">
+    <div class="inline-flex items-center justify-center w-20 h-20 bg-red-100 rounded-full mb-4">
+      <i class="fa-solid fa-triangle-exclamation text-4xl text-red-600"></i>
+    </div>
+    <h1 class="text-5xl font-extrabold text-slate-800 mb-2" th:text="${status ?: '500'}">500</h1>
+    <p class="text-xl font-medium text-slate-600 uppercase tracking-widest">System Error</p>
+  </div>
+
+  <div class="p-8 text-center">
+    <h2 class="text-2xl font-bold text-slate-800 mb-3">Oops! Something went wrong.</h2>
+    <p class="text-slate-500 mb-8 leading-relaxed">
+      We're experiencing some technical difficulties. Our team has been notified, but if you're in a hurry, please reach out to us below.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+      <a href="mailto:reddy.venkat.kalyan04@gmail.com"
+         class="flex items-center justify-start sm:justify-center gap-3 p-4 bg-white border-2 border-slate-100 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all group min-w-0">
+        <i class="fa-solid fa-envelope text-blue-600 text-xl flex-shrink-0"></i>
+        <div class="text-left min-w-0">
+          <p class="text-xs font-bold text-slate-400 uppercase">Email Us</p>
+          <p class="text-sm font-semibold text-slate-700 break-all">reddy.venkat.kalyan04@gmail.com</p>
+        </div>
+      </a>
+
+      <a href="tel:+919776365777"
+         class="flex items-center justify-center gap-3 p-4 bg-white border-2 border-slate-100 rounded-xl hover:border-green-500 hover:bg-green-50 transition-all group">
+        <i class="fa-solid fa-phone text-green-600 text-xl"></i>
+        <div class="text-left">
+          <p class="text-xs font-bold text-slate-400 uppercase">Call Support</p>
+          <p class="text-sm font-semibold text-slate-700">+91 97763 65777</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="/" class="w-full sm:w-auto px-8 py-3 bg-slate-800 text-white font-bold rounded-lg hover:bg-slate-900 transition shadow-lg shadow-slate-200">
+        <i class="fa-solid fa-house mr-2"></i> Return Home
+      </a>
+      <button onclick="window.location.reload()" class="w-full sm:w-auto px-8 py-3 bg-white text-slate-700 font-bold rounded-lg border border-slate-200 hover:bg-slate-50 transition">
+        <i class="fa-solid fa-rotate-right mr-2"></i> Try Again
+      </button>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

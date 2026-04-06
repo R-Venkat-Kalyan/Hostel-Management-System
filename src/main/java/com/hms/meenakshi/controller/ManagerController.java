@@ -1,5 +1,6 @@
 package com.hms.meenakshi.controller;
 
+import com.hms.meenakshi.dto.Expenses;
 import com.hms.meenakshi.dto.PaymentHistoryDTO;
 import com.hms.meenakshi.dto.ResidentDetailsDTO;
 import com.hms.meenakshi.entity.Room;
@@ -30,10 +31,99 @@ public class ManagerController {
     private final PaymentService paymentService;
 
     @GetMapping("/dashboard")
-    public String dashBoard(RedirectAttributes redirectAttributes, Model model){
+    public String dashBoard(Model model) {
+        // 1. Residing Students
+        List<User> residents = userService.findByRole("RESIDENT"); // Adjust null if your logic uses "NEW" or a specific RoomId check
+        long totalStudents = residents.size();
+
+        // 2. Room & Bed Logic (Reuse your viewRooms logic)
+        List<Room> rooms = roomService.getAllRooms();
+        int totalOccupied = rooms.stream().mapToInt(Room::getOccupiedCount).sum();
+        int totalCapacity = rooms.stream().mapToInt(Room::getCapacity).sum();
+
+        int availableRooms = (int) rooms.stream().filter(r -> r.getOccupiedCount() < r.getCapacity()).count();
+        int availableBeds = totalCapacity - totalOccupied;
+
+        // 3. Pending Approvals (Using PaymentService)
+        // Assuming you have a way to filter by 'PENDING' status in your history or a count method
+        String currentMonth = YearMonth.now().toString();
+        long pendingApprovals = paymentService.getFilteredPayments(currentMonth).stream()
+                .filter(p -> "PENDING".equalsIgnoreCase(p.getStatus()))
+                .count();
+
+        // 4. Financials
+        List<PaymentHistoryDTO> currentMonthPayments = paymentService.getFilteredPayments(currentMonth);
+        double collectedThisMonth = currentMonthPayments.stream()
+                .filter(p -> "APPROVED".equalsIgnoreCase(p.getStatus()))
+                .mapToDouble(PaymentHistoryDTO::getAmount)
+                .sum();
+
+        // For Outstanding, we use your Resident Snapshot logic
+        List<ResidentDetailsDTO> residentList = userService.getAllResidentSnapshots();
+        double totalOutstanding = residentList.stream().mapToDouble(ResidentDetailsDTO::getDuePayment).sum();
+
+        // Adding to Model
+        model.addAttribute("totalStudents", totalStudents);
+        model.addAttribute("availableRooms", availableRooms);
+        model.addAttribute("availableBeds", availableBeds);
+        model.addAttribute("pendingApprovals", pendingApprovals);
+
+        model.addAttribute("last_date", collectedThisMonth); // Match HTML variable
+        model.addAttribute("deadline", totalOutstanding);   // Match HTML variable
+
         model.addAttribute("mainContent", "manager-pages/dashboard");
         return "manager-pages/layout";
     }
+
+    @GetMapping("/add-expense")
+    public String addExpense(Model model){
+        model.addAttribute("mainContent", "add-expense");
+        return "manager-pages/layout";
+    }
+
+
+//    @PostMapping("/save-expense")
+//    public String saveExpense(@ModelAttribute Expenses expense,
+//                              HttpSession session,
+//                              RedirectAttributes redirectAttributes) {
+//
+//        // 1. Get the logged-in user from the session
+//        User currentUser = (User) session.getAttribute("user");
+//
+//        if (currentUser != null) {
+//            // 2. Set the audit fields before saving
+//            expense.setAddedBy(currentUser.getName());
+//            expense.setAddedByRole(currentUser.getRole());
+//
+//            // 3. Persist to MongoDB
+//            expenseRepository.save(expense);
+//
+//            redirectAttributes.addFlashAttribute("successMessage", "Expense logged successfully! ✅");
+//        } else {
+//            redirectAttributes.addFlashAttribute("errorMessage", "Session expired. Please login again.");
+//            return "redirect:/sign-in";
+//        }
+//
+//        return "redirect:/manager/expense-list";
+//    }
+//
+//    @GetMapping("/expenses")
+//    public String viewExpenses(Model model) {
+//        // Fetch all records sorted by date
+//        List<Expense> allExpenses = expenseRepository.findAllByOrderByExpenseDateDesc();
+//
+//        model.addAttribute("expenses", allExpenses);
+//        model.addAttribute("mainContent", "manager-pages/expense-list");
+//        return "manager-pages/layout";
+//    }
+//
+//    @PostMapping("/delete-expense/{id}")
+//    public String deleteExpense(@PathVariable String id, RedirectAttributes redirectAttributes) {
+//        expenseRepository.deleteById(id);
+//        redirectAttributes.addFlashAttribute("successMessage", "Expense record deleted. 🗑️");
+//        return "redirect:/manager/expense-list";
+//    }
+
 
     @GetMapping("/add-room")
     public String addRoom(Model model) {

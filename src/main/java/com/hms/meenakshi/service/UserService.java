@@ -28,6 +28,10 @@ public class UserService {
         return userRepository.findByRoleAndRoomId(role, roomId);
     }
 
+    public List<User> findByRole(String role) {
+        return userRepository.findByRole(role);
+    }
+
 
     // 1. Get ALL residents (Your existing method, updated to use the helper)
     public List<ResidentDetailsDTO> getAllResidentSnapshots() {

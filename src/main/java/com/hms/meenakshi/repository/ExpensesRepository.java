@@ -1,0 +1,17 @@
+package com.hms.meenakshi.repository;
+
+import com.hms.meenakshi.dto.Expenses;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface ExpensesRepository extends MongoRepository<Expenses, String> {
+
+    // Custom query to see expenses by a specific manager
+    List<Expenses> findByAddedByOrderByExpenseDateDesc(String addedBy);
+
+    // Custom query to see all expenses sorted by newest first
+    List<Expenses> findAllByOrderByExpenseDateDesc();
+}

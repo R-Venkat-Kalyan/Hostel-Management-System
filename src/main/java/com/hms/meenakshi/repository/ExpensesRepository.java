@@ -4,6 +4,7 @@ import com.hms.meenakshi.dto.Expenses;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -13,5 +14,5 @@ public interface ExpensesRepository extends MongoRepository<Expenses, String> {
     List<Expenses> findByAddedByOrderByExpenseDateDesc(String addedBy);
 
     // Custom query to see all expenses sorted by newest first
-    List<Expenses> findAllByOrderByExpenseDateDesc();
+    List<Expenses> findByExpenseDateBetweenOrderByExpenseDateDesc(LocalDate start, LocalDate end);
 }

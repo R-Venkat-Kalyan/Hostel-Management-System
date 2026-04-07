@@ -23,6 +23,7 @@ public class AuthController {
      private final AuthService authService;
      private final UserRepository userRepository;
 
+
     /* STEP 1: Render the Current Password Check Page */
     @GetMapping("/update-password")
     public String showCurrentPasswordPage(HttpSession session, RedirectAttributes ra) {
@@ -140,6 +141,36 @@ public class AuthController {
             return "redirect:/auth/reset-password";
         } catch (Exception e) {
             ra.addFlashAttribute("successMessage", "Email service failed. Try again.");
+            return "redirect:/sign-in";
+        }
+    }
+
+    // Two-Step Authentication for Manager & Owner
+    @GetMapping("/security-check")
+    public String securityCheck(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        // Ensure only privileged users access this page
+        if (user == null || "RESIDENT".equals(user.getRole())) {
+            return "redirect:/sign-in";
+        }
+        return "security-check";
+    }
+
+    @PostMapping("/verify-pin")
+    public String verifyPin(@RequestParam String pin, HttpSession session, RedirectAttributes ra) {
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) return "redirect:/sign-in";
+
+        // Global check: universityId holds the PIN for both Owner and Manager
+        if (user.getUniversityId() != null && user.getUniversityId().equals(pin)) {
+            session.setAttribute("isVerified", true);
+
+            // Dynamic Redirect based on role
+            return "OWNER".equals(user.getRole()) ? "redirect:/owner/dashboard" : "redirect:/manager/dashboard";
+        } else {
+            session.invalidate();
+            ra.addFlashAttribute("successMessage", "Security PIN Mismatch..❌ Access Denied.");
             return "redirect:/sign-in";
         }
     }

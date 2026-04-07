@@ -29,10 +29,10 @@ public class User {
 
     // Resident-specific fields (Matching UI)
     private String fullName;
-    private String universityId;
+    private String universityId; // acts as security pin for manager
     private String phone;
 
-    // Relationships & Tracking
+    // Relationships & Tracking, NA for Manager Role
     private String roomId;         // Set during room assignment logic
     private String feeSummaryId;   // FK to feeSummaries
 

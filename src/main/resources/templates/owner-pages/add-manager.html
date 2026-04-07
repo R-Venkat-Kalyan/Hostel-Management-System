@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Resident | Meenakshi Management</title>
+    <title>Add Manager | Meenakshi Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
           rel="stylesheet">
@@ -28,11 +28,11 @@
         <div class="inline-flex items-center justify-center w-14 h-14 bg-blue-600 text-white rounded-2xl mb-4 shadow-xl shadow-blue-100">
             <i class="fa-solid fa-user-plus text-xl"></i>
         </div>
-        <h2 class="text-3xl font-bold text-slate-800 tracking-tight">Resident Registration</h2>
-        <p class="text-slate-500 text-sm mt-2">Fill in the details to create a new resident profile</p>
+        <h2 class="text-3xl font-bold text-slate-800 tracking-tight">Manager Registration</h2>
+        <p class="text-slate-500 text-sm mt-2">Fill in the details to create a new manager profile</p>
     </div>
 
-    <form th:action="@{/manager/save-resident}" method="POST" id="registrationForm" class="space-y-6">
+    <form th:action="@{/owner/save-manager}" method="POST" id="registrationForm" class="space-y-6">
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="group">
@@ -47,12 +47,11 @@
             </div>
 
             <div class="group">
-                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">University
-                    ID</label>
+                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-rose-600 transition-colors">Security PIN</label>
                 <div class="relative">
-                    <i class="fa-solid fa-id-card absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" name="universityId" placeholder="U-2026-001"
-                           class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all"
+                    <i class="fa-solid fa-user-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" name="universityId" placeholder="Qw#890" maxlength="12"
+                           class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 focus:bg-white outline-none transition-all font-black text-slate-700 tracking-[0.3em]"
                            required>
                 </div>
             </div>
@@ -113,17 +112,17 @@
             </div>
         </div>
 
-        <input type="hidden" name="role" value="RESIDENT">
+        <input type="hidden" name="role" value="MANAGER">
         <input type="hidden" name="status" value="ACTIVE">
 
         <button type="submit"
                 class="w-full bg-slate-900 hover:bg-blue-600 text-white font-bold py-5 rounded-[2rem] shadow-xl flex items-center justify-center gap-3 transition-all hover:-translate-y-1 active:scale-95 mt-8 group">
-            <span class="text-lg">Register Resident Account</span>
+            <span class="text-lg">Register Manager Account</span>
             <i class="fa-solid fa-arrow-right text-blue-400 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
         </button>
         <div class="mt-8 text-center">
             <p class="text-slate-800 text-xs">
-                Registered accounts are automatically granted <span class="font-bold">RESIDENT</span> role access.
+                Registered accounts are automatically granted <span class="font-bold">MANAGER</span> role access.
             </p>
         </div>
     </form>

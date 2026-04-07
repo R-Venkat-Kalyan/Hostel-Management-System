@@ -5,10 +5,7 @@ import com.hms.meenakshi.dto.PaymentHistoryDTO;
 import com.hms.meenakshi.dto.ResidentDetailsDTO;
 import com.hms.meenakshi.entity.Room;
 import com.hms.meenakshi.entity.User;
-import com.hms.meenakshi.service.PaymentService;
-import com.hms.meenakshi.service.RoomAssignmentService;
-import com.hms.meenakshi.service.RoomService;
-import com.hms.meenakshi.service.UserService;
+import com.hms.meenakshi.service.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -29,9 +26,15 @@ public class ManagerController {
     private final UserService userService;
     private final RoomAssignmentService assignmentService;
     private final PaymentService paymentService;
+    private final ExpensesService expensesService;
 
     @GetMapping("/dashboard")
-    public String dashBoard(Model model) {
+    public String dashBoard(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        Boolean isVerified = (Boolean) session.getAttribute("isVerified");
+        if (user == null || isVerified == null || !isVerified) {
+            return "redirect:/auth/security-challenge";
+        }
         // 1. Residing Students
         List<User> residents = userService.findByRole("RESIDENT"); // Adjust null if your logic uses "NEW" or a specific RoomId check
         long totalStudents = residents.size();
@@ -81,48 +84,58 @@ public class ManagerController {
         return "manager-pages/layout";
     }
 
+    @PostMapping("/save-expense")
+    public String saveExpense(@ModelAttribute Expenses expense,
+                              HttpSession session,
+                              RedirectAttributes redirectAttributes) {
 
-//    @PostMapping("/save-expense")
-//    public String saveExpense(@ModelAttribute Expenses expense,
-//                              HttpSession session,
-//                              RedirectAttributes redirectAttributes) {
-//
-//        // 1. Get the logged-in user from the session
-//        User currentUser = (User) session.getAttribute("user");
-//
-//        if (currentUser != null) {
-//            // 2. Set the audit fields before saving
-//            expense.setAddedBy(currentUser.getName());
-//            expense.setAddedByRole(currentUser.getRole());
-//
-//            // 3. Persist to MongoDB
-//            expenseRepository.save(expense);
-//
-//            redirectAttributes.addFlashAttribute("successMessage", "Expense logged successfully! ✅");
-//        } else {
-//            redirectAttributes.addFlashAttribute("errorMessage", "Session expired. Please login again.");
-//            return "redirect:/sign-in";
-//        }
-//
-//        return "redirect:/manager/expense-list";
-//    }
-//
-//    @GetMapping("/expenses")
-//    public String viewExpenses(Model model) {
-//        // Fetch all records sorted by date
-//        List<Expense> allExpenses = expenseRepository.findAllByOrderByExpenseDateDesc();
-//
-//        model.addAttribute("expenses", allExpenses);
-//        model.addAttribute("mainContent", "manager-pages/expense-list");
-//        return "manager-pages/layout";
-//    }
-//
-//    @PostMapping("/delete-expense/{id}")
-//    public String deleteExpense(@PathVariable String id, RedirectAttributes redirectAttributes) {
-//        expenseRepository.deleteById(id);
-//        redirectAttributes.addFlashAttribute("successMessage", "Expense record deleted. 🗑️");
-//        return "redirect:/manager/expense-list";
-//    }
+        // 1. Get the logged-in user from the session
+        User currentUser = (User) session.getAttribute("user");
+
+        if (currentUser != null) {
+            // 2. Set the audit fields before saving
+            expense.setAddedBy(currentUser.getFullName());
+            expense.setAddedByRole(currentUser.getRole());
+
+            // 3. Persist to MongoDB
+            expensesService.saveExpense(expense);
+
+            redirectAttributes.addFlashAttribute("successMessage", "Expense logged successfully! ✅");
+        } else {
+            redirectAttributes.addFlashAttribute("successMessage", "Session expired. Please login again.");
+            return "redirect:/sign-in";
+        }
+
+        return "redirect:/manager/expenses";
+    }
+
+    @GetMapping("/expenses")
+    public String viewExpenses(Model model, @RequestParam(required = false) String month) {
+
+        if (month == null) {
+            month = YearMonth.now().toString(); // Default to current month
+        }
+        // Fetch all records sorted by date
+        List<Expenses> allExpenses = expensesService.findAllExpenses(month);
+
+        model.addAttribute("expenses", allExpenses);
+        model.addAttribute("selectedMonth", month);
+        model.addAttribute("mainContent", "manager-pages/expenses-list");
+        return "manager-pages/layout";
+    }
+
+    @PostMapping("/delete-expense/{id}")
+    public String deleteExpense(@PathVariable String id, RedirectAttributes redirectAttributes) {
+        expensesService.deleteExpense(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Expense record deleted. 🗑️");
+        return "redirect:/manager/expenses";
+    }
+
+    @GetMapping("/contacts")
+    public String allContacts(Model model) {
+        model.addAttribute("mainContent", "resident-pages/contacts");
+        return "manager-pages/layout";
+    }
 
 
     @GetMapping("/add-room")

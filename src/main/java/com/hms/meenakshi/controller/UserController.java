@@ -71,12 +71,11 @@ public class UserController {
 
         // 5. Role-Based Redirection
         String role = user.getRole();
-        if ("OWNER".equalsIgnoreCase(role)) {
-            return "redirect:/owner/dashboard";
-        } else if ("MANAGER".equalsIgnoreCase(role)) {
-            return "redirect:/manager/dashboard";
-        } else {
+        if ("RESIDENT".equals(role)) {
             return "redirect:/resident/dashboard";
+        } else {
+            // OWNER and MANAGER both go to the same Security PIN page
+            return "redirect:/auth/security-check";
         }
     }
 

@@ -1,13 +1,16 @@
 package com.hms.meenakshi.service;
 
+import com.hms.meenakshi.entity.VacatedResident;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -51,6 +54,39 @@ public class AuthService {
             mailSender.send(message);
         } catch (IOException e) {
             throw new MessagingException("Failed to read email template", e);
+        }
+    }
+
+    @Async
+    public void sendVacateNoticeAsync(VacatedResident data, String residentEmail) {
+        try {
+            // 1. Load the High-End Template
+            Resource resource = new ClassPathResource("templates/manager-pages/vacate-notice.html");
+            String content = new String(Files.readAllBytes(resource.getFile().toPath()), StandardCharsets.UTF_8);
+
+            // 2. Map Placeholders
+            content = content.replace("[[name]]", data.getName())
+                    .replace("[[uniId]]", data.getUniversityId())
+                    .replace("[[room]]", data.getRoomNumber())
+                    .replace("[[joinDate]]", data.getJoinedDate().toString())
+                    .replace("[[vacateDate]]", data.getVacatedDate().toString())
+                    .replace("[[totalPaid]]", String.format("%.2f", data.getTotalPaidDuringStay()))
+                    .replace("[[reason]]", data.getReason().replace("_", " "));
+
+            // 3. Prepare Recipients
+            String[] recipients = {"owner@meenakshi.com", "manager@meenakshi.com", residentEmail};
+
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom(fromEmail);
+            helper.setTo(recipients);
+            helper.setSubject("Official Clearance: " + data.getName() + " [" + data.getReason() + "]");
+            helper.setText(content, true);
+
+            mailSender.send(message);
+        } catch (Exception e) {
+            System.err.println("Failed to send high-end vacate notice: " + e.getMessage());
         }
     }
 }

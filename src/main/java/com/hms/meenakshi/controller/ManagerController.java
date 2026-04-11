@@ -192,7 +192,7 @@ public class ManagerController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("successMessage", "Error: " + e.getMessage());
         }
-        return "redirect:/assign-room";
+        return "redirect:/manager/assign-room";
     }
 
     @GetMapping("/view-residents")
@@ -239,6 +239,31 @@ public class ManagerController {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("successMessage", "Failed to save: " + e.getMessage());
             return "redirect:/manager/collect-payment/" + userId;
+        }
+    }
+
+    @PostMapping("/vacate-resident/{id}")
+    public String vacateResident(@PathVariable String id, RedirectAttributes ra) {
+        try {
+            // 'false' indicates this is a permanent exit
+            assignmentService.handleResidentExit(id, "Course Completed / Voluntary Exit", false);
+            ra.addFlashAttribute("successMessage", "Resident vacated and archived. Owner notified! ✅");
+        } catch (Exception e) {
+            ra.addFlashAttribute("errorMessage", e.getMessage());
+        }
+        return "redirect:/manager/view-residents";
+    }
+
+    @PostMapping("/switch-room/{id}")
+    public String switchRoom(@PathVariable String id, RedirectAttributes ra) {
+        try {
+            // 'true' indicates a switch; user is reset but not deleted
+            assignmentService.handleResidentExit(id, "Internal Room Change", true);
+            ra.addFlashAttribute("successMessage", "Old room cleared! You can now re-assign this resident. 🔁");
+            return "redirect:/manager/assign-room";
+        } catch (Exception e) {
+            ra.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/manager/view-residents";
         }
     }
 

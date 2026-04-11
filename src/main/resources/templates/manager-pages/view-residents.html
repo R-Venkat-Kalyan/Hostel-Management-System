@@ -12,20 +12,23 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         th, td { white-space: nowrap; }
 
-        /* Matching the Daily Tracker's table feel */
         .header-controls button {
             height: 2.1rem;
             font-size: .825rem;
         }
+
+        /* Tooltip style refinement */
+        [title]:hover::after {
+            font-weight: 600;
+            font-size: 10px;
+        }
     </style>
 </head>
 
-<body>
+<body class="bg-slate-50">
 
-
-<div class="w-full">
+<div th:fragment="content" class="w-full">
     <div class="bg-white shadow-xl rounded-xl overflow-hidden">
-
 
         <div class="px-4 sm:px-6 py-4 bg-slate-800 text-white rounded-t-xl flex items-center justify-between">
             <h2 class="text-2xl sm:text-3xl font-bold">
@@ -43,10 +46,6 @@
 
         <div class="block w-full overflow-x-auto p-4 sm:p-6">
             <table id="residentTable" class="min-w-full divide-y divide-gray-300 bg-white rounded-lg border border-gray-300">
-            
-<!--        <div class="overflow-x-auto p-4 sm:p-6">-->
-
-<!--            <table id="residentTable" class="w-full bg-white rounded-lg border border-gray-300">-->
                 <thead>
                 <tr class="bg-slate-700 text-white text-sm">
                     <th class="py-2 px-3 text-left">Name</th>
@@ -72,11 +71,45 @@
                         th:text="'₹' + ${res.duePayment}">₹500</td>
                     <td class="py-2 px-3 border border-gray-200 text-center"
                         th:text="${res.lastPaidDate != null ? #temporals.format(res.lastPaidDate, 'dd-MM-yyyy') : '-'}">24-03-2026</td>
-                    <td class="py-2 px-3 border border-gray-200 text-center">
-                        <a th:href="@{/manager/collect-payment/{id}(id=${res.userId})}"
-                           class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all text-xs font-bold shadow-lg shadow-blue-100">
-                            Add Payment
-                        </a>
+
+                    <td class="py-2 px-3 border border-gray-200">
+                        <div class="flex items-center justify-center gap-4">
+
+                            <a th:href="@{/manager/collect-payment/{id}(id=${res.userId})}"
+                               title="Collect Payment"
+                               class="text-blue-600 hover:text-blue-800 transition-transform hover:scale-125">
+                                <i class="fas fa-hand-holding-dollar fa-lg"></i>
+                            </a>
+
+                            <form th:action="@{/manager/switch-room/{id}(id=${res.userId})}"
+                                  method="POST"
+                                  onsubmit="return confirm('Clear resident from current room for switching?');"
+                                  class="inline">
+                                <button type="submit" title="Switch Room / Change Assignment"
+                                        class="text-amber-500 hover:text-amber-700 transition-transform hover:scale-125">
+                                    <i class="fas fa-person-walking-luggage fa-lg"></i>
+                                </button>
+                            </form>
+
+                            <th:block th:if="${res.duePayment > 0}">
+                                <span th:title="'Clear dues (₹' + ${res.duePayment} + ') to enable vacate'"
+                                      class="text-gray-300 cursor-not-allowed">
+                                    <i class="fas fa-user-xmark fa-lg"></i>
+                                </span>
+                            </th:block>
+
+                            <th:block th:if="${res.duePayment <= 0}">
+                                <form th:action="@{/manager/vacate-resident/{id}(id=${res.userId})}"
+                                      method="POST"
+                                      onsubmit="return confirm('Are you sure? This will archive the resident and notify the owner.');"
+                                      class="inline">
+                                    <button type="submit" title="Permanent Vacate (Dues Cleared)"
+                                            class="text-rose-500 hover:text-rose-700 transition-transform hover:scale-125">
+                                        <i class="fas fa-user-xmark fa-lg"></i>
+                                    </button>
+                                </form>
+                            </th:block>
+                        </div>
                     </td>
                 </tr>
                 </tbody>
@@ -93,13 +126,12 @@
                 </tr>
                 </tfoot>
             </table>
-
         </div>
     </div>
 </div>
 
 <script>
-    /* CSV Export Logic matching your Tracker style */
+    /* Export Logic remains the same */
     document.getElementById('btnExport')?.addEventListener('click', () => {
         const table = document.getElementById('residentTable');
         const rows = table.querySelectorAll('thead tr, tbody tr');

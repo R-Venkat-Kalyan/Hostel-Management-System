@@ -1,13 +1,7 @@
 package com.hms.meenakshi.service;
 
-import com.hms.meenakshi.entity.FeeSummary;
-import com.hms.meenakshi.entity.Room;
-import com.hms.meenakshi.entity.RoomAssignment;
-import com.hms.meenakshi.entity.User;
-import com.hms.meenakshi.repository.FeeSummaryRepository;
-import com.hms.meenakshi.repository.RoomAssignmentRepository;
-import com.hms.meenakshi.repository.RoomRepository;
-import com.hms.meenakshi.repository.UserRepository;
+import com.hms.meenakshi.entity.*;
+import com.hms.meenakshi.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +16,9 @@ public class RoomAssignmentService {
     private  final RoomRepository roomRepository;
     private final UserRepository userRepository;
     private  final FeeSummaryRepository feeSummaryRepository;
+    private final VacatedResidentRepository vacatedRepo;
+    private final AuthService authService;
+    private final UserReceiptsService userReceiptsService;
 
     @Transactional
     public void assignRoomToResident(String userId, String roomId) {
@@ -72,6 +69,59 @@ public class RoomAssignmentService {
         roomRepository.save(room);
     }
 
+    @Transactional
+    public void handleResidentExit(String userId, String reason, boolean isSwitch) {
+        // 1. Fetch User and current data for archiving
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // We use a custom query or your existing snapshot logic to get the room number
+        Room room = roomRepository.findById(user.getRoomId())
+                .orElseThrow(() -> new RuntimeException("Room mapping not found"));
+
+        FeeSummary fee = feeSummaryRepository.findByUserId(userId);
+
+        // 2. Hard Check: Dues must be zero for permanent exit
+        if (!isSwitch && fee != null && fee.getPendingAmount() > 0) {
+            throw new IllegalStateException("Clear dues (₹" + fee.getPendingAmount() + ") before vacating.");
+        }
+
+        // 3. Create Archive Entry
+        VacatedResident archive = new VacatedResident();
+        archive.setName(user.getFullName());
+        archive.setUniversityId(user.getUniversityId());
+        archive.setRoomNumber(room.getRoomNumber());
+        archive.setJoinedDate(user.getCreatedAt());
+        archive.setVacatedDate(LocalDate.now());
+        archive.setTotalPaidDuringStay(fee != null ? fee.getPaidAmount() : 0.0);
+        archive.setReason(isSwitch ? "ROOM_SWITCH" : "PERMANENT_EXIT");
+        vacatedRepo.save(archive);
+
+        // 4. Update Room Capacity (Old Room)
+        room.setOccupiedCount(Math.max(0, room.getOccupiedCount() - 1));
+        room.setStatus("AVAILABLE");
+        roomRepository.save(room);
+
+        // 5. Cleanup Assignments and Fees
+        assignmentRepository.deleteByUserId(userId);
+        feeSummaryRepository.deleteByUserId(userId);
+
+        userReceiptsService.deleteAllReceiptsByUserId(userId);
+
+        // 6. Branching Logic: Switch vs Vacate
+        if (isSwitch) {
+            // Reset User to 'NEW' so they appear in the 'Assign Room' list
+            user.setRoomId("NEW");
+            user.setFeeSummaryId("NEW");
+            userRepository.save(user);
+        } else {
+            // Permanent Delete from active users
+            userRepository.deleteById(userId);
+        }
+
+        // 7. Async Email to Owner & Manager
+        authService.sendVacateNoticeAsync(archive, user.getEmail());
+    }
 
     }
 

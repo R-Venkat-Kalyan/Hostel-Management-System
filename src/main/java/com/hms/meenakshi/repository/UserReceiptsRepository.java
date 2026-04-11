@@ -10,4 +10,6 @@ import java.util.List;
 public interface UserReceiptsRepository extends MongoRepository<UserReceipts, String> {
 
     List<UserReceipts> findByUserIdOrderByPaymentDateDesc(String userId);
+
+    void deleteByUserId(String userId);
 }

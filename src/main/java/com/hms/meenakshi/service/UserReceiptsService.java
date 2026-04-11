@@ -7,6 +7,7 @@ import com.hms.meenakshi.repository.UserReceiptsRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -81,5 +82,29 @@ public class UserReceiptsService {
 
     public Optional<UserReceipts> findById(String id) {
         return receiptsRepository.findById(id);
+    }
+
+    @Async
+    public void deleteAllReceiptsByUserId(String userId) {
+        try {
+            // 1. Find all records for this user
+            List<UserReceipts> receipts = getReceiptsForUser(userId);
+
+            // 2. Loop through and delete from Cloudinary
+            for (UserReceipts receipt : receipts) {
+                // Assuming you store the Cloudinary Public ID in your entity
+                if (receipt.getPublicId() != null) {
+                    cloudinary.uploader().destroy(receipt.getPublicId(), ObjectUtils.emptyMap());
+                }
+            }
+
+            // 3. Clear the database records
+            receiptsRepository.deleteByUserId(userId);
+
+            System.out.println("Async Cleanup: Cloudinary assets and DB records cleared for user: " + userId);
+        } catch (Exception e) {
+            // Since this is Async, we log the error because the controller won't see it
+            System.err.println("Failed to perform async Cloudinary cleanup: " + e.getMessage());
+        }
     }
 }

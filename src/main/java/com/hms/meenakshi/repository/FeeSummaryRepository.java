@@ -6,4 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FeeSummaryRepository extends MongoRepository<FeeSummary, String> {
+    
+    void deleteByUserId(String userId);
+
+    FeeSummary findByUserId(String userId);
 }

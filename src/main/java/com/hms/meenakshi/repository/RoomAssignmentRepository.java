@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RoomAssignmentRepository extends MongoRepository<RoomAssignment, String> {
+
+    void deleteByUserId(String userId);
 }

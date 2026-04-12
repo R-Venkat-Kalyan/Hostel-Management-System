@@ -17,28 +17,25 @@
             font-size: .825rem;
         }
 
-        /* Tooltip style refinement */
-        [title]:hover::after {
-            font-weight: 600;
-            font-size: 10px;
-        }
+        /* Modern Tooltip appearance */
+        [title] { position: relative; }
     </style>
 </head>
 
 <body class="bg-slate-50">
 
 <div th:fragment="content" class="w-full">
-    <div class="bg-white shadow-xl rounded-xl overflow-hidden">
+    <div class="bg-white shadow-xl rounded-xl overflow-hidden border border-gray-300">
 
         <div class="px-4 sm:px-6 py-4 bg-slate-800 text-white rounded-t-xl flex items-center justify-between">
             <h2 class="text-2xl sm:text-3xl font-bold">
-                <i class="fas fa-users-gear mr-2"></i>
+                <i class="fas fa-users-gear mr-2 text-blue-400"></i>
                 Resident Management
             </h2>
 
             <div class="header-controls flex items-center gap-2">
                 <button type="button" id="btnExport"
-                        class="px-3 rounded-md bg-white text-slate-800 hover:bg-gray-100 font-semibold">
+                        class="px-3 rounded-md bg-white text-slate-800 hover:bg-gray-100 font-semibold transition-colors">
                     Export CSV
                 </button>
             </div>
@@ -48,32 +45,32 @@
             <table id="residentTable" class="min-w-full divide-y divide-gray-300 bg-white rounded-lg border border-gray-300">
                 <thead>
                 <tr class="bg-slate-700 text-white text-sm">
-                    <th class="py-2 px-3 text-left">Name</th>
-                    <th class="py-2 px-3 text-left">University ID</th>
-                    <th class="py-2 px-3 text-left">Room</th>
-                    <th class="py-2 px-3 text-left">Room Type</th>
-                    <th class="py-2 px-3 text-right">Total Payment</th>
-                    <th class="py-2 px-3 text-right">Due Payment</th>
-                    <th class="py-2 px-3 text-center">Last Paid Date</th>
-                    <th class="py-2 px-3 text-center">Actions</th>
+                    <th class="py-3 px-4 text-left">Name</th>
+                    <th class="py-3 px-4 text-left">University ID</th>
+                    <th class="py-3 px-4 text-left">Room</th>
+                    <th class="py-3 px-4 text-left">Room Type</th>
+                    <th class="py-3 px-4 text-right">Total Payment</th>
+                    <th class="py-3 px-4 text-right">Due Payment</th>
+                    <th class="py-3 px-4 text-center">Last Paid Date</th>
+                    <th class="py-3 px-4 text-center">Actions</th>
                 </tr>
                 </thead>
 
                 <tbody class="text-sm">
-                <tr th:each="res : ${residents}" class="hover:bg-gray-100 transition">
-                    <td class="py-2 px-3 border border-gray-200 font-medium" th:text="${res.name}">John Doe</td>
-                    <td class="py-2 px-3 border border-gray-200" th:text="${res.universityId}">U2024001</td>
-                    <td class="py-2 px-3 border border-gray-200 font-bold text-slate-700" th:text="${res.room}">101</td>
-                    <td class="py-2 px-3 border border-gray-200" th:text="${res.roomType}">2-Sharing</td>
-                    <td class="py-2 px-3 border border-gray-200 text-right" th:text="'₹' + ${res.totalPayment}">₹5000</td>
-                    <td class="py-2 px-3 border border-gray-200 text-right font-bold"
-                        th:classappend="${res.duePayment > 0 ? 'text-red-600' : 'text-green-600'}"
+                <tr th:each="res : ${residents}" class="hover:bg-slate-50 transition-colors">
+                    <td class="py-3 px-4 border border-gray-200 font-semibold text-slate-700" th:text="${res.name}">John Doe</td>
+                    <td class="py-3 px-4 border border-gray-200 text-slate-600" th:text="${res.universityId}">U2024001</td>
+                    <td class="py-3 px-4 border border-gray-200 font-bold text-blue-600" th:text="${res.room}">101</td>
+                    <td class="py-3 px-4 border border-gray-200" th:text="${res.roomType}">2-Sharing</td>
+                    <td class="py-3 px-4 border border-gray-200 text-right font-medium" th:text="'₹' + ${res.totalPayment}">₹5000</td>
+                    <td class="py-3 px-4 border border-gray-200 text-right font-bold"
+                        th:classappend="${res.duePayment > 0 ? 'text-red-600' : 'text-emerald-600'}"
                         th:text="'₹' + ${res.duePayment}">₹500</td>
-                    <td class="py-2 px-3 border border-gray-200 text-center"
+                    <td class="py-3 px-4 border border-gray-200 text-center text-slate-500"
                         th:text="${res.lastPaidDate != null ? #temporals.format(res.lastPaidDate, 'dd-MM-yyyy') : '-'}">24-03-2026</td>
 
-                    <td class="py-2 px-3 border border-gray-200">
-                        <div class="flex items-center justify-center gap-4">
+                    <td class="py-3 px-4 border border-gray-200">
+                        <div class="flex items-center justify-center gap-5">
 
                             <a th:href="@{/manager/collect-payment/{id}(id=${res.userId})}"
                                title="Collect Payment"
@@ -81,33 +78,27 @@
                                 <i class="fas fa-hand-holding-dollar fa-lg"></i>
                             </a>
 
-                            <form th:action="@{/manager/switch-room/{id}(id=${res.userId})}"
-                                  method="POST"
-                                  onsubmit="return confirm('Clear resident from current room for switching?');"
-                                  class="inline">
-                                <button type="submit" title="Switch Room / Change Assignment"
-                                        class="text-amber-500 hover:text-amber-700 transition-transform hover:scale-125">
-                                    <i class="fas fa-person-walking-luggage fa-lg"></i>
-                                </button>
-                            </form>
+                            <button type="button"
+                                    th:onclick="openModal('switch', [[${res.userId}]])"
+                                    title="Switch Room / Re-assign"
+                                    class="text-amber-500 hover:text-amber-600 transition-transform hover:scale-125">
+                                <i class="fas fa-person-walking-luggage fa-lg"></i>
+                            </button>
 
                             <th:block th:if="${res.duePayment > 0}">
-                                <span th:title="'Clear dues (₹' + ${res.duePayment} + ') to enable vacate'"
+                                <span th:title="'Clear dues (₹' + ${res.duePayment} + ') to vacate'"
                                       class="text-gray-300 cursor-not-allowed">
                                     <i class="fas fa-user-xmark fa-lg"></i>
                                 </span>
                             </th:block>
 
                             <th:block th:if="${res.duePayment <= 0}">
-                                <form th:action="@{/manager/vacate-resident/{id}(id=${res.userId})}"
-                                      method="POST"
-                                      onsubmit="return confirm('Are you sure? This will archive the resident and notify the owner.');"
-                                      class="inline">
-                                    <button type="submit" title="Permanent Vacate (Dues Cleared)"
-                                            class="text-rose-500 hover:text-rose-700 transition-transform hover:scale-125">
-                                        <i class="fas fa-user-xmark fa-lg"></i>
-                                    </button>
-                                </form>
+                                <button type="button"
+                                        th:onclick="openModal('vacate', [[${res.userId}]])"
+                                        title="Permanent Vacate (Full Archive)"
+                                        class="text-rose-500 hover:text-rose-600 transition-transform hover:scale-125">
+                                    <i class="fas fa-user-xmark fa-lg"></i>
+                                </button>
                             </th:block>
                         </div>
                     </td>
@@ -115,14 +106,10 @@
                 </tbody>
 
                 <tfoot>
-                <tr class="bg-gray-50 text-sm">
-                    <td class="py-2 px-3 border-t font-bold text-slate-600" colspan="5">
-                        Total Outstanding Balance
-                    </td>
-                    <td class="py-2 px-3 border-t text-right font-bold text-red-600" th:text="'₹' + ${totalDue}">
-                        0
-                    </td>
-                    <td class="py-2 px-3 border-t" colspan="2"></td>
+                <tr class="bg-slate-50 text-sm">
+                    <td class="py-3 px-4 border-t font-bold text-slate-600" colspan="5">Total Outstanding Balance</td>
+                    <td class="py-3 px-4 border-t text-right font-bold text-red-600" th:text="'₹' + ${totalDue}">0</td>
+                    <td class="py-3 px-4 border-t" colspan="2"></td>
                 </tr>
                 </tfoot>
             </table>
@@ -130,35 +117,93 @@
     </div>
 </div>
 
-<script>
-    /* Export Logic remains the same */
+<div id="confirmModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
+    <div class="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full p-8 border border-slate-200 transform transition-all">
+        <div class="text-center">
+            <div id="modalIcon" class="mx-auto flex items-center justify-center h-16 w-16 rounded-2xl mb-4 text-2xl"></div>
+            <h3 class="text-xl font-bold text-slate-900" id="modalTitle">Confirm Action</h3>
+            <p class="text-sm text-slate-500 mt-2 leading-relaxed" id="modalMessage"></p>
+        </div>
+
+        <div class="mt-8 flex gap-3">
+            <button onclick="closeModal()" class="flex-1 px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-sm transition-all">
+                Cancel
+            </button>
+            <button id="confirmBtn" class="flex-1 px-4 py-3 text-white rounded-xl font-bold text-sm transition-all shadow-lg shadow-blue-100">
+                Confirm
+            </button>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    let currentUserId = null;
+    let currentAction = null;
+
+    function openModal(action, userId) {
+        currentUserId = userId;
+        currentAction = action;
+        const modal = document.getElementById('confirmModal');
+        const title = document.getElementById('modalTitle');
+        const msg = document.getElementById('modalMessage');
+        const icon = document.getElementById('modalIcon');
+        const btn = document.getElementById('confirmBtn');
+
+        if (action === 'vacate') {
+            title.innerText = "Permanent Vacate";
+            msg.innerText = "This resident will be archived as Inactive. The owner will receive a final clearance report via email.";
+            icon.className = "mx-auto flex items-center justify-center h-16 w-16 rounded-2xl mb-4 bg-rose-50 text-rose-600 border border-rose-100";
+            icon.innerHTML = '<i class="fas fa-user-xmark"></i>';
+            btn.className = "flex-1 px-4 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold text-sm transition-all shadow-lg shadow-rose-200";
+        } else {
+            title.innerText = "Room Switch";
+            msg.innerText = "The resident will be cleared from their current room. You must re-assign them to a new room from the Assign Room page.";
+            icon.className = "mx-auto flex items-center justify-center h-16 w-16 rounded-2xl mb-4 bg-amber-50 text-amber-600 border border-amber-100";
+            icon.innerHTML = '<i class="fas fa-person-walking-luggage"></i>';
+            btn.className = "flex-1 px-4 py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-sm transition-all shadow-lg shadow-amber-200";
+        }
+
+        modal.classList.remove('hidden');
+
+        btn.onclick = function() {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            // Action matches your controller endpoints: /manager/vacate-resident/{id} or /manager/switch-room/{id}
+            form.action = `/manager/${action}-resident/${currentUserId}`;
+            if(action === 'switch') form.action = `/manager/switch-room/${currentUserId}`;
+
+            document.body.appendChild(form);
+            form.submit();
+        };
+    }
+
+    function closeModal() {
+        document.getElementById('confirmModal').classList.add('hidden');
+    }
+
+    /* CSV Export Logic */
     document.getElementById('btnExport')?.addEventListener('click', () => {
         const table = document.getElementById('residentTable');
         const rows = table.querySelectorAll('thead tr, tbody tr');
         let csv = [];
-
         rows.forEach(row => {
             const cols = row.querySelectorAll('th, td');
             let vals = [];
             cols.forEach((c, idx) => {
-                if (idx === cols.length - 1) return; // Skip Actions column
+                if (idx === cols.length - 1) return;
                 let t = c.textContent.replace(/\s+/g, ' ').trim();
-                if (t.includes(',') || t.includes('"'))
-                    t = '"' + t.replace(/"/g, '""') + '"';
+                if (t.includes(',') || t.includes('"')) t = '"' + t.replace(/"/g, '""') + '"';
                 vals.push(t);
             });
             csv.push(vals.join(','));
         });
-
         const blob = new Blob([csv.join('\n')], {type: 'text/csv;charset=utf-8;'});
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = `resident-report-${new Date().toISOString().slice(0, 10)}.csv`;
-        document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
     });
 </script>
 

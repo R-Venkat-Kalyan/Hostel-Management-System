@@ -23,8 +23,6 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
 
-
-
                 .logout(logout -> logout
                         .logoutUrl("/sign-out")
                         .logoutSuccessUrl("/")

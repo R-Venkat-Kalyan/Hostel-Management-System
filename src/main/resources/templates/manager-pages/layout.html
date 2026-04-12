@@ -21,6 +21,25 @@
             transition: transform 0.3s ease-in-out;
         }
     </style>
+    <script>
+        let timeout;
+        function resetTimer() {
+            clearTimeout(timeout);
+            // 5 minutes = 300,000 milliseconds
+            timeout = setTimeout(() => {
+                alert("Session expired due to inactivity.");
+                window.location.href = "/sign-out";
+            }, 300000);
+        }
+
+        // Reset timer on any user interaction
+        window.onload = resetTimer;
+        window.onmousemove = resetTimer;
+        window.onmousedown = resetTimer;
+        window.ontouchstart = resetTimer;
+        window.onclick = resetTimer;
+        window.onkeydown = resetTimer;
+    </script>
 </head>
 
 <body class="flex flex-col w-screen h-screen bg-white overflow-x-hidden">

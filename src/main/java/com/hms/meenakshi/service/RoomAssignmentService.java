@@ -113,11 +113,15 @@ public class RoomAssignmentService {
             // Reset User to 'NEW' so they appear in the 'Assign Room' list
             user.setRoomId("NEW");
             user.setFeeSummaryId("NEW");
-            userRepository.save(user);
+
         } else {
             // Permanent Delete from active users
-            userRepository.deleteById(userId);
+            user.setRoomId("VACATED");
+            user.setFeeSummaryId("NONE");
+            user.setRole("INACTIVE_RESIDENT");
+            user.setStatus("INACTIVE");
         }
+        userRepository.save(user);
 
         // 7. Async Email to Owner & Manager
         authService.sendVacateNoticeAsync(archive, user.getEmail());

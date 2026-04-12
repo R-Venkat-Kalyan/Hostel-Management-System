@@ -16,8 +16,6 @@
             height: 2.1rem;
             font-size: .825rem;
         }
-
-        /* Modern Tooltip appearance */
         [title] { position: relative; }
     </style>
 </head>
@@ -72,21 +70,21 @@
                     <td class="py-3 px-4 border border-gray-200">
                         <div class="flex items-center justify-center gap-5">
 
-                            <a th:href="@{/manager/collect-payment/{id}(id=${res.userId})}"
+                            <a th:href="@{/{role}/collect-payment/{id}(role=${role}, id=${res.userId})}"
                                title="Collect Payment"
                                class="text-blue-600 hover:text-blue-800 transition-transform hover:scale-125">
                                 <i class="fas fa-hand-holding-dollar fa-lg"></i>
                             </a>
 
                             <button type="button"
-                                    th:onclick="openModal('switch', [[${res.userId}]])"
+                                    th:onclick="openModal('switch', [[${res.userId}]], [[${role}]])"
                                     title="Switch Room / Re-assign"
                                     class="text-amber-500 hover:text-amber-600 transition-transform hover:scale-125">
                                 <i class="fas fa-person-walking-luggage fa-lg"></i>
                             </button>
 
                             <th:block th:if="${res.duePayment > 0}">
-                                <span th:title="'Clear dues (₹' + ${res.duePayment} + ') to vacate'"
+                                <span th:title="'Clear dues (₹' + ${res.duePayment} + ') to enable vacate'"
                                       class="text-gray-300 cursor-not-allowed">
                                     <i class="fas fa-user-xmark fa-lg"></i>
                                 </span>
@@ -94,7 +92,7 @@
 
                             <th:block th:if="${res.duePayment <= 0}">
                                 <button type="button"
-                                        th:onclick="openModal('vacate', [[${res.userId}]])"
+                                        th:onclick="openModal('vacate', [[${res.userId}]], [[${role}]])"
                                         title="Permanent Vacate (Full Archive)"
                                         class="text-rose-500 hover:text-rose-600 transition-transform hover:scale-125">
                                     <i class="fas fa-user-xmark fa-lg"></i>
@@ -130,7 +128,7 @@
             <button onclick="closeModal()" class="flex-1 px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-sm transition-all">
                 Cancel
             </button>
-            <button id="confirmBtn" class="flex-1 px-4 py-3 text-white rounded-xl font-bold text-sm transition-all shadow-lg shadow-blue-100">
+            <button id="confirmBtn" class="flex-1 px-4 py-3 text-white rounded-xl font-bold text-sm transition-all shadow-lg">
                 Confirm
             </button>
         </div>
@@ -139,11 +137,11 @@
 
 <script th:inline="javascript">
     let currentUserId = null;
-    let currentAction = null;
+    let currentRole = null;
 
-    function openModal(action, userId) {
+    function openModal(action, userId, role) {
         currentUserId = userId;
-        currentAction = action;
+        currentRole = role;
         const modal = document.getElementById('confirmModal');
         const title = document.getElementById('modalTitle');
         const msg = document.getElementById('modalMessage');
@@ -152,13 +150,13 @@
 
         if (action === 'vacate') {
             title.innerText = "Permanent Vacate";
-            msg.innerText = "This resident will be archived as Inactive. The owner will receive a final clearance report via email.";
+            msg.innerText = "Resident will be marked as Inactive. Official clearance report will be dispatched to the owner.";
             icon.className = "mx-auto flex items-center justify-center h-16 w-16 rounded-2xl mb-4 bg-rose-50 text-rose-600 border border-rose-100";
             icon.innerHTML = '<i class="fas fa-user-xmark"></i>';
             btn.className = "flex-1 px-4 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold text-sm transition-all shadow-lg shadow-rose-200";
         } else {
             title.innerText = "Room Switch";
-            msg.innerText = "The resident will be cleared from their current room. You must re-assign them to a new room from the Assign Room page.";
+            msg.innerText = "Resident will be unassigned from the current room. Please re-assign from the assignment panel.";
             icon.className = "mx-auto flex items-center justify-center h-16 w-16 rounded-2xl mb-4 bg-amber-50 text-amber-600 border border-amber-100";
             icon.innerHTML = '<i class="fas fa-person-walking-luggage"></i>';
             btn.className = "flex-1 px-4 py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-sm transition-all shadow-lg shadow-amber-200";
@@ -169,9 +167,13 @@
         btn.onclick = function() {
             const form = document.createElement('form');
             form.method = 'POST';
-            // Action matches your controller endpoints: /manager/vacate-resident/{id} or /manager/switch-room/{id}
-            form.action = `/manager/${action}-resident/${currentUserId}`;
-            if(action === 'switch') form.action = `/manager/switch-room/${currentUserId}`;
+
+            // Dynamic routing based on role and action
+            if(action === 'switch') {
+                form.action = `/${currentRole}/switch-room/${currentUserId}`;
+            } else {
+                form.action = `/${currentRole}/vacate-resident/${currentUserId}`;
+            }
 
             document.body.appendChild(form);
             form.submit();

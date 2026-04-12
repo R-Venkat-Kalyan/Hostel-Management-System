@@ -32,7 +32,7 @@
         <p class="text-slate-500 text-sm mt-2">Fill in the details to create a new resident profile</p>
     </div>
 
-    <form th:action="@{/manager/save-resident}" method="POST" id="registrationForm" class="space-y-6">
+    <form th:action="@{/{role}/save-resident(role=${role})}" method="POST" id="registrationForm" class="space-y-6">
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="group">

@@ -42,7 +42,7 @@
         </div>
     </div>
 
-    <form th:action="@{/manager/save-payment}" method="POST" id="paymentForm" class="space-y-6">
+    <form th:action="@{/{role}/save-payment(role=${role})}" method="POST" id="paymentForm" class="space-y-6">
 
         <input type="hidden" name="userId" th:value="${resident.userId}">
 

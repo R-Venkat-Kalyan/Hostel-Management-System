@@ -5,8 +5,7 @@
     </div>
 
     <div class="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-slate-200 border border-slate-100">
-        <form th:action="@{/manager/save-expense}" method="POST" class="space-y-8">
-
+        <form th:action="@{/{role}/save-expense(role=${role})}" method="POST" class="space-y-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="group">
                     <label class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 block ml-1">Expense Name / Title</label>

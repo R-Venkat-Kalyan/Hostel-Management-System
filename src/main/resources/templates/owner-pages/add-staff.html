@@ -3,41 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Manager | Meenakshi Management</title>
+    <title>Add Staff | Meenakshi Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .form-card {
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(0, 0, 0, 0.08);
         }
+        select { appearance: none; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen flex items-start justify-center pt-12 p-4">
 
-<div th:fragment="content" class="w-full max-w-2xl form-card rounded-[2.5rem] shadow-2xl p-8 md:p-12 transition-all">
+<div class="w-full max-w-2xl form-card rounded-[2.5rem] shadow-2xl p-8 md:p-12 transition-all">
     <div class="text-center mb-10">
         <div class="inline-flex items-center justify-center w-14 h-14 bg-blue-600 text-white rounded-2xl mb-4 shadow-xl shadow-blue-100">
-            <i class="fa-solid fa-user-plus text-xl"></i>
+            <i class="fa-solid fa-user-shield text-xl"></i>
         </div>
-        <h2 class="text-3xl font-bold text-slate-800 tracking-tight">Manager Registration</h2>
-        <p class="text-slate-500 text-sm mt-2">Fill in the details to create a new manager profile</p>
+        <h2 class="text-3xl font-bold text-slate-800 tracking-tight">Staff Registration</h2>
+        <p class="text-slate-500 text-sm mt-2">Create a new administrative account</p>
     </div>
 
-    <form th:action="@{/owner/save-manager}" method="POST" id="registrationForm" class="space-y-6">
+    <form th:action="@{/owner/save-staff}" method="POST" id="registrationForm" class="space-y-6">
+
+        <div class="group">
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Select Account Role</label>
+            <div class="relative">
+                <i class="fa-solid fa-id-badge absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <select name="role" required
+                        class="w-full pl-11 pr-10 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold text-slate-700">
+                    <option value="" disabled selected>Choose Role...</option>
+                    <option value="MANAGER">MANAGER (Standard Access)</option>
+                    <option value="OWNER">OWNER (Full Admin Access)</option>
+                </select>
+                <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-xs"></i>
+            </div>
+        </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="group">
-                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Full
-                    Name</label>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Full Name</label>
                 <div class="relative">
                     <i class="fa-regular fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                     <input type="text" name="fullName" placeholder="John Doe"
@@ -59,19 +69,17 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="group">
-                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Email
-                    Address</label>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Email Address</label>
                 <div class="relative">
                     <i class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="email" name="email" id="email" placeholder="resident@email.com"
+                    <input type="email" name="email" id="email" placeholder="staff@email.com"
                            class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all"
                            required>
                 </div>
             </div>
 
             <div class="group">
-                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Phone
-                    Number</label>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Phone Number</label>
                 <div class="relative">
                     <i class="fa-solid fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                     <input type="tel" name="phone" placeholder="+91 00000 00000"
@@ -96,8 +104,7 @@
             </div>
 
             <div class="group">
-                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Confirm
-                    Password</label>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Confirm Password</label>
                 <div class="relative">
                     <i class="fa-solid fa-shield-check absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                     <input type="password" id="confirmPassword" placeholder="••••••••"
@@ -107,29 +114,21 @@
                         <i id="eye2" class="fa-solid fa-eye-slash"></i>
                     </button>
                 </div>
-                <p id="passwordError" class="hidden text-[10px] text-red-500 mt-2 ml-1 font-bold italic">Passwords do
-                    not match!</p>
+                <p id="passwordError" class="hidden text-[10px] text-red-500 mt-2 ml-1 font-bold italic">Passwords do not match!</p>
             </div>
         </div>
 
-        <input type="hidden" name="role" value="MANAGER">
         <input type="hidden" name="status" value="ACTIVE">
 
         <button type="submit"
                 class="w-full bg-slate-900 hover:bg-blue-600 text-white font-bold py-5 rounded-[2rem] shadow-xl flex items-center justify-center gap-3 transition-all hover:-translate-y-1 active:scale-95 mt-8 group">
-            <span class="text-lg">Register Manager Account</span>
+            <span class="text-lg">Create Staff Account</span>
             <i class="fa-solid fa-arrow-right text-blue-400 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
         </button>
-        <div class="mt-8 text-center">
-            <p class="text-slate-800 text-xs">
-                Registered accounts are automatically granted <span class="font-bold">MANAGER</span> role access.
-            </p>
-        </div>
     </form>
 </div>
 
 <script>
-    // Password Toggle Function
     function togglePassword(inputId, eyeId) {
         const input = document.getElementById(inputId);
         const eye = document.getElementById(eyeId);
@@ -144,7 +143,6 @@
         }
     }
 
-    // Password Matching Validation
     const form = document.getElementById('registrationForm');
     const password = document.getElementById('password');
     const confirmPassword = document.getElementById('confirmPassword');
@@ -152,17 +150,13 @@
 
     form.addEventListener('submit', function (e) {
         if (password.value !== confirmPassword.value) {
-            e.preventDefault(); // Stop form submission
+            e.preventDefault();
             errorMsg.classList.remove('hidden');
             confirmPassword.classList.add('border-red-500', 'bg-red-50');
             confirmPassword.focus();
-        } else {
-            errorMsg.classList.add('hidden');
-            confirmPassword.classList.remove('border-red-500', 'bg-red-50');
         }
     });
 
-    // Real-time error clearing
     confirmPassword.addEventListener('input', function () {
         if (password.value === confirmPassword.value) {
             errorMsg.classList.add('hidden');

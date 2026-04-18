@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Staff | Meenakshi Management</title>
+    <title th:text="${user != null and user.id != null ? 'Edit Staff' : 'Add Staff'} + ' | Meenakshi Management'">Add Staff</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -25,11 +25,17 @@
         <div class="inline-flex items-center justify-center w-14 h-14 bg-blue-600 text-white rounded-2xl mb-4 shadow-xl shadow-blue-100">
             <i class="fa-solid fa-user-shield text-xl"></i>
         </div>
-        <h2 class="text-3xl font-bold text-slate-800 tracking-tight">Staff Registration</h2>
-        <p class="text-slate-500 text-sm mt-2">Create a new administrative account</p>
+        <h2 class="text-3xl font-bold text-slate-800 tracking-tight"
+            th:text="${user != null and user.id != null ? 'Edit Staff Member' : 'Staff Registration'}">Staff Registration</h2>
+        <p class="text-slate-500 text-sm mt-2"
+           th:text="${user != null and user.id != null ? 'Update existing administrative credentials' : 'Create a new administrative account'}">
+            Create a new administrative account
+        </p>
     </div>
 
     <form th:action="@{/owner/save-staff}" method="POST" id="registrationForm" class="space-y-6">
+
+        <input type="hidden" name="id" th:value="${user?.id}">
 
         <div class="group">
             <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Select Account Role</label>
@@ -37,9 +43,9 @@
                 <i class="fa-solid fa-id-badge absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                 <select name="role" required
                         class="w-full pl-11 pr-10 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all font-bold text-slate-700">
-                    <option value="" disabled selected>Choose Role...</option>
-                    <option value="MANAGER">MANAGER (Standard Access)</option>
-                    <option value="OWNER">OWNER (Full Admin Access)</option>
+                    <option value="" disabled th:selected="${user == null}">Choose Role...</option>
+                    <option value="MANAGER" th:selected="${user?.role == 'MANAGER'}">MANAGER (Standard Access)</option>
+                    <option value="OWNER" th:selected="${user?.role == 'OWNER'}">OWNER (Full Admin Access)</option>
                 </select>
                 <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-xs"></i>
             </div>
@@ -50,7 +56,7 @@
                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Full Name</label>
                 <div class="relative">
                     <i class="fa-regular fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" name="fullName" placeholder="John Doe"
+                    <input type="text" name="fullName" th:value="${user?.fullName}" placeholder="John Doe"
                            class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all"
                            required>
                 </div>
@@ -60,7 +66,7 @@
                 <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-rose-600 transition-colors">Security PIN</label>
                 <div class="relative">
                     <i class="fa-solid fa-user-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" name="universityId" placeholder="Qw#890" maxlength="12"
+                    <input type="text" name="universityId" th:value="${user?.universityId}" placeholder="Qw#890" maxlength="12"
                            class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 focus:bg-white outline-none transition-all font-black text-slate-700 tracking-[0.3em]"
                            required>
                 </div>
@@ -72,7 +78,7 @@
                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Email Address</label>
                 <div class="relative">
                     <i class="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="email" name="email" id="email" placeholder="staff@email.com"
+                    <input type="email" name="email" id="email" th:value="${user?.email}" placeholder="staff@email.com"
                            class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all"
                            required>
                 </div>
@@ -82,7 +88,7 @@
                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Phone Number</label>
                 <div class="relative">
                     <i class="fa-solid fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                    <input type="tel" name="phone" placeholder="+91 00000 00000"
+                    <input type="tel" name="phone" th:value="${user?.phone}" placeholder="+91 00000 00000"
                            class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all"
                            required>
                 </div>
@@ -94,7 +100,7 @@
                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Password</label>
                 <div class="relative">
                     <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="password" name="password" id="password" placeholder="••••••••"
+                    <input type="password" name="password" id="password" th:value="${user?.password}" placeholder="••••••••"
                            class="w-full pl-11 pr-12 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all"
                            required>
                     <button type="button" onclick="togglePassword('password', 'eye1')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors">
@@ -107,7 +113,7 @@
                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1 group-focus-within:text-blue-600 transition-colors">Confirm Password</label>
                 <div class="relative">
                     <i class="fa-solid fa-shield-check absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="password" id="confirmPassword" placeholder="••••••••"
+                    <input type="password" id="confirmPassword" th:value="${user?.password}" placeholder="••••••••"
                            class="w-full pl-11 pr-12 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 focus:bg-white outline-none transition-all"
                            required>
                     <button type="button" onclick="togglePassword('confirmPassword', 'eye2')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors">
@@ -118,11 +124,11 @@
             </div>
         </div>
 
-        <input type="hidden" name="status" value="ACTIVE">
+        <input type="hidden" name="status" th:value="${user?.status ?: 'ACTIVE'}">
 
         <button type="submit"
                 class="w-full bg-slate-900 hover:bg-blue-600 text-white font-bold py-5 rounded-[2rem] shadow-xl flex items-center justify-center gap-3 transition-all hover:-translate-y-1 active:scale-95 mt-8 group">
-            <span class="text-lg">Create Staff Account</span>
+            <span class="text-lg" th:text="${user != null and user.id != null ? 'Update Staff Account' : 'Create Staff Account'}">Create Staff Account</span>
             <i class="fa-solid fa-arrow-right text-blue-400 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
         </button>
     </form>

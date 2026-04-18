@@ -6,10 +6,9 @@ import com.hms.meenakshi.dto.PaymentHistoryDTO;
 import com.hms.meenakshi.dto.ResidentDetailsDTO;
 import com.hms.meenakshi.entity.Room;
 import com.hms.meenakshi.entity.User;
-import com.hms.meenakshi.service.ExpensesService;
-import com.hms.meenakshi.service.PaymentService;
-import com.hms.meenakshi.service.RoomService;
-import com.hms.meenakshi.service.UserService;
+import com.hms.meenakshi.entity.VacatedResident;
+import com.hms.meenakshi.service.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,25 +30,23 @@ public class OwnerController {
     private final UserService userService;
     private final ExpensesService expensesService;
     private final RoomService roomService;
+    private final VacatedResidentService vacatedResidentService;
 
     @GetMapping("/dashboard")
     public String dashBoard(Model model, HttpSession session) {
-//        User user = (User) session.getAttribute("user");
-//        Boolean isVerified = (Boolean) session.getAttribute("isVerified");
-//        if (user == null || isVerified == null || !isVerified) {
-//            return "redirect:/auth/security-challenge";
-//        }
+        User user = (User) session.getAttribute("user");
+        Boolean isVerified = (Boolean) session.getAttribute("isVerified");
+        if (user == null || isVerified == null || !isVerified) {
+            return "redirect:/sign-in";
+        }
         // 1. Residing Students
         List<User> residents = userService.findByRole("RESIDENT"); // Adjust null if your logic uses "NEW" or a specific RoomId check
         long totalStudents = residents.size();
 
         // 2. Room & Bed Logic (Reuse your viewRooms logic)
         List<Room> rooms = roomService.getAllRooms();
-        // int totalOccupied = rooms.stream().mapToInt(Room::getOccupiedCount).sum();
-        // int totalCapacity = rooms.stream().mapToInt(Room::getCapacity).sum();
 
         int availableRooms = (int) rooms.stream().filter(r -> r.getOccupiedCount() < r.getCapacity()).count();
-//        int availableBeds = totalCapacity - totalOccupied;
 
         // 3. Pending Approvals (Using PaymentService)
         // Assuming you have a way to filter by 'PENDING' status in your history or a count method
@@ -68,31 +66,20 @@ public class OwnerController {
         List<ResidentDetailsDTO> residentList = userService.getAllResidentSnapshots();
         double totalOutstanding = residentList.stream().mapToDouble(ResidentDetailsDTO::getDuePayment).sum();
 
+        // Total Vacated Students
+        long vacatedResidents = vacatedResidentService.totalVacatedStudents();
+
         // Adding to Model
         model.addAttribute("totalStudents", totalStudents);
         model.addAttribute("availableRooms", availableRooms);
-//        model.addAttribute("availableBeds", availableBeds);
         model.addAttribute("pendingApprovals", pendingApprovals);
-
+        model.addAttribute("vacatedCount", vacatedResidents);
         model.addAttribute("last_date", collectedThisMonth); // Match HTML variable
         model.addAttribute("deadline", totalOutstanding);   // Match HTML variable
 
         model.addAttribute("mainContent", "owner-pages/dashboard");
         return "owner-pages/layout";
     }
-
-//    @GetMapping("/add-manager")
-//    public String addManager(){
-//        return "owner-pages/add-manager";
-//    }
-//
-//    @PostMapping("/owner/save-manager")
-//    public String saveManager(@ModelAttribute User user){
-//        user.setFeeSummaryId("NA");
-//        user.setRoomId("NA");
-//        userService.saveUser(user);
-//        return "redirect:/add-manager";
-//    }
 
     @GetMapping("/add-staff")
     public String addStaff(Model model) {
@@ -107,8 +94,33 @@ public class OwnerController {
         user.setStatus("ACTIVE");
         userService.saveUser(user);
 
-        ra.addFlashAttribute("successMessage", "New " + user.getRole() + " registered successfully! ✅");
+        ra.addFlashAttribute("successMessage", "New " + user.getRole() + " saved successfully! ✅");
         return "redirect:/owner/dashboard";
+    }
+
+    @GetMapping("/view-staff")
+    public String viewStaff(Model model) {
+        List<User> staff = userService.getAllStaffMembers();
+        model.addAttribute("staffList", staff);
+        model.addAttribute("mainContent", "owner-pages/view-staff");
+        return "owner-pages/layout";
+    }
+
+    @GetMapping("/edit-staff/{id}")
+    public String editStaff(@PathVariable String id, Model model) {
+
+        User staff = userService.findById(id).orElseThrow(() -> new RuntimeException("Staff not found"));
+        // We pass the actual object so Thymeleaf can read its fields
+        model.addAttribute("user", staff);
+        model.addAttribute("mainContent", "owner-pages/add-staff");
+        return "owner-pages/layout";
+    }
+
+    @PostMapping("/delete-staff/{id}")
+    public String deleteStaff(@PathVariable String id, RedirectAttributes ra) {
+        userService.deleteStaff(id);
+        ra.addFlashAttribute("successMessage", "Staff member removed successfully. 🗑️");
+        return "redirect:/owner/view-staff";
     }
 
     @GetMapping("/approval-pending-payments")
@@ -147,14 +159,28 @@ public class OwnerController {
 
         model.addAttribute("expenses", allExpenses);
         model.addAttribute("selectedMonth", month);
-        model.addAttribute("mainContent", "manager-pages/expenses-list");
-        return "manager-pages/layout";
+        model.addAttribute("mainContent", "owner-pages/expenses-list");
+        return "owner-pages/layout";
     }
 
     @PostMapping("/delete-expense/{id}")
     public String deleteExpense(@PathVariable String id, RedirectAttributes redirectAttributes) {
         expensesService.deleteExpense(id);
         redirectAttributes.addFlashAttribute("successMessage", "Expense record deleted. 🗑️");
-        return "redirect:/manager/expenses";
+        return "redirect:/owner/expenses";
+    }
+
+    @GetMapping("/vacated-residents")
+    public String viewVacatedResidents(HttpServletRequest request, Model model) {
+        List<VacatedResident> vacatedList = vacatedResidentService.getAllVacatedResidents();
+        model.addAttribute("vacatedResidents", vacatedList);
+
+        // Calculate total historical revenue for the footer
+        double totalHistoricalRevenue = vacatedList.stream()
+                .mapToDouble(VacatedResident::getTotalPaidDuringStay)
+                .sum();
+        model.addAttribute("totalRevenue", totalHistoricalRevenue);
+        model.addAttribute("mainContent", "owner-pages/vacated-residents");
+        return "owner-pages/layout";
     }
 }

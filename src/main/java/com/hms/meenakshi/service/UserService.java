@@ -8,6 +8,7 @@ import com.hms.meenakshi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,6 +23,10 @@ public class UserService {
 
     public void saveUser(User user){
         userRepository.save(user);
+    }
+
+    public Optional<User> findById(String id){
+        return userRepository.findById(id);
     }
 
     public List<User> findByRoleAndRoomId(String role, String roomId) {
@@ -80,6 +85,18 @@ public class UserService {
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public List<User> getAllStaffMembers() {
+        // Fetches only users with role MANAGER or OWNER
+        return userRepository.findAll().stream()
+                .filter(u -> "MANAGER".equalsIgnoreCase(u.getRole()) || "OWNER".equalsIgnoreCase(u.getRole()))
+                .sorted(Comparator.comparing(User::getRole))
+                .collect(Collectors.toList());
+    }
+
+    public void deleteStaff(String id) {
+        userRepository.deleteById(id);
     }
 
 

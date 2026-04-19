@@ -33,7 +33,8 @@ public class ManagerController {
         User user = (User) session.getAttribute("user");
         Boolean isVerified = (Boolean) session.getAttribute("isVerified");
         if (user == null || isVerified == null || !isVerified) {
-            return "redirect:/auth/security-challenge";
+//            ra.addFlashAttribute("successMessage", "User Session Expired, LogIn Again. ❌");
+            return "redirect:/sign-out";
         }
         // 1. Residing Students
         List<User> residents = userService.findByRole("RESIDENT"); // Adjust null if your logic uses "NEW" or a specific RoomId check
@@ -80,25 +81,34 @@ public class ManagerController {
 
 
     @GetMapping("/expenses")
-    public String viewExpenses(Model model, @RequestParam(required = false) String month) {
+    public String viewExpenses(Model model, @RequestParam(required = false) String month, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            if (month == null) {
+                month = YearMonth.now().toString(); // Default to current month
+            }
+            // Fetch all records sorted by date
+            List<Expenses> allExpenses = expensesService.findAllExpenses(month);
 
-        if (month == null) {
-            month = YearMonth.now().toString(); // Default to current month
+            model.addAttribute("expenses", allExpenses);
+            model.addAttribute("selectedMonth", month);
+            model.addAttribute("mainContent", "manager-pages/expenses-list");
+            return "manager-pages/layout";
         }
-        // Fetch all records sorted by date
-        List<Expenses> allExpenses = expensesService.findAllExpenses(month);
-
-        model.addAttribute("expenses", allExpenses);
-        model.addAttribute("selectedMonth", month);
-        model.addAttribute("mainContent", "manager-pages/expenses-list");
-        return "manager-pages/layout";
+//        ra.addFlashAttribute("successMessage", "User Session Expired, LogIn Again. ❌");
+        return "redirect:/sign-out";
     }
 
     @PostMapping("/delete-expense/{id}")
-    public String deleteExpense(@PathVariable String id, RedirectAttributes redirectAttributes) {
-        expensesService.deleteExpense(id);
-        redirectAttributes.addFlashAttribute("successMessage", "Expense record deleted. 🗑️");
-        return "redirect:/manager/expenses";
+    public String deleteExpense(@PathVariable String id, RedirectAttributes redirectAttributes, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+            expensesService.deleteExpense(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Expense record deleted. 🗑️");
+            return "redirect:/manager/expenses";
+        }
+        redirectAttributes.addFlashAttribute("successMessage", "User Session Expired, LogIn Again. ❌");
+        return "redirect:/sign-out";
     }
 
 

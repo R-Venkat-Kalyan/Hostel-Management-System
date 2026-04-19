@@ -23,6 +23,14 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
 
+                .formLogin(form -> form
+                        .loginPage("/sign-in")
+                        .loginProcessingUrl("/userLogin")
+                        .defaultSuccessUrl("/login")
+                        .failureUrl("/signin?error")
+                        .permitAll()
+                )
+
                 .logout(logout -> logout
                         .logoutUrl("/sign-out")
                         .logoutSuccessUrl("/")

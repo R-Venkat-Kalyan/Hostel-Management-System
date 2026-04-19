@@ -117,12 +117,11 @@ public class UserController {
     }
 
     @PostMapping("/sign-out")
-    public String signOut(HttpSession session, RedirectAttributes ra){
-        if(session != null) {
-            session.invalidate();
-        }
-        ra.addFlashAttribute("successMessage", "Logged out successfully. See you soon! 👋");
-        return "redirect:/sign-in";
+    public String signOut(HttpSession session, Model model){
+        session.invalidate();
+//        model.addAttribute("successMessage", "Logged out successfully. See you soon! 👋");
+//        model.addAttribute("successMessage", "Your session has ended. Please sign in to access your dashboard. 🔒");
+        return "index";
     }
 
 }

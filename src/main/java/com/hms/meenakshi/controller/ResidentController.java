@@ -78,7 +78,7 @@ public class ResidentController {
             return "resident-pages/layout";
         }
         ra.addFlashAttribute("successMessage", "User Session Expired, LogIn Again. ❌");
-        return "redirect:/sign-in";
+        return "redirect:/sign-out";
     }
 
     // Helper methods to prevent UI from looking "broken" if data is missing
@@ -117,7 +117,7 @@ public class ResidentController {
             return "resident-pages/layout";
         }
         ra.addFlashAttribute("successMessage", "User Session Expired, LogIn Again. ❌");
-        return "redirect:/sign-in";
+        return "redirect:/sign-out";
     }
 
     @GetMapping("/my-payments")
@@ -139,7 +139,7 @@ public class ResidentController {
             return "resident-pages/layout";
         }
         ra.addFlashAttribute("successMessage", "User Session Expired, LogIn Again. ❌");
-        return "redirect:/sign-in";
+        return "redirect:/sign-out";
     }
 
     @GetMapping("/add-fee-receipt")
@@ -153,7 +153,7 @@ public class ResidentController {
             return "resident-pages/layout";
         }
         ra.addFlashAttribute("successMessage", "User Session Expired, LogIn Again. ❌");
-        return "redirect:/sign-in";
+        return "redirect:/sign-out";
     }
 
     @PostMapping("/save-receipt")
@@ -170,7 +170,7 @@ public class ResidentController {
             return "redirect:/resident/view-receipts";
         }
         ra.addFlashAttribute("successMessage", "User Session Expired, LogIn Again. ❌");
-        return "redirect:/sign-in";
+        return "redirect:/sign-out";
     }
 
     @GetMapping("/view-receipts")
@@ -185,7 +185,7 @@ public class ResidentController {
             return "resident-pages/layout";
         }
         ra.addFlashAttribute("successMessage", "User Session Expired, LogIn Again. ❌");
-        return "redirect:/sign-in";
+        return "redirect:/sign-out";
     }
 
     @GetMapping("/delete-receipt/{id}")
@@ -203,7 +203,7 @@ public class ResidentController {
             return "redirect:/resident/view-receipts";
         }
         ra.addFlashAttribute("successMessage", "User Session Expired, LogIn Again. ❌");
-        return "redirect:/sign-in";
+        return "redirect:/sign-out";
     }
 
     @GetMapping("/add-laundry")
@@ -218,7 +218,7 @@ public class ResidentController {
             return "resident-pages/layout";
         }
         ra.addFlashAttribute("successMessage", "User Session Expired, LogIn Again. ❌");
-        return "redirect:/sign-in";
+        return "redirect:/sign-out";
     }
 
     @GetMapping("/contacts")
@@ -232,6 +232,6 @@ public class ResidentController {
             return "resident-pages/layout";
         }
         ra.addFlashAttribute("successMessage", "User Session Expired, LogIn Again. ❌");
-        return "redirect:/sign-in";
+        return "redirect:/sign-out";
     }
 }

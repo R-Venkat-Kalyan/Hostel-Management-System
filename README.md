@@ -1,4 +1,4 @@
-# 🚀 [Insert App Name]
+# 🚀 MeenakshiHostels
 
 <div align="center">
 
@@ -6,7 +6,6 @@
 *A next-generation Hostel Management System engineered for precision, scalability, and real-time decision-making.*
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge)
-![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)
 ![Java](https://img.shields.io/badge/Java-17+-orange?style=for-the-badge&logo=openjdk)
 ![Spring Boot](https://img.shields.io/badge/SpringBoot-3.x-success?style=for-the-badge&logo=springboot)
 ![AWS](https://img.shields.io/badge/Deployed-AWS-232F3E?style=for-the-badge&logo=amazonaws)
@@ -21,7 +20,7 @@
 
 ## 📌 Project Overview
 
-**[Insert App Name]** is a **Hostel Management & Administrative Intelligence Platform** that bridges operational workflows with executive-level oversight.
+**[MeenakshiHostels]** is a **Hostel Management & Administrative Intelligence Platform** that bridges operational workflows with executive-level oversight.
 
 It provides a centralized, role-driven ecosystem for managing:
 - Residents & room allocations  
@@ -56,8 +55,7 @@ It provides a centralized, role-driven ecosystem for managing:
 ## ✨ Core Features
 
 - 🤖 AI-Driven Codebase Intelligence (Project-IQ)  
-- 🔐 Automated Session Security & Cache Control  
-- 💳 Real-time Payment Approval Workflow  
+- 🔐 Automated Session Security & Cache Control   
 - 📊 Dynamic Expense Analytics (Month-over-Month)  
 - 🏠 Smart Room Allocation System  
 - 📬 Notification System (Email/Alerts)  
@@ -88,17 +86,8 @@ It provides a centralized, role-driven ecosystem for managing:
 
 ## 🌐 Deployment & Access
 
-**Live Demo:** https://your-app-url.com  
+**Live Demo:** http://meenakshihostels-env.eba-sbphzs94.us-east-1.elasticbeanstalk.com/ 
 
-### Test Credentials
-
-| Role     | Email              | Password |
-|----------|-------------------|----------|
-| Owner    | owner@test.com    | ******** |
-| Manager  | manager@test.com  | ******** |
-| Resident | resident@test.com | ******** |
-
-> 🔒 Rotate demo credentials regularly for security.
 
 ---
 
@@ -125,7 +114,7 @@ AWS_ACCESS_KEY=
 AWS_SECRET_KEY=
 ```
 
-> ⚠️ Never commit `.env`. Use `.env.example`.
+> ⚠️ Never commit `.env`.
 
 ---
 
@@ -138,17 +127,6 @@ mvn clean install
 mvn spring-boot:run
 ```
 
----
-
-<details>
-<summary>⚙️ Advanced Setup</summary>
-
-- Configure MongoDB pooling  
-- Enable caching strategies  
-- Setup AWS environment variables  
-- Enable HTTPS & security layers  
-
-</details>
 
 ---
 
@@ -165,9 +143,9 @@ src/
 resources/
  ├── templates/
  ├── static/
- └── application.yml
+ └── application.properties
 
-.env.example
+.env
 pom.xml
 ```
 
@@ -182,20 +160,6 @@ pom.xml
 
 ---
 
-## 🛡️ Security Notes
-
-> 🔐 Store sensitive configs in environment variables  
-> ⚡ Avoid caching sensitive admin data  
-> 📦 Follow secure deployment practices  
-
----
-
-## 📜 License
-
-MIT License
-
----
-
 ## 🤝 Contributing
 
 ```
@@ -206,6 +170,5 @@ Fork → Create Branch → Commit → Push → Pull Request
 
 ## 🌟 Final Note
 
-**[Insert App Name]** is not just a hostel management tool —  
+**[MeenakshiHostels]** is not just a hostel management tool —  
 it is a **data-driven administrative intelligence platform** designed for modern operational excellence.
-http://meenakshihostels-env.eba-sbphzs94.us-east-1.elasticbeanstalk.com/

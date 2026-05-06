@@ -5,9 +5,9 @@
 ### Administrative Intelligence Meets Operational Excellence  
 *A next-generation Hostel Management System engineered for precision, scalability, and real-time decision-making.*
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge)
 ![Java](https://img.shields.io/badge/Java-17+-orange?style=for-the-badge&logo=openjdk)
 ![Spring Boot](https://img.shields.io/badge/SpringBoot-3.x-success?style=for-the-badge&logo=springboot)
+![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 ![AWS](https://img.shields.io/badge/Deployed-AWS-232F3E?style=for-the-badge&logo=amazonaws)
 
 </div>

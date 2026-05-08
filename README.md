@@ -1,4 +1,4 @@
-# 🚀 MeenakshiHostels
+# 🚀 [MeenakshiHostels](http://meenakshihostels-env.eba-sbphzs94.us-east-1.elasticbeanstalk.com/)
 
 <div align="center">
 
@@ -11,10 +11,6 @@
 ![AWS](https://img.shields.io/badge/Deployed-AWS-232F3E?style=for-the-badge&logo=amazonaws)
 
 </div>
-
----
-
-![Dashboard Preview](./assets/dashboard-preview.gif)
 
 ---
 
